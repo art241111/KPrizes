@@ -42,10 +42,10 @@ class MainNavigationVM : ViewModel() {
     }
 
     private fun back(): Boolean {
+        stack.pop()
         return if (stack.empty()) {
             true
         } else {
-            stack.pop()
             setScreen(stack.pop())
             false
         }
