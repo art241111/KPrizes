@@ -7,7 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.art241111.kprizes.robot.RobotVM
 import com.art241111.kprizes.ui.Background
+import com.art241111.kprizes.ui.settingScreen.SettingsScreen
+import com.art241111.kprizes.ui.settingScreen.SettingsScreens
 import com.art241111.kprizes.ui.startScreen.StartScreen
 import com.art241111.kprizes.ui.timeUp.TimeUpScreen
 import com.art241111.kprizes.ui.timer.TimerVM
@@ -29,6 +32,9 @@ fun MainNavigateScreen(
     // sharedPreferences: SharedPreferencesHelperForString,
     // tiltControl: TiltControl,
 ) {
+    // Create Robot
+    val robot = viewModel<RobotVM>()
+
     // Setting up navigation for the game using tilt
     val tintGameNavVM = viewModel<TintGameNavVM>()
     tintGameNavVM.setNavigation(navigate)
@@ -43,7 +49,10 @@ fun MainNavigateScreen(
     }
 
     Background(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        moveSettings = {
+            navigate.setScreen(SettingsScreens.HOME)
+        },
     ) {
         // Changing the screen depending on the state
         when (navigate.state.value) {
@@ -72,6 +81,13 @@ fun MainNavigateScreen(
                 TintGameNavigationScreen(
                     navigate = tintGameNavVM,
                     timer = timer
+                )
+            }
+
+            is SettingsScreens -> {
+                SettingsScreen(
+                    navigate = navigate,
+                    robot = robot
                 )
             }
         }

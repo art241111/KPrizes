@@ -1,41 +1,39 @@
 package com.art241111.kprizes.ui.settingScreen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.art241111.kprizes.navigation.MainNavigationVM
+import com.art241111.kprizes.robot.RobotVM
+import com.art241111.kprizes.ui.settingScreen.connect.ConnectView
 
 /**
+ * Settings screen with status navigation.
+ *
  * @author Created by Artem Gerasimov (gerasimov.av.dev@gmail.com).
  */
 
 @Composable
-fun SettingsScreen(
-    modifier: Modifier = Modifier,
+fun BoxScope.SettingsScreen(
+    navigate: MainNavigationVM,
+    robot: RobotVM
 ) {
-    Column(modifier) {
-        ConnectToTheRobot()
-    }
-}
+    val settingsNavVM = viewModel<SettingsNavVM>()
+    settingsNavVM.setNavigation(navigate)
 
-@Composable
-private fun ConnectToTheRobot(modifier: Modifier = Modifier){
-    Row(
-        modifier = modifier.fillMaxHeight()
-    ) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = "Подключиться к роботу"
-        )
+    when (navigate.state.value) {
+        SettingsScreens.HOME -> {
+            SettingsList(
+                robot = robot,
+                settingsNavVM = settingsNavVM
+            )
+        }
 
-        Button(
-            onClick = {}
-        ) {
-            Text(
-                text = "Подключиться"
+        SettingsScreens.CONNECT -> {
+            ConnectView(
+                back = { settingsNavVM.back() },
+                robot = robot
             )
         }
     }

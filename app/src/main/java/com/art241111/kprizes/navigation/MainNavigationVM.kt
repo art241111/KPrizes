@@ -36,7 +36,6 @@ class MainNavigationVM : ViewModel() {
     }
 
     fun moveToHome() {
-
         stack.clear()
         stack.add(GeneralScreen.HOME)
         _state.value = GeneralScreen.HOME
@@ -46,6 +45,7 @@ class MainNavigationVM : ViewModel() {
         return if (stack.empty()) {
             true
         } else {
+            stack.pop()
             setScreen(stack.pop())
             false
         }

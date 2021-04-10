@@ -26,7 +26,7 @@ import com.art241111.kprizes.ui.timer.BigCircleButton
 @Composable
 fun StartScreen(
     modifier: Modifier = Modifier,
-    startGame: () -> Unit
+    startGame: () -> Unit,
 ) {
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
