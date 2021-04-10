@@ -38,20 +38,24 @@ class CatTextVM : ViewModel() {
      * @param phrasesList - list of phrases that the cat assistant says.
      */
     fun startUpdate(phrasesList: List<String>) {
-        if (isFirstUpdate) {
-            isFirstUpdate = true
+        if (phrasesList.size == 1) {
+            _text.value = phrasesList[0]
+        } else {
+            if (isFirstUpdate) {
+                isFirstUpdate = true
 
-            viewModelScope.launch {
-                while (update) {
-                    _isUpdate.value = true
-                    delay(50L)
+                viewModelScope.launch {
+                    while (update) {
+                        _isUpdate.value = true
+                        delay(50L)
 
-                    state = ++state % phrasesList.size
-                    _text.value = phrasesList[state]
+                        state = ++state % phrasesList.size
+                        _text.value = phrasesList[state]
 
-                    _isUpdate.value = false
+                        _isUpdate.value = false
 
-                    delay(2500L)
+                        delay(2500L)
+                    }
                 }
             }
         }
