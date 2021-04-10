@@ -18,18 +18,15 @@ class TimerVM : ViewModel() {
     val progress: State<Double> = _progress
 
     private var isFirstStart = true
-
-    init {
-        start(60000L)
-    }
+    private var isWork = true
 
     fun start(time: Long) {
         if (isFirstStart) {
             isFirstStart = false
-            _progress.value = 1.0
+            isWork = true
 
             viewModelScope.launch {
-                while (_progress.value > 0) {
+                while (_progress.value > 0 && isWork) {
                     _progress.value = progress.value - 0.001
                     delay(time / 1000)
                 }
@@ -38,6 +35,11 @@ class TimerVM : ViewModel() {
     }
 
     fun stop() {
+        isWork = false
         isFirstStart = true
+    }
+
+    fun resettingProgress() {
+        _progress.value = 1.0
     }
 }
