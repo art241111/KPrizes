@@ -8,3 +8,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "KPrizes"
 include ':app'
+include ':kconnectscreen'
+include ':kconnectscreen'
+include ':kControlLibrary'
+include ':kControlLibrary:tcpClient'
