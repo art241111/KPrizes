@@ -10,6 +10,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kprizes.navigation.MainNavigateScreen
 import com.art241111.kprizes.navigation.MainNavigationVM
 import com.art241111.kprizes.ui.theme.KPrizesTheme
+import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
+
+private const val KPRIZES_SHARED_PREFERENCES_NAME = "K_PRIZES"
 
 class MainActivity : ComponentActivity() {
     private lateinit var navigationVM: MainNavigationVM
@@ -25,7 +28,11 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     MainNavigateScreen(
-                        navigate = navigationVM
+                        navigate = navigationVM,
+                        sharedPreferences = SharedPreferencesHelperForString(
+                            this,
+                            KPRIZES_SHARED_PREFERENCES_NAME
+                        ),
                     )
                 }
             }

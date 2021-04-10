@@ -1,8 +1,12 @@
-package com.art241111.kprizes.robot
+package com.art241111.kprizes.data.robot
 
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.art241111.kprizes.data.DELAY_SEND_SP
+import com.art241111.kprizes.data.LONG_MOVE_SP
+import com.art241111.kprizes.data.SHORT_MOVE_SP
+import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 import com.github.poluka.kControlLibrary.KRobot
 import com.github.poluka.kControlLibrary.actions.Command
 import kotlinx.coroutines.Dispatchers
@@ -71,17 +75,17 @@ class RobotVM : ViewModel() {
      */
     val coordinate = kRobot.positionState
 
-    // /**
-    //  * Configuring parameters for sending commands.
-    //  */
-    // fun loadDefaultValue(sharedPreferences: SharedPreferencesHelperForString) {
-    //     delaySending =
-    //         sharedPreferences.load(DELAY_SEND_SP, 70L.toString()).toLong()
-    //
-    //     defaultButtonDistanceLong =
-    //         sharedPreferences.load(LONG_MOVE_SP, 10.0.toString()).toDouble()
-    //
-    //     defaultButtonDistanceShort =
-    //         sharedPreferences.load(SHORT_MOVE_SP, 1.0.toString()).toDouble()
-    // }
+    /**
+     * Configuring parameters for sending commands.
+     */
+    fun loadDefaultValue(sharedPreferences: SharedPreferencesHelperForString) {
+        delaySending =
+            sharedPreferences.load(DELAY_SEND_SP, 70L.toString()).toLong()
+
+        defaultButtonDistanceLong =
+            sharedPreferences.load(LONG_MOVE_SP, 10.0.toString()).toDouble()
+
+        defaultButtonDistanceShort =
+            sharedPreferences.load(SHORT_MOVE_SP, 1.0.toString()).toDouble()
+    }
 }

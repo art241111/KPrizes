@@ -1,4 +1,4 @@
-package com.art241111.kprizes.robot
+package com.art241111.kprizes.data.robot
 
 import android.util.Log
 import androidx.compose.runtime.State

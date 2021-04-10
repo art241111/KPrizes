@@ -2,11 +2,11 @@ package com.art241111.kprizes.ui.settingScreen
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.navigation.MainNavigationVM
-import com.art241111.kprizes.robot.RobotVM
 import com.art241111.kprizes.ui.settingScreen.connect.ConnectView
+import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 
 /**
  * Settings screen with status navigation.
@@ -17,7 +17,8 @@ import com.art241111.kprizes.ui.settingScreen.connect.ConnectView
 @Composable
 fun BoxScope.SettingsScreen(
     navigate: MainNavigationVM,
-    robot: RobotVM
+    robot: RobotVM,
+    sharedPreferences: SharedPreferencesHelperForString
 ) {
     val settingsNavVM = viewModel<SettingsNavVM>()
     settingsNavVM.setNavigation(navigate)
@@ -26,14 +27,17 @@ fun BoxScope.SettingsScreen(
         SettingsScreens.HOME -> {
             SettingsList(
                 robot = robot,
-                settingsNavVM = settingsNavVM
+                settingsNavVM = settingsNavVM,
+                sharedPreferences = sharedPreferences,
+                back = { navigate.onBackButtonClick() }
             )
         }
 
         SettingsScreens.CONNECT -> {
             ConnectView(
                 back = { settingsNavVM.back() },
-                robot = robot
+                robot = robot,
+                sharedPreferences = sharedPreferences
             )
         }
     }

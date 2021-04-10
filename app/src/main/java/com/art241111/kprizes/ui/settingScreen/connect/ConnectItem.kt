@@ -7,7 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.art241111.kprizes.robot.RobotVM
+import com.art241111.kprizes.data.robot.RobotVM
 
 /**
  * Item in the list to connect to the robot.
