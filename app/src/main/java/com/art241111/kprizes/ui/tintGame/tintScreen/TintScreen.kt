@@ -27,16 +27,17 @@ import com.art241111.kprizes.ui.timer.TimerVM
 @ExperimentalAnimationApi
 @Composable
 fun TintScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    timer: TimerVM,
+    onClick: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
-        val timer = viewModel<TimerVM>()
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
             progress = timer.progress.value.toFloat(),
             onClick = {
-                // TODO: Move to screen Z
+                onClick()
             }
         ) {
             Text(

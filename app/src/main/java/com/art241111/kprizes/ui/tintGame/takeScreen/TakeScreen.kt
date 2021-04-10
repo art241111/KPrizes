@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kprizes.ui.catHelper.CatAssistant
 import com.art241111.kprizes.ui.timer.BigCircleButton
-import com.art241111.kprizes.ui.timer.TimerVM
 
 /**
  * The screen where the user should grab the toy.
@@ -27,15 +26,16 @@ import com.art241111.kprizes.ui.timer.TimerVM
 @Composable
 fun TakeScreen(
     modifier: Modifier = Modifier,
-    timer: TimerVM
+    timer: Float,
+    onTake: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
-            progress = timer.progress.value.toFloat(),
+            progress = timer,
             onClick = {
-                // TODO: Take things
+                onTake()
             }
         ) {
             Text(
