@@ -42,6 +42,14 @@ fun BoxScope.SettingsList(
                     onConnectClick = { settingsNavVM.moveToConnect() }
                 )
             }
+
+            item {
+                // TODO: Добавление домашней точки
+            }
+
+            item {
+                // TODO: Добавление точки, где оставлять подарки
+            }
         }
     }
 }
