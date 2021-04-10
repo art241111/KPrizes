@@ -1,5 +1,6 @@
 package com.art241111.kprizes
 
+import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,6 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.navigation.MainNavigateScreen
 import com.art241111.kprizes.navigation.MainNavigationVM
 import com.art241111.kprizes.ui.theme.KPrizesTheme
@@ -20,6 +22,10 @@ class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sensor = applicationContext.getSystemService(SENSOR_SERVICE) as SensorManager
+        val tiltController = TiltControl(sensorManager = sensor)
+
         setContent {
             navigationVM = viewModel()
             navigationVM.moveToHome()
@@ -33,6 +39,7 @@ class MainActivity : ComponentActivity() {
                             this,
                             KPRIZES_SHARED_PREFERENCES_NAME
                         ),
+                        tiltController = tiltController
                     )
                 }
             }

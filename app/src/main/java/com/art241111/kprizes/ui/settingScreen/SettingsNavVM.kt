@@ -11,7 +11,7 @@ import com.art241111.kprizes.navigation.MainNavigationVM
  * @author Created by Artem Gerasimov (gerasimov.av.dev@gmail.com).
  */
 enum class SettingsScreens : AppState {
-    HOME, CONNECT
+    HOME, CONNECT, ADD_POINT
 }
 
 class SettingsNavVM : ViewModel() {
@@ -25,6 +25,10 @@ class SettingsNavVM : ViewModel() {
 
     fun moveToConnect() {
         mainNavVM.setScreen(SettingsScreens.CONNECT)
+    }
+
+    fun moveToAddPoint() {
+        mainNavVM.setScreen(SettingsScreens.ADD_POINT)
     }
 
     fun back() {

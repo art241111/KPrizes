@@ -18,7 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.data.robot.RobotVM
+import com.art241111.kprizes.ui.settingScreen.addPoints.AddHomePoint
+import com.art241111.kprizes.ui.settingScreen.addPoints.AddSetPoint
+import com.art241111.kprizes.ui.settingScreen.addPoints.EditPoints
 import com.art241111.kprizes.ui.settingScreen.connect.ConnectItem
 import com.art241111.kprizes.ui.settingScreen.sendingSettings.DelaySending
 import com.art241111.kprizes.ui.settingScreen.sendingSettings.FastMoveSettings
@@ -37,7 +41,9 @@ fun BoxScope.SettingsList(
     robot: RobotVM,
     back: () -> Unit,
     settingsNavVM: SettingsNavVM,
-    sharedPreferences: SharedPreferencesHelperForString
+    sharedPreferences: SharedPreferencesHelperForString,
+    tiltController: TiltControl,
+    moveToAddPoint: (EditPoints) -> Unit
 ) {
     Column(modifier.align(Alignment.Center)) {
         Surface(
@@ -80,11 +86,17 @@ fun BoxScope.SettingsList(
                 }
 
                 item {
-                    // TODO: Добавление домашней точки
+                    AddHomePoint(
+                        robot = robot,
+                        moveToAddPoint = moveToAddPoint
+                    )
                 }
 
                 item {
-                    // TODO: Добавление точки, где оставлять подарки
+                    AddSetPoint(
+                        robot = robot,
+                        moveToAddPoint = moveToAddPoint
+                    )
                 }
             }
         }

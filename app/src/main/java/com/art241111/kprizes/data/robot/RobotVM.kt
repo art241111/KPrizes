@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.art241111.kprizes.data.DELAY_SEND_SP
 import com.art241111.kprizes.data.LONG_MOVE_SP
 import com.art241111.kprizes.data.SHORT_MOVE_SP
+import com.art241111.kprizes.ui.settingScreen.addPoints.EditPoints
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 import com.github.poluka.kControlLibrary.KRobot
 import com.github.poluka.kControlLibrary.actions.Command
+import com.github.poluka.kControlLibrary.enity.position.Point
+import com.github.poluka.kControlLibrary.enity.position.toPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -21,6 +24,9 @@ class RobotVM : ViewModel() {
     var defaultButtonDistanceShort: Double = 10.0
     var defaultButtonDistanceLong: Double = 10.0
     var delaySending: Long = 10L
+
+    var homePoint = Point()
+    var setPoint = Point()
 
     private val kRobot = KRobot()
     private val connectRobot = ConnectRobot(kRobot)
@@ -87,5 +93,8 @@ class RobotVM : ViewModel() {
 
         defaultButtonDistanceShort =
             sharedPreferences.load(SHORT_MOVE_SP, 1.0.toString()).toDouble()
+
+        homePoint = sharedPreferences.load(EditPoints.HOME_POINT.name, Point().toString()).toPoint()
+        setPoint = sharedPreferences.load(EditPoints.SET_POINT.name, Point().toString()).toPoint()
     }
 }

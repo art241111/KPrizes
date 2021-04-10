@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.ui.Background
 import com.art241111.kprizes.ui.settingScreen.SettingsScreen
@@ -31,6 +32,7 @@ fun MainNavigateScreen(
     navigate: MainNavigationVM,
     modifier: Modifier = Modifier,
     sharedPreferences: SharedPreferencesHelperForString,
+    tiltController: TiltControl,
     // tiltControl: TiltControl,
 ) {
     // Create Robot
@@ -90,7 +92,8 @@ fun MainNavigateScreen(
                 SettingsScreen(
                     navigate = navigate,
                     robot = robot,
-                    sharedPreferences = sharedPreferences
+                    sharedPreferences = sharedPreferences,
+                    tiltController = tiltController
                 )
             }
         }
