@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.art241111.kprizes.R
 
@@ -16,21 +17,23 @@ val typography = Typography(
     ),
 
     h1 = TextStyle(
-        fontFamily = Font(R.font.sansation_bold).toFontFamily(),
+        fontFamily = Font(R.font.sansation_regular).toFontFamily(),
         fontWeight = FontWeight.Thin,
-        fontSize = 36.sp
+        fontSize = 90.sp,
+        textAlign = TextAlign.Center,
+        color = Red700
     ),
 
     h2 = TextStyle(
-        fontFamily = Font(R.font.sansation_bold).toFontFamily(),
+        fontFamily = Font(R.font.sansation_regular).toFontFamily(),
         fontWeight = FontWeight.Thin,
         fontSize = 24.sp
     ),
 
     button = TextStyle(
-        fontFamily = Font(R.font.sansation_bold).toFontFamily(),
+        fontFamily = Font(R.font.sansation_regular).toFontFamily(),
         fontWeight = FontWeight.Normal,
         fontSize = 20.sp
     ),
-    defaultFontFamily = Font(R.font.sansation_bold).toFontFamily()
+    defaultFontFamily = Font(R.font.sansation_regular).toFontFamily()
 )
