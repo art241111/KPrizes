@@ -13,7 +13,6 @@ import com.art241111.kcontrolsystem.data.ControlVM
 import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kcontrolsystem.data.UIMoveByCoordinate
 import com.art241111.kcontrolsystem.ui.buttons.ButtonsView
-import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.github.poluka.kControlLibrary.enity.position.Point
 
 @Composable
@@ -22,7 +21,6 @@ fun ControlView(
     coordinate: State<Point>,
     moveInTime: MoveInTime,
     moveByCoordinate: UIMoveByCoordinate,
-    tiltControl: TiltControl,
     controlVM: ControlVM
 ) {
     Surface(
@@ -36,7 +34,6 @@ fun ControlView(
                 coordinate = coordinate,
                 moveInTime = moveInTime,
                 moveByCoordinate = moveByCoordinate,
-                tiltControl = tiltControl,
                 controlVM = controlVM
             )
         }

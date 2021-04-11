@@ -2,6 +2,7 @@ package com.art241111.kconnectscreen.utils
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
@@ -47,9 +48,13 @@ class ImagesFromAssets {
                 while (isImageUpload) {
                     position = (++position) % images.size
                     val inputStream = context.assets.open(directName + "/" + images[position])
-                    val image = Drawable.createFromStream(inputStream, null).toBitmap()
+                    try {
+                        val image = Drawable.createFromStream(inputStream, null).toBitmap()
+                        _image.postValue(image.asImageBitmap())
+                    } catch (e: OutOfMemoryError) {
+                        Log.e("ImageFromAssets", e.stackTrace.toString())
+                    }
 
-                    _image.postValue(image.asImageBitmap())
                     delay(2000L)
                 }
             }

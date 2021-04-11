@@ -8,6 +8,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 const val DELAY_SEND_SP = "DELAY_SEND"
 const val LONG_MOVE_SP = "LONG_MOVE"
@@ -22,7 +23,6 @@ class MoveInTime(
     var defaultButtonDistanceShort: Double = 1.0,
     private val move: (x: Double, y: Double, z: Double, o: Double, a: Double, t: Double) -> Unit
 ) {
-
     private var isMoving = false
 
     private val job = SupervisorJob()
@@ -43,11 +43,10 @@ class MoveInTime(
      * @param value - значение, которое нужно установить.
      */
     operator fun set(axes: Int, value: Double) {
-
         if (value == -0.0) moveDistance[axes] = 0.0
         else moveDistance[axes] = value
 
-        if (moveDistance.contentEquals(Array(6) { 0.0 })) {
+        if (isNull(moveDistance)) {
             isMoving = false
             stopMoving()
         } else {
@@ -56,6 +55,14 @@ class MoveInTime(
                 startMoving()
             }
         }
+    }
+
+    private fun isNull(array: Array<Double>): Boolean {
+        var result = true
+        for (element in array) {
+            if (abs(element) != 0.0) result = false
+        }
+        return result
     }
 
     /**
@@ -67,22 +74,24 @@ class MoveInTime(
         if (!this::jobMoving.isInitialized || !jobMoving.isActive) {
             jobMoving = scope.launch {
                 while (isMoving && this.isActive) {
-                    if (!moveDistance.contentEquals(Array(6) { 0.0 })) {
-                        move(
-                            moveDistance[0],
-                            moveDistance[1],
-                            moveDistance[2],
-                            moveDistance[3],
-                            moveDistance[4],
-                            moveDistance[5]
-                        )
-                    } else {
-                        isMoving = false
-                        scope.cancel()
-                        jobMoving.cancel()
-                        this.cancel()
+                    if (isMoving) {
+                        if (!isNull(moveDistance)) {
+                            move(
+                                moveDistance[0],
+                                moveDistance[1],
+                                moveDistance[2],
+                                moveDistance[3],
+                                moveDistance[4],
+                                moveDistance[5]
+                            )
+                        } else {
+                            isMoving = false
+                            scope.cancel()
+                            jobMoving.cancel()
+                            this.cancel()
+                        }
+                        delay(delaySending)
                     }
-                    delay(delaySending)
                 }
             }
         }

@@ -30,7 +30,7 @@ data class MoveByAxes(
     }
 //    "$MOVE_BY_COORDINATE;${(coordinate.ordinal + 1)};$distance"
 
-    internal infix fun on(_distance: Double) {
+    infix fun on(_distance: Double) {
         distance = _distance
     }
 }

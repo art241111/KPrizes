@@ -5,12 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.art241111.kcontrolsystem.ui.utils.TiltControl
+import com.art241111.kcontrolsystem.data.ControlVM
+import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.navigation.MainNavigationVM
 import com.art241111.kprizes.ui.settingScreen.addPoints.EditPoints
 import com.art241111.kprizes.ui.settingScreen.addPoints.GetPoint
-import com.art241111.kprizes.ui.settingScreen.connect.CONST_IP_NAME
 import com.art241111.kprizes.ui.settingScreen.connect.ConnectView
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 
@@ -25,7 +25,8 @@ fun BoxScope.SettingsScreen(
     navigate: MainNavigationVM,
     robot: RobotVM,
     sharedPreferences: SharedPreferencesHelperForString,
-    tiltController: TiltControl
+    controlVM: ControlVM,
+    moveInTime: MoveInTime
 ) {
     val settingsNavVM = viewModel<SettingsNavVM>()
     settingsNavVM.setNavigation(navigate)
@@ -42,7 +43,6 @@ fun BoxScope.SettingsScreen(
                     editPoint.value = point
                     settingsNavVM.moveToAddPoint()
                 },
-                tiltController = tiltController
             )
         }
 
@@ -58,7 +58,8 @@ fun BoxScope.SettingsScreen(
             if (editPoint.value != null) {
                 GetPoint(
                     robotVM = robot,
-                    tiltControl = tiltController,
+                    controlVM = controlVM,
+                    moveInTime = moveInTime,
                     addPoint = { newPoint ->
                         when (editPoint.value) {
                             EditPoints.HOME_POINT -> {

@@ -33,7 +33,6 @@ import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kcontrolsystem.data.UIMoveByCoordinate
 import com.art241111.kcontrolsystem.ui.theme.TextHeader
 import com.art241111.kcontrolsystem.ui.theme.red500
-import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.github.poluka.kControlLibrary.enity.position.Point
 
 @Composable
@@ -73,24 +72,14 @@ private fun IconButtonWithState(
     }
 }
 
-/**
- * @param tiltControl - требуется создать в MainActivity для правильной работы.
- * Также требуется перед запуском tiltControl установить [MoveInTime] для передачи
- * параметров движения на робота.
- */
 @Composable
 internal fun ButtonsView(
     modifier: Modifier = Modifier,
     coordinate: State<Point>,
     moveInTime: MoveInTime,
     moveByCoordinate: UIMoveByCoordinate,
-    tiltControl: TiltControl,
     controlVM: ControlVM
 ) {
-
-    controlVM.tiltControl = tiltControl
-    controlVM.tiltControl.moveInTime = moveInTime
-
     val scrollState: ScrollState = rememberScrollState(0)
 
     Column(
@@ -253,7 +242,7 @@ private fun SlowMoving(
     }
 }
 
-data class PressOrRelease(
+internal data class PressOrRelease(
     val onPressed: () -> Unit,
     val onReleased: () -> Unit,
 )

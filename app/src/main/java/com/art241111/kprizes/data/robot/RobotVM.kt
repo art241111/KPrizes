@@ -3,13 +3,15 @@ package com.art241111.kprizes.data.robot
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.art241111.kprizes.data.DELAY_SEND_SP
-import com.art241111.kprizes.data.LONG_MOVE_SP
-import com.art241111.kprizes.data.SHORT_MOVE_SP
+import com.art241111.kcontrolsystem.data.DELAY_SEND_SP
+import com.art241111.kcontrolsystem.data.LONG_MOVE_SP
+import com.art241111.kcontrolsystem.data.SHORT_MOVE_SP
 import com.art241111.kprizes.ui.settingScreen.addPoints.EditPoints
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 import com.github.poluka.kControlLibrary.KRobot
 import com.github.poluka.kControlLibrary.actions.Command
+import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
+import com.github.poluka.kControlLibrary.dsl.Program
 import com.github.poluka.kControlLibrary.enity.position.Point
 import com.github.poluka.kControlLibrary.enity.position.toPoint
 import kotlinx.coroutines.Dispatchers
@@ -31,19 +33,18 @@ class RobotVM : ViewModel() {
     private val kRobot = KRobot()
     private val connectRobot = ConnectRobot(kRobot)
 
-    // /**
-    //  * Run program on robot
-    //  */
-    // val isRun: StateFlow<Boolean> = runProgramRobot.isRun
-    // fun runProgram(
-    //     UICommands: List<UICommand>,
-    //     points: MutableMap<String, Point>
-    // ) {
-    //     runProgramRobot.runProgram(UICommands, points)
-    // }
+    /**
+     * Run program on robot
+     */
 
-    fun dangerousRun(command: Command) {
-        kRobot.dangerousRun(command)
+    infix fun run(@ExecutedOnTheRobot program: Program) {
+        kRobot.run(program)
+    }
+
+    infix fun dangerousRun(command: Command) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kRobot.dangerousRun(command)
+        }
     }
 
     /**

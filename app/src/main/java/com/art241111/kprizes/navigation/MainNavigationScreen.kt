@@ -7,8 +7,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.art241111.kcontrolsystem.data.ControlVM
+import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.data.robot.RobotVM
+import com.art241111.kprizes.data.robot.TiltMoveImp
 import com.art241111.kprizes.ui.Background
 import com.art241111.kprizes.ui.settingScreen.SettingsScreen
 import com.art241111.kprizes.ui.settingScreen.SettingsScreens
@@ -18,7 +21,9 @@ import com.art241111.kprizes.ui.timer.TimerVM
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameNavVM
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameNavigationScreen
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameScreen
+import com.art241111.kprizes.ui.tintGame.robotProgram.moveToHome
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
+import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
 
 /**
  * The main screen, where screens are created depending on the state.
@@ -33,11 +38,22 @@ fun MainNavigateScreen(
     modifier: Modifier = Modifier,
     sharedPreferences: SharedPreferencesHelperForString,
     tiltController: TiltControl,
-    // tiltControl: TiltControl,
 ) {
     // Create Robot
     val robot = viewModel<RobotVM>()
     robot.loadDefaultValue(sharedPreferences)
+
+    val controlVM = viewModel<ControlVM>()
+    val moveInTime = MoveInTime(
+        delaySending = robot.delaySending,
+        defaultButtonDistanceLong = robot.defaultButtonDistanceLong,
+        defaultButtonDistanceShort = robot.defaultButtonDistanceShort,
+        move = { x, y, z, o, a, t ->
+            robot.dangerousRun(MoveOnDistance(x, y, z, o, a, t))
+        }
+    )
+    controlVM.tiltControl = tiltController
+    controlVM.tiltControl.tiltMove = TiltMoveImp(robot)
 
     // Setting up navigation for the game using tilt
     val tintGameNavVM = viewModel<TintGameNavVM>()
@@ -48,7 +64,6 @@ fun MainNavigateScreen(
     val isFirstTimeUp = remember { mutableStateOf(true) }
     if (timer.progress.value <= 0 && isFirstTimeUp.value) {
         isFirstTimeUp.value = false
-        // navigate.moveToHome()
         navigate.setScreen(GeneralScreen.TIME_UP_SCREEN)
     }
 
@@ -67,7 +82,9 @@ fun MainNavigateScreen(
                         isFirstTimeUp.value = true
 
                         // TODO: В зависимотси от настроек
-                        tintGameNavVM.moveToTintScreen()
+                        moveToHome(robot)
+                        controlVM.startTrackingTilt()
+                        tintGameNavVM.moveToTintScreen(timer)
                     }
                 )
             }
@@ -81,10 +98,12 @@ fun MainNavigateScreen(
             }
 
             is TintGameScreen -> {
-                timer.start(60000L)
                 TintGameNavigationScreen(
                     navigate = tintGameNavVM,
-                    timer = timer
+                    timer = timer,
+                    robot = robot,
+                    moveInTime = moveInTime,
+                    controlVM = controlVM
                 )
             }
 
@@ -93,7 +112,8 @@ fun MainNavigateScreen(
                     navigate = navigate,
                     robot = robot,
                     sharedPreferences = sharedPreferences,
-                    tiltController = tiltController
+                    controlVM = controlVM,
+                    moveInTime = moveInTime
                 )
             }
         }

@@ -3,7 +3,7 @@ package com.art241111.kprizes.ui.settingScreen.sendingSettings
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.art241111.kprizes.data.SHORT_MOVE_SP
+import com.art241111.kcontrolsystem.data.SHORT_MOVE_SP
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 

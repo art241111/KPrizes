@@ -30,6 +30,7 @@ class RemoteWriter : RemoteWriterImp, Sender, SafeSender {
      * @param text - the text that will be sent to the server.
      */
     override fun send(text: String) {
+        println(text)
         writer.print(text)
         writer.flush()
     }

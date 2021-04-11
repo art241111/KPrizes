@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.ui.settingScreen.addPoints.AddHomePoint
 import com.art241111.kprizes.ui.settingScreen.addPoints.AddSetPoint
@@ -42,7 +41,6 @@ fun BoxScope.SettingsList(
     back: () -> Unit,
     settingsNavVM: SettingsNavVM,
     sharedPreferences: SharedPreferencesHelperForString,
-    tiltController: TiltControl,
     moveToAddPoint: (EditPoints) -> Unit
 ) {
     Column(modifier.align(Alignment.Center)) {

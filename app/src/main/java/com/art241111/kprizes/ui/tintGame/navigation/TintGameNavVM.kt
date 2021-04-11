@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import com.art241111.kprizes.navigation.AppState
 import com.art241111.kprizes.navigation.MainNavigationVM
+import com.art241111.kprizes.ui.timer.TimerVM
 
 /**
  * View model, which is responsible for managing navigation in the tilt app.
@@ -23,7 +24,8 @@ class TintGameNavVM : ViewModel() {
         state = mainNavVM.state
     }
 
-    fun moveToTintScreen() {
+    fun moveToTintScreen(timer: TimerVM) {
+        timer.start(60000L)
         mainNavVM.setScreen(TintGameScreen.TINT_SCREEN)
     }
 

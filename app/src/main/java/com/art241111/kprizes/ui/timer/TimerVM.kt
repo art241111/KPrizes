@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -25,10 +26,12 @@ class TimerVM : ViewModel() {
             isFirstStart = false
             isWork = true
 
-            viewModelScope.launch {
-                while (_progress.value > 0 && isWork) {
-                    _progress.value = progress.value - 0.001
-                    delay(time / 1000)
+            viewModelScope.launch(Dispatchers.IO) {
+                while (_progress.value > 0) {
+                    if (isWork) {
+                        _progress.value = progress.value - 0.001
+                        delay(time / 1000)
+                    }
                 }
             }
         }

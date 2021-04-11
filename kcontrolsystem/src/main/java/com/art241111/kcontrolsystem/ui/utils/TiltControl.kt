@@ -5,18 +5,18 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import com.art241111.kcontrolsystem.data.MoveInTime
 
 class TiltControl(private val sensorManager: SensorManager) {
-    lateinit var moveInTime: MoveInTime
+    lateinit var tiltMove: TiltMove
     private var sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
     private lateinit var listener: SensorEventListener
 
     fun startTracking() {
+        Log.d("START", "START______________________________________________")
         if (sensor != null) {
-            listener = if (this::moveInTime.isInitialized) {
-                MySensorEventListener(moveInTime)
+            listener = if (this::tiltMove.isInitialized) {
+                MySensorEventListener(tiltMove)
             } else {
                 MySensorEventListener(null)
             }
@@ -34,19 +34,20 @@ class TiltControl(private val sensorManager: SensorManager) {
     fun stopTracking() {
         if (sensor != null && this::listener.isInitialized) {
             sensorManager.unregisterListener(listener, sensor)
-            moveInTime[0] = 0.0
-            moveInTime[1] = 0.0
         } else {
             Log.e("sensor", "Sensor not detected")
         }
     }
 
-    private class MySensorEventListener(val moveInTime: MoveInTime?) : SensorEventListener {
+    private class MySensorEventListener(val tiltMove: TiltMove?) : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent?) {
-            if (moveInTime != null) {
+            if (tiltMove != null) {
                 if (event != null) {
-                    moveInTime[0] = -1 * event.values[0].toDouble()
-                    moveInTime[1] = -1 * event.values[1].toDouble()
+                    tiltMove.move(
+                        x = -1 * event.values[0].toDouble(),
+                        y = -1 * event.values[1].toDouble()
+                    )
+
                     Log.d(
                         "sensor",
                         "${-1 * event.values[0].toDouble()}: ${-1 * event.values[1].toDouble()}"
