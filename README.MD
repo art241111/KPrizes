@@ -15,12 +15,14 @@
 <div style="text-align:center">
     <img src="appendices/main_screen.png" width="1200" height="640"/>
 </div>
-### Первого экрана игры наклоном, на котором робот перемещается по осям X, Y
+### Первого экрана игры наклоном   
+на котором робот перемещается по осям X, Y
+
 <div style="text-align:center">
     <img src="appendices/tint_first_screen.png" width="1200" height="640"/>
 </div>
 
-###Когда прошло немного времени
+### Когда прошло немного времени
 <div style="text-align:center">
     <img src="appendices/tint_first_screen2.png" width="1200" height="640"/>
 </div>
