@@ -9,6 +9,6 @@ import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
 
 class TiltMoveImp(private val robot: RobotVM) : TiltMove {
     override fun move(x: Double, y: Double) {
-        robot dangerousRun MoveOnDistance(y, x)
+        robot dangerousRun MoveOnDistance(y, -x)
     }
 }

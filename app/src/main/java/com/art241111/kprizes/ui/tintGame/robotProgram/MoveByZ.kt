@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kprizes.data.robot.RobotVM
 import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
-import com.github.poluka.kControlLibrary.enity.Axes
+import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,9 +32,9 @@ class MoveByZVM() : ViewModel() {
             isWork = true
 
             viewModelScope.launch(Dispatchers.IO) {
-                while ((robot.coordinate.value[Axes.Z] > -120) && (isWork)) {
-                    moveInTime[2] = -10.0
-                    delay(100L)
+                while (isWork) {
+                    robot dangerousRun MoveOnDistance(z = -10.0)
+                    delay(200L)
                 }
             }
         }
@@ -42,6 +42,7 @@ class MoveByZVM() : ViewModel() {
 
     internal fun stop() {
         isWork = false
+        isFirst = true
 
         moveInTime[0] = 0.0
         moveInTime[1] = 0.0

@@ -46,8 +46,8 @@ fun TintGameNavigationScreen(
         }
 
         TintGameScreen.TAKE_SCREEN -> {
-
             moveByZVM.move(robot)
+
             TakeScreen(
                 timer = timer.progress.value.toFloat(),
                 onTake = {
