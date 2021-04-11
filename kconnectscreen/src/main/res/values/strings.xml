@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">KConnectScreen</string>
+    <string name="robowizard">Robowizard</string>
+    <string name="cancel">Cancel</string>
+
+    <!--    Connect Screen-->
+    <string name="connect">CONNECT</string>
+    <string name="connection">CONNECTION</string>
+    <string name="robot_ip">Robot IP</string>
+    <string name="connect_error">Connection error</string>
+</resources>

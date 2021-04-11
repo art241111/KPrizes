@@ -25,14 +25,15 @@ import com.art241111.kprizes.ui.timer.BigCircleButton
 @ExperimentalAnimationApi
 @Composable
 fun StartScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    startGame: () -> Unit,
 ) {
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
             onClick = {
-                // TODO: Start game 
+                startGame()
             }
         ) {
             Text(

@@ -13,7 +13,8 @@ val typography = Typography(
     body1 = TextStyle(
         fontFamily = Font(R.font.sansation_bold).toFontFamily(),
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 16.sp,
+        color = Red700
     ),
 
     h1 = TextStyle(
@@ -27,7 +28,8 @@ val typography = Typography(
     h2 = TextStyle(
         fontFamily = Font(R.font.sansation_regular).toFontFamily(),
         fontWeight = FontWeight.Thin,
-        fontSize = 24.sp
+        fontSize = 30.sp,
+        color = Red700
     ),
 
     button = TextStyle(

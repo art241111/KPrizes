@@ -8,3 +8,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "KPrizes"
 include ':app'
+include ':kconnectscreen'
+include ':kconnectscreen'
+include ':kControlLibrary'
+include ':kControlLibrary:tcpClient'
+include ':SaveAndLoadInformation'
+include ':kcontrolsystem:JoystickComposeView'
+include ':kcontrolsystem'
