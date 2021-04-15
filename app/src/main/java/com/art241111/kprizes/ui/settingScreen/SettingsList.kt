@@ -18,14 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.art241111.kcontrolsystem.data.DELAY_SEND_SP
+import com.art241111.kcontrolsystem.data.LONG_MOVE_SP
+import com.art241111.kcontrolsystem.data.SHORT_MOVE_SP
+import com.art241111.kprizes.data.robot.ROBOT_POSITION_ANGLE
 import com.art241111.kprizes.data.robot.RobotVM
+import com.art241111.kprizes.repository.ServerVisionVM
 import com.art241111.kprizes.ui.settingScreen.addPoints.AddHomePoint
 import com.art241111.kprizes.ui.settingScreen.addPoints.AddSetPoint
 import com.art241111.kprizes.ui.settingScreen.addPoints.EditPoints
 import com.art241111.kprizes.ui.settingScreen.connect.ConnectItem
-import com.art241111.kprizes.ui.settingScreen.sendingSettings.DelaySending
-import com.art241111.kprizes.ui.settingScreen.sendingSettings.FastMoveSettings
-import com.art241111.kprizes.ui.settingScreen.sendingSettings.SlowMoveSettings
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 
 /**
@@ -41,7 +43,8 @@ fun BoxScope.SettingsList(
     back: () -> Unit,
     settingsNavVM: SettingsNavVM,
     sharedPreferences: SharedPreferencesHelperForString,
-    moveToAddPoint: (EditPoints) -> Unit
+    moveToAddPoint: (EditPoints) -> Unit,
+    serverVision: ServerVisionVM,
 ) {
     Column(modifier.align(Alignment.Center)) {
         Surface(
@@ -57,29 +60,56 @@ fun BoxScope.SettingsList(
                 // Connect to the robot
                 item {
                     ConnectItem(
-                        robot = robot,
-                        onConnectClick = { settingsNavVM.moveToConnect() }
+                        itemText = "Подключение к роботу",
+                        connectState = robot.connect,
+                        onDisconnect = {
+                            robot.disconnect()
+                        },
+                        onConnectClick = { settingsNavVM.moveToConnectToTheRobot() }
                     )
                 }
 
                 item {
-                    DelaySending(
-                        robot = robot,
-                        sharedPreferences = sharedPreferences
+                    ParamChangeItem(
+                        defaultValue = robot.robotPositionAngle,
+                        labelText = "Поворот осей X,Y",
+                        onValueChange = {
+                            robot.robotPositionAngle = it
+                            sharedPreferences.save(ROBOT_POSITION_ANGLE, it.toLong().toString())
+                        }
                     )
                 }
 
                 item {
-                    FastMoveSettings(
-                        robot = robot,
-                        sharedPreferences = sharedPreferences
+                    ParamChangeItem(
+                        defaultValue = robot.delaySending.toDouble(),
+                        labelText = "Задержка отправки сообщений",
+                        onValueChange = {
+                            robot.delaySending = it.toLong()
+                            sharedPreferences.save(DELAY_SEND_SP, it.toLong().toString())
+                        }
                     )
                 }
 
                 item {
-                    SlowMoveSettings(
-                        robot = robot,
-                        sharedPreferences = sharedPreferences
+                    ParamChangeItem(
+                        defaultValue = robot.defaultButtonDistanceLong,
+                        labelText = "Быстрое перемещение",
+                        onValueChange = {
+                            robot.defaultButtonDistanceLong = it
+                            sharedPreferences.save(LONG_MOVE_SP, it.toString())
+                        }
+                    )
+                }
+
+                item {
+                    ParamChangeItem(
+                        defaultValue = robot.defaultButtonDistanceShort,
+                        labelText = "Точечное перемещение",
+                        onValueChange = {
+                            robot.defaultButtonDistanceLong = it
+                            sharedPreferences.save(SHORT_MOVE_SP, it.toString())
+                        }
                     )
                 }
 
@@ -94,6 +124,18 @@ fun BoxScope.SettingsList(
                     AddSetPoint(
                         robot = robot,
                         moveToAddPoint = moveToAddPoint
+                    )
+                }
+
+                // Connect to the robot
+                item {
+                    ConnectItem(
+                        itemText = "Подключение к серверу",
+                        connectState = serverVision.connect,
+                        onDisconnect = {
+                            serverVision.disconnect()
+                        },
+                        onConnectClick = { settingsNavVM.moveToConnectToTheVisionSever() }
                     )
                 }
             }
