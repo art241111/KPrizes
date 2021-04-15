@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.art241111.kprizes.data.robot.RobotVM
 
 /**
  * Item in the list to connect to the robot.
@@ -18,7 +18,9 @@ import com.art241111.kprizes.data.robot.RobotVM
 @Composable
 internal fun ConnectItem(
     modifier: Modifier = Modifier,
-    robot: RobotVM,
+    itemText: String,
+    connectState: State<Boolean>,
+    onDisconnect: () -> Unit,
     onConnectClick: () -> Unit,
 ) {
 
@@ -27,20 +29,20 @@ internal fun ConnectItem(
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically),
-            text = "Подключение к роботу"
+            text = itemText
         )
 
-        val text = when (robot.connect.value) {
+        val text = when (connectState.value) {
             true -> "Отключиться"
             false -> "Подключиться"
         }
 
         Button(
             onClick = {
-                if (!robot.connect.value) {
+                if (!connectState.value) {
                     onConnectClick()
                 } else {
-                    robot.disconnect()
+                    onDisconnect()
                 }
             }
         ) {

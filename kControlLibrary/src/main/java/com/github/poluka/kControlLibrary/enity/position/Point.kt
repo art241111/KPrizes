@@ -1,18 +1,19 @@
 package com.github.poluka.kControlLibrary.enity.position
 
 import com.github.poluka.kControlLibrary.enity.Axes
+import com.github.poluka.kControlLibrary.enity.Distance
 
 /**
  * Массив, который хранит позицию робота.
  * @author artem241120@gmail.com
  */
 class Point(
-    x: Double = 0.0,
-    y: Double = 0.0,
-    z: Double = 0.0,
-    o: Double = 0.0,
-    a: Double = 0.0,
-    t: Double = 0.0
+    private val x: Double = 0.0,
+    private val y: Double = 0.0,
+    private val z: Double = 0.0,
+    private val o: Double = 0.0,
+    private val a: Double = 0.0,
+    private val t: Double = 0.0
 ) {
     private val position = doubleArrayOf(x, y, z, o, a, t)
 
@@ -50,5 +51,16 @@ class Point(
 
     operator fun set(axes: Int, value: Double) {
         position[axes] = value
+    }
+
+    operator fun minus(point: Point): Distance {
+        return Distance(
+            x = x - point.x,
+            y = y - point.y,
+            z = z - point.z,
+            o = o - point.o,
+            a = a - point.a,
+            t = t - point.t,
+        )
     }
 }

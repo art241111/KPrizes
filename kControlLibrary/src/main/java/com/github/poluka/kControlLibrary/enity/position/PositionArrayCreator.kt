@@ -17,7 +17,7 @@ fun Point.positionArrayFromString(text: String): Point {
     return this
 }
 
-private fun getDoubleArrayFromString(position: String): List<Double> = position.split(";")
+fun getDoubleArrayFromString(position: String): List<Double> = position.split(";")
     .map { value ->
         String.format("%.2f", value.trim().toDouble())
             .replace(",", ".")

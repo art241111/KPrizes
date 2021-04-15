@@ -9,8 +9,11 @@ import com.art241111.kcontrolsystem.data.ControlVM
 import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.navigation.MainNavigationVM
+import com.art241111.kprizes.repository.ServerVisionVM
 import com.art241111.kprizes.ui.settingScreen.addPoints.EditPoints
 import com.art241111.kprizes.ui.settingScreen.addPoints.GetPoint
+import com.art241111.kprizes.ui.settingScreen.connect.CONST_IP_NAME_ROBOT
+import com.art241111.kprizes.ui.settingScreen.connect.CONST_IP_NAME_VISION_SERVER
 import com.art241111.kprizes.ui.settingScreen.connect.ConnectView
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 
@@ -26,7 +29,8 @@ fun BoxScope.SettingsScreen(
     robot: RobotVM,
     sharedPreferences: SharedPreferencesHelperForString,
     controlVM: ControlVM,
-    moveInTime: MoveInTime
+    moveInTime: MoveInTime,
+    serverVision: ServerVisionVM
 ) {
     val settingsNavVM = viewModel<SettingsNavVM>()
     settingsNavVM.setNavigation(navigate)
@@ -43,14 +47,27 @@ fun BoxScope.SettingsScreen(
                     editPoint.value = point
                     settingsNavVM.moveToAddPoint()
                 },
+                serverVision = serverVision
             )
         }
 
-        SettingsScreens.CONNECT -> {
+        SettingsScreens.CONNECT_TO_THE_ROBOT -> {
             ConnectView(
                 back = { settingsNavVM.back() },
-                robot = robot,
-                sharedPreferences = sharedPreferences
+                onConnect = { ip -> robot.connect(ip) },
+                connectStatus = robot.connectStatus,
+                sharedPreferences = sharedPreferences,
+                sharedPreferencesName = CONST_IP_NAME_ROBOT
+            )
+        }
+
+        SettingsScreens.CONNECT_TO_THE_VISION -> {
+            ConnectView(
+                back = { settingsNavVM.back() },
+                onConnect = { ip -> serverVision.connect(ip) },
+                connectStatus = serverVision.connectStatus,
+                sharedPreferences = sharedPreferences,
+                sharedPreferencesName = CONST_IP_NAME_VISION_SERVER
             )
         }
 

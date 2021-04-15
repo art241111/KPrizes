@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kcontrolsystem.data.ControlVM
 import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kprizes.data.robot.RobotVM
+import com.art241111.kprizes.repository.ServerVisionVM
 import com.art241111.kprizes.ui.timer.TimerVM
 import com.art241111.kprizes.ui.tintGame.robotProgram.MoveByZVM
 import com.art241111.kprizes.ui.tintGame.robotProgram.stayPrizes
@@ -25,7 +26,8 @@ fun TintGameNavigationScreen(
     timer: TimerVM,
     robot: RobotVM,
     moveInTime: MoveInTime,
-    controlVM: ControlVM
+    controlVM: ControlVM,
+    serverVisionVM: ServerVisionVM,
 ) {
     val moveByZVM = viewModel<MoveByZVM>()
 
@@ -36,6 +38,7 @@ fun TintGameNavigationScreen(
                 timer = timer,
                 onClick = {
                     timer.stop()
+                    serverVisionVM.stopMoving()
 
                     moveByZVM.setMoveInTime(moveInTime)
                     controlVM.stopTrackingTilt()
