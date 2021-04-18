@@ -2730,6 +2730,7 @@ N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
 .END
 .SIG_COMMENT
+.END
 .IDE_CMT
 @@@ PROJECT @@@
 @@@ HISTORY @@@
@@ -2741,50 +2742,41 @@ N_INT130    "run_move  "
 
 @@@ INSPECTION @@@
 @@@ CONNECTION @@@
-KROSET R01
-127.0.0.1
-9105
+Standard 1
+192.168.0.2
+23
 @@@ PROGRAM @@@
-0:motion:F
-0:server.pc:B
-0:open_socket.pc:B
+0:motion
+0:server.pc
+0:open_socket.pc
 .ret 
 .i 
-0:close_socket.pc:B
+0:close_socket.pc
 .ret 
-0:send.pc:B
-.$send_data 
+0:send.pc
 .buf_n 
 .ret 
-0:receive.pc:B
+0:receive.pc
 .max_length 
 .num_of_el 
-0:parse.pc:B
-.$data 
+0:parse.pc
 .ret 
-0:check_data.pc:B
-.$data 
+0:check_data.pc
 .ret 
 .i 
-0:parse_move.pc:B
-.motion_number 
-.motion_value 
+0:parse_move.pc
 .i 
-0:parse_cmove.pc:B
-.$data 
+0:parse_cmove.pc
 .i 
-0:parse_moveto.pc:B
-.$data 
+0:parse_moveto.pc
 .i 
-0:parse_service.pc:B
-.$data 
-.$service_type 
-0:pos_sender.pc:B
+0:parse_service.pc
+0:pos_sender.pc
 .temp 
 .data 
 .i 
-0:run_motion.pc:B
-0:sender.pc:B
+0:run_motion.pc
+0:sender.pc
 @@@ TRANS @@@
 @@@ JOINTS @@@
 @@@ REALS @@@
@@ -2912,6 +2904,7 @@ reconnect:
   CALL open_socket.pc
   IF sock_id == -1 THEN
     PRINT   "Connection attempts were stopped manually"
+    CALL close_socket.pc
     GOTO pg_end
   END
   sock_id_old = sock_id
@@ -3241,7 +3234,7 @@ pg_end:
     IF ($send_message == "") THEN
       $send_message = "POINT;" + .$coordinates
     END
-    TWAIT 10
+    TWAIT 2
   END
   ;
 pg_end:
@@ -3292,7 +3285,7 @@ pg_ret:
       CALL send.pc($send_message + "\n")
       $send_message = ""
     END
-    TWAIT 10
+    TWAIT 1
   END
   ;
 pg_end:

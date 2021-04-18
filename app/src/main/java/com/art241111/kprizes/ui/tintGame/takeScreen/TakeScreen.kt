@@ -36,14 +36,15 @@ fun TakeScreen(
             progress = timer,
             onClick = {
                 onTake()
+            },
+            content = {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "Захватить",
+                    style = MaterialTheme.typography.h1,
+                )
             }
-        ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "Захватить",
-                style = MaterialTheme.typography.h1,
-            )
-        }
+        )
 
         val catTextVM = viewModel<CatTextTakeScreenVM>()
         val isUpdate = catTextVM.isUpdate

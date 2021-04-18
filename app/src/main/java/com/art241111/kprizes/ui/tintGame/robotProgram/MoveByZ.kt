@@ -43,9 +43,5 @@ class MoveByZVM() : ViewModel() {
     internal fun stop() {
         isWork = false
         isFirst = true
-
-        moveInTime[0] = 0.0
-        moveInTime[1] = 0.0
-        moveInTime[2] = 0.0
     }
 }

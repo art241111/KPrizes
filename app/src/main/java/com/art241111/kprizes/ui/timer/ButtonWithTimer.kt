@@ -35,7 +35,9 @@ fun BigCircleButton(
     backgroundColor: Color = MaterialTheme.colors.surface,
     progress: Float = 1f,
     onClick: () -> Unit,
-    content: @Composable BoxScope.() -> Unit,
+    enabled: Boolean = true,
+    content: @Composable() (BoxScope.() -> Unit),
+
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
@@ -50,7 +52,8 @@ fun BigCircleButton(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onClick() }
+                .clickable(enabled = enabled) { onClick() }
+
         ) {
             CircularProgressIndicator(
                 progress = animatedProgress,

@@ -22,6 +22,7 @@ import com.art241111.kprizes.ui.timer.TimerVM
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameNavVM
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameNavigationScreen
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameScreen
+import com.art241111.kprizes.ui.tintGame.robotProgram.MoveByZVM
 import com.art241111.kprizes.ui.tintGame.robotProgram.moveToHome
 import com.art241111.kprizes.utils.LoadDefaultValue
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
@@ -69,6 +70,7 @@ fun MainNavigateScreen(
     }
 
     val serverVision = viewModel<ServerVisionVM>()
+    val moveByZVM = viewModel<MoveByZVM>()
     Background(
         modifier = modifier.fillMaxSize(),
         moveSettings = {
@@ -78,17 +80,24 @@ fun MainNavigateScreen(
         // Changing the screen depending on the state
         when (navigate.state.value) {
             GeneralScreen.HOME -> {
-                StartScreen(
-                    startGame = {
-                        timer.resettingProgress()
-                        isFirstTimeUp.value = true
-                        moveToHome(robot)
+                controlVM.stopTrackingTilt()
+                moveByZVM.stop()
+                timer.stop()
 
-                        if (!serverVision.connect.value) {
-                            controlVM.startTrackingTilt()
-                            tintGameNavVM.moveToTintScreen(timer)
-                        } else {
-                            serverVision.startMoving(robot)
+                StartScreen(
+                    enabled = robot.connect.value,
+                    startGame = {
+                        if (robot.connect.value) {
+                            timer.resettingProgress()
+                            isFirstTimeUp.value = true
+                            moveToHome(robot)
+
+                            if (!serverVision.connect.value) {
+                                controlVM.startTrackingTilt()
+                                tintGameNavVM.moveToTintScreen(timer)
+                            } else {
+                                serverVision.startMoving(robot)
+                            }
                         }
                     }
                 )
@@ -109,7 +118,8 @@ fun MainNavigateScreen(
                     robot = robot,
                     moveInTime = moveInTime,
                     controlVM = controlVM,
-                    serverVisionVM = serverVision
+                    serverVisionVM = serverVision,
+                    moveByZVM = moveByZVM
                 )
             }
 

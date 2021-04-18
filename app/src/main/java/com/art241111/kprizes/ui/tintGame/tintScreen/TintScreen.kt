@@ -38,15 +38,16 @@ fun TintScreen(
             progress = timer.progress.value.toFloat(),
             onClick = {
                 onClick()
+            },
+            content = {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "Остановить перемещение",
+                    style = MaterialTheme.typography.h1,
+                    fontSize = 60.sp
+                )
             }
-        ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "Остановить перемещение",
-                style = MaterialTheme.typography.h1,
-                fontSize = 60.sp
-            )
-        }
+        )
 
         val catTextVM = viewModel<CatTextTintScreenVM>()
         val isUpdate = catTextVM.isUpdate

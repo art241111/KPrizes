@@ -59,15 +59,15 @@ fun CatAssistant(
                 content = content
             )
         }
-
-        Image(
-            modifier = modifier
-                .size(imageWidth, imageHeight)
-                .padding(0.dp),
-            painter = painterResource(id = R.drawable.cathelper),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
-        )
+//
+//        Image(
+//            modifier = modifier
+//                .size(imageWidth, imageHeight)
+//                .padding(0.dp),
+//            painter = painterResource(id = R.drawable.cathelper),
+//            contentDescription = "",
+//            contentScale = ContentScale.Crop,
+//        )
     }
 }
 

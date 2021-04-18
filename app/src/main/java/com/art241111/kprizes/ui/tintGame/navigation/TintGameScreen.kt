@@ -28,9 +28,8 @@ fun TintGameNavigationScreen(
     moveInTime: MoveInTime,
     controlVM: ControlVM,
     serverVisionVM: ServerVisionVM,
+    moveByZVM: MoveByZVM,
 ) {
-    val moveByZVM = viewModel<MoveByZVM>()
-
     when (navigate.state.value) {
         TintGameScreen.TINT_SCREEN -> {
 

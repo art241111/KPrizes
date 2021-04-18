@@ -27,6 +27,7 @@ import com.art241111.kprizes.ui.timer.BigCircleButton
 fun StartScreen(
     modifier: Modifier = Modifier,
     startGame: () -> Unit,
+    enabled: Boolean
 ) {
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
@@ -34,7 +35,8 @@ fun StartScreen(
             size = 640.dp,
             onClick = {
                 startGame()
-            }
+            },
+            enabled = enabled
         ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),

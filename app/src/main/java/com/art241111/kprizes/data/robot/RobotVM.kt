@@ -76,7 +76,7 @@ class RobotVM : ViewModel() {
             }
             270.0 -> {
                 newX = -y
-                newY = -x
+                newY = x
             }
         }
 

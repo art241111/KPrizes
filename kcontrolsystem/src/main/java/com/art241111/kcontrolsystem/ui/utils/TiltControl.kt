@@ -44,8 +44,8 @@ class TiltControl(private val sensorManager: SensorManager) {
             if (tiltMove != null) {
                 if (event != null) {
                     tiltMove.move(
-                        x = -1 * event.values[0].toDouble(),
-                        y = -1 * event.values[1].toDouble()
+                        x = -1.5 * event.values[0].toDouble(),
+                        y = -1.5 * event.values[1].toDouble()
                     )
 
                     Log.d(
