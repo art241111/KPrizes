@@ -24,27 +24,29 @@ class CatTextTintScreenVM : ViewModel() {
      */
     val text: State<String> = catTextVM.text
 
-    init {
-        startUpdate()
-    }
-
     /**
      * Starting the text update for the assistant cat.
      */
+    private var isRun = false
     fun startUpdate() {
-        catTextVM.startUpdate(
-            listOf(
-                "Наклоняйте планшет, чтобы управлять роботом",
-                // "Давай сыграем в игру!",
-                // "Вытяни игрушку с помощью промышленного робота "
+        if (!isRun) {
+            isRun = true
+
+            catTextVM.startUpdate(
+                listOf(
+                    "Наклоняйте планшет, чтобы управлять роботом",
+                    // "Давай сыграем в игру!",
+                    // "Вытяни игрушку с помощью промышленного робота "
+                )
             )
-        )
+        }
     }
 
     /**
      * Stopping text updates.
      */
     fun stopUpdate() {
+        isRun = false
         catTextVM.stopUpdate()
     }
 }

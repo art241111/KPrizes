@@ -29,11 +29,14 @@ fun StartScreen(
     startGame: () -> Unit,
     enabled: Boolean
 ) {
+    val catTextVM = viewModel<CatTextMainScreenVM>()
+
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
             onClick = {
+                catTextVM.stopUpdate()
                 startGame()
             },
             enabled = enabled
@@ -45,7 +48,7 @@ fun StartScreen(
             )
         }
 
-        val catTextVM = viewModel<CatTextMainScreenVM>()
+        catTextVM.startUpdate()
         val isUpdate = catTextVM.isUpdate
         CatAssistant(
             modifier = Modifier
