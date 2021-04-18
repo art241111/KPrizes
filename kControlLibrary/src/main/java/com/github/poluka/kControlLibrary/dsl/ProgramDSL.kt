@@ -17,19 +17,20 @@ fun kProgram(dslCommands: Program.() -> Unit) =
  */
 @ExecutedOnTheRobot
 class Program(val robot: String) {
-    val commands: MutableList<Command> = mutableListOf()
+    private val _commands: MutableList<Command> = mutableListOf()
+    val commands: List<Command> = _commands
 
     fun subProgram(subProgram: Program.() -> Unit) {
         val programBlockContainer = Program(robot).apply(subProgram)
-        commands.addAll(programBlockContainer.commands)
+        _commands.addAll(programBlockContainer._commands)
     }
 
-    fun add(command: Command) {
-        commands.add(command)
+    infix fun add(command: Command) {
+        _commands.add(command)
     }
 
-    fun add(program: Program) {
-        commands.addAll(program.commands)
+    infix fun add(program: Program) {
+        _commands.addAll(program._commands)
     }
 
     internal fun build(): Program = this
