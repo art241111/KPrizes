@@ -1,4 +1,4 @@
-package com.art241111.kprizes.ui.startScreen
+package com.art241111.kprizes.ui.visionGame
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
@@ -12,41 +12,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kprizes.ui.catHelper.CatAssistant
 import com.art241111.kprizes.ui.timer.BigCircleButton
+import com.art241111.kprizes.ui.timer.TimerVM
 
 /**
- * The main screen, which has a large red button and a cat assistant.
- *
  * @author Created by Artem Gerasimov (gerasimov.av.dev@gmail.com).
  */
-
 @ExperimentalAnimationApi
 @Composable
-fun StartScreen(
+fun VisionGameScreen(
     modifier: Modifier = Modifier,
-    startGame: () -> Unit,
-    enabled: Boolean
+    timer: TimerVM,
+    onEndGame: () -> Unit
 ) {
-    val catTextVM = viewModel<CatTextMainScreenVM>()
-
+    val catTextVM = viewModel<CatTextVisionScreenVM>()
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
+            progress = timer.progress.value.toFloat(),
             onClick = {
                 catTextVM.stopUpdate()
-                startGame()
+                onEndGame()
             },
-            enabled = enabled
-        ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "НАЧАТЬ ИГРУ",
-                style = MaterialTheme.typography.h1
-            )
-        }
+            content = {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "Остановить игру",
+                    style = MaterialTheme.typography.h1,
+                    fontSize = 60.sp
+                )
+            }
+        )
 
         catTextVM.startUpdate()
         val isUpdate = catTextVM.isUpdate

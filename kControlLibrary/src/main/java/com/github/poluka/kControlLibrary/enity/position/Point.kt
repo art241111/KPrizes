@@ -8,12 +8,12 @@ import com.github.poluka.kControlLibrary.enity.Distance
  * @author artem241120@gmail.com
  */
 class Point(
-    private val x: Double = 0.0,
-    private val y: Double = 0.0,
-    private val z: Double = 0.0,
-    private val o: Double = 0.0,
-    private val a: Double = 0.0,
-    private val t: Double = 0.0
+    x: Double = 0.0,
+    y: Double = 0.0,
+    z: Double = 0.0,
+    o: Double = 0.0,
+    a: Double = 0.0,
+    t: Double = 0.0
 ) {
     private val position = doubleArrayOf(x, y, z, o, a, t)
 
@@ -55,12 +55,36 @@ class Point(
 
     operator fun minus(point: Point): Distance {
         return Distance(
-            x = x - point.x,
-            y = y - point.y,
-            z = z - point.z,
-            o = o - point.o,
-            a = a - point.a,
-            t = t - point.t,
+            x = position[0] - point.position[0],
+            y = position[1] - point.position[1],
+            z = position[2] - point.position[2],
+            o = position[3] - point.position[3],
+            a = position[4] - point.position[4],
+            t = position[5] - point.position[5],
         )
+    }
+
+    operator fun plus(point: Point): Distance {
+        return Distance(
+            x = position[0] + point.position[0],
+            y = position[1] + point.position[1],
+            z = position[2] + point.position[2],
+            o = position[3] + point.position[3],
+            a = position[4] + point.position[4],
+            t = position[5] + point.position[5],
+        )
+    }
+
+    fun isNull(): Boolean {
+        var isEm = true
+
+        for (pos in position) {
+            if (pos != 0.0) {
+                isEm = false
+                break
+            }
+        }
+
+        return isEm
     }
 }

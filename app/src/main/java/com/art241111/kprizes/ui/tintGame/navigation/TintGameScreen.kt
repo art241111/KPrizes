@@ -2,14 +2,12 @@ package com.art241111.kprizes.ui.tintGame.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kcontrolsystem.data.ControlVM
 import com.art241111.kcontrolsystem.data.MoveInTime
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.repository.ServerVisionVM
 import com.art241111.kprizes.ui.timer.TimerVM
 import com.art241111.kprizes.ui.tintGame.robotProgram.MoveByZVM
-import com.art241111.kprizes.ui.tintGame.robotProgram.stayPrizes
 import com.art241111.kprizes.ui.tintGame.takeScreen.TakeScreen
 import com.art241111.kprizes.ui.tintGame.tintScreen.TintScreen
 
@@ -29,6 +27,7 @@ fun TintGameNavigationScreen(
     controlVM: ControlVM,
     serverVisionVM: ServerVisionVM,
     moveByZVM: MoveByZVM,
+    onGameEnd: () -> Unit,
 ) {
     when (navigate.state.value) {
         TintGameScreen.TINT_SCREEN -> {
@@ -53,11 +52,7 @@ fun TintGameNavigationScreen(
             TakeScreen(
                 timer = timer.progress.value.toFloat(),
                 onTake = {
-                    moveByZVM.stop()
-                    stayPrizes(robot)
-
-                    // Перемещение надомашний экран
-                    navigate.moveToHome()
+                    onGameEnd()
                 }
             )
         }

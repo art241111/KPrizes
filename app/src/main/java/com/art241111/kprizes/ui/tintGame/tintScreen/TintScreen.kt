@@ -31,12 +31,15 @@ fun TintScreen(
     timer: TimerVM,
     onClick: () -> Unit
 ) {
+    val catTextVM = viewModel<CatTextTintScreenVM>()
+
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
             progress = timer.progress.value.toFloat(),
             onClick = {
+                catTextVM.stopUpdate()
                 onClick()
             },
             content = {
@@ -49,7 +52,7 @@ fun TintScreen(
             }
         )
 
-        val catTextVM = viewModel<CatTextTintScreenVM>()
+        catTextVM.startUpdate()
         val isUpdate = catTextVM.isUpdate
         CatAssistant(
             modifier = Modifier

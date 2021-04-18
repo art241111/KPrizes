@@ -29,12 +29,15 @@ fun TakeScreen(
     timer: Float,
     onTake: () -> Unit
 ) {
+    val catTextVM = viewModel<CatTextTakeScreenVM>()
+
     Box(modifier.fillMaxSize()) {
         BigCircleButton(
             modifier = Modifier.align(Alignment.Center),
             size = 640.dp,
             progress = timer,
             onClick = {
+                catTextVM.stopUpdate()
                 onTake()
             },
             content = {
@@ -46,7 +49,7 @@ fun TakeScreen(
             }
         )
 
-        val catTextVM = viewModel<CatTextTakeScreenVM>()
+        catTextVM.startUpdate()
         val isUpdate = catTextVM.isUpdate
         CatAssistant(
             modifier = Modifier

@@ -11,7 +11,8 @@ fun Point.positionArrayFromString(text: String): Point {
 
     // Загружаем все значения в массив
     for (coordinate in Axes.values()) {
-        this[coordinate] = position[coordinate.ordinal]
+        if (coordinate.ordinal < position.size)
+            this[coordinate] = position[coordinate.ordinal]
     }
 
     return this

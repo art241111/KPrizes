@@ -18,7 +18,7 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
      * State the position that you want to monitor
      * to obtain information about the position.
      */
-    private var oldPositionState: Point = Point()
+    private var oldPosition: Point = Point()
     private val _moveDistance: MutableStateFlow<Distance> = MutableStateFlow(Distance())
     val moveDistance: StateFlow<Distance> = _moveDistance
     var gripperState: Boolean = false
@@ -29,13 +29,10 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
         isHandling = true
 
         incomingText.collect { text ->
-            Log.d("SERVER_VISION", text)
-            if (text.substringBefore(";").trim() == "MOVE") {
-                val newPosition = positionParsing(text)
-                if (newPosition != null) {
-                    oldPositionState = newPosition
-                    gripperState = text.substringAfterLast(";").trim() == "1"
-                }
+            val newPosition = positionParsing(text)
+            if (newPosition != null) {
+                oldPosition = newPosition
+                gripperState = text.substringAfterLast(";").trim() == "1"
             }
             if (!isHandling) return@collect
         }
@@ -52,10 +49,14 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
      * @return null - if old position.
      */
     private fun positionParsing(position: String): Point? {
-        val newPosition = Point().positionArrayFromString(position)
+        val newPosition = Point().positionArrayFromString(";$position")
 
-        return if (newPosition != oldPositionState) {
-            _moveDistance.value = oldPositionState - newPosition
+        return if (newPosition != oldPosition) {
+            if (!oldPosition.isNull()) {
+                _moveDistance.value = newPosition - oldPosition
+            }
+
+            Log.d("SERVER_VISION", "${_moveDistance.value}")
             newPosition
         } else {
             null

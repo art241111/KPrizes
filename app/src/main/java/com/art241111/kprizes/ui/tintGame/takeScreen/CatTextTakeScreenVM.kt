@@ -1,8 +1,6 @@
 package com.art241111.kprizes.ui.tintGame.takeScreen
 
-import androidx.compose.runtime.State
-import androidx.lifecycle.ViewModel
-import com.art241111.kprizes.ui.catHelper.CatTextVM
+import com.art241111.kprizes.ui.catHelper.OpenCatTextVM
 
 /**
  * View model for updating phrases on the take screen
@@ -10,41 +8,9 @@ import com.art241111.kprizes.ui.catHelper.CatTextVM
  * @author Created by Artem Gerasimov (gerasimov.av.dev@gmail.com).
  */
 
-class CatTextTakeScreenVM : ViewModel() {
-    private val catTextVM = CatTextVM()
-
-    /**
-     * The state that changes when the text changes.
-     * Required for animating text changes in the assistant cat.
-     */
-    val isUpdate: State<Boolean> = catTextVM.isUpdate
-
-    /**
-     * The text that the assistant cat is currently saying.
-     */
-    val text: State<String> = catTextVM.text
-
-    init {
-        startUpdate()
-    }
-
-    /**
-     * Starting the text update for the assistant cat.
-     */
-    fun startUpdate() {
-        catTextVM.startUpdate(
-            listOf(
-                "Нажмите на кнопку, когда будете уверены, что робот возьмет игрушку",
-                // "Давай сыграем в игру!",
-                // "Вытяни игрушку с помощью промышленного робота "
-            )
+class CatTextTakeScreenVM : OpenCatTextVM() {
+    override val possibleText: List<String>
+        get() = listOf(
+            "Нажмите на кнопку, когда будете уверены, что робот возьмет игрушку",
         )
-    }
-
-    /**
-     * Stopping text updates.
-     */
-    fun stopUpdate() {
-        catTextVM.stopUpdate()
-    }
 }

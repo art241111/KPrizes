@@ -24,6 +24,9 @@ import com.art241111.kprizes.ui.tintGame.navigation.TintGameNavigationScreen
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameScreen
 import com.art241111.kprizes.ui.tintGame.robotProgram.MoveByZVM
 import com.art241111.kprizes.ui.tintGame.robotProgram.moveToHome
+import com.art241111.kprizes.ui.tintGame.robotProgram.stayPrizes
+import com.art241111.kprizes.ui.visionGame.VisionGameScreen
+import com.art241111.kprizes.ui.visionGame.VisionGameScreens
 import com.art241111.kprizes.utils.LoadDefaultValue
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 
@@ -80,6 +83,7 @@ fun MainNavigateScreen(
         // Changing the screen depending on the state
         when (navigate.state.value) {
             GeneralScreen.HOME -> {
+                serverVision.stopMoving()
                 controlVM.stopTrackingTilt()
                 moveByZVM.stop()
                 timer.stop()
@@ -90,12 +94,12 @@ fun MainNavigateScreen(
                         if (robot.connect.value) {
                             timer.resettingProgress()
                             isFirstTimeUp.value = true
-                            moveToHome(robot)
 
                             if (!serverVision.connect.value) {
                                 controlVM.startTrackingTilt()
                                 tintGameNavVM.moveToTintScreen(timer)
                             } else {
+                                navigate.setScreen(VisionGameScreens.MAIN_SCREEN)
                                 serverVision.startMoving(robot)
                             }
                         }
@@ -119,7 +123,15 @@ fun MainNavigateScreen(
                     moveInTime = moveInTime,
                     controlVM = controlVM,
                     serverVisionVM = serverVision,
-                    moveByZVM = moveByZVM
+                    moveByZVM = moveByZVM,
+                    onGameEnd = {
+                        moveByZVM.stop()
+                        stayPrizes(robot)
+
+                        // Перемещение надомашний экран
+                        moveToHome(robot)
+                        navigate.moveToHome()
+                    }
                 )
             }
 
@@ -131,6 +143,19 @@ fun MainNavigateScreen(
                     sharedPreferences = sharedPreferences,
                     controlVM = controlVM,
                     moveInTime = moveInTime,
+                )
+            }
+
+            is VisionGameScreens -> {
+                VisionGameScreen(
+                    timer = timer,
+                    onEndGame = {
+                        serverVision.stopMoving()
+
+                        // Перемещение надомашний экран
+                        moveToHome(robot)
+                        navigate.moveToHome()
+                    }
                 )
             }
         }
