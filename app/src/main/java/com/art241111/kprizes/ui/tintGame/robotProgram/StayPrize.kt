@@ -6,7 +6,6 @@ import com.github.poluka.kControlLibrary.actions.gripper.closeGripper
 import com.github.poluka.kControlLibrary.actions.gripper.openGripper
 import com.github.poluka.kControlLibrary.actions.move.MoveToPoint
 import com.github.poluka.kControlLibrary.actions.move.moveByAxes
-import com.github.poluka.kControlLibrary.actions.move.moveToPoint
 import com.github.poluka.kControlLibrary.dsl.kProgram
 import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.position.Point

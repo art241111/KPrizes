@@ -24,6 +24,7 @@ import com.art241111.kprizes.ui.tintGame.navigation.TintGameNavigationScreen
 import com.art241111.kprizes.ui.tintGame.navigation.TintGameScreen
 import com.art241111.kprizes.ui.tintGame.robotProgram.MoveByZVM
 import com.art241111.kprizes.ui.tintGame.robotProgram.moveToHome
+import com.art241111.kprizes.ui.tintGame.robotProgram.stayPrizes
 import com.art241111.kprizes.utils.LoadDefaultValue
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 
@@ -90,7 +91,6 @@ fun MainNavigateScreen(
                         if (robot.connect.value) {
                             timer.resettingProgress()
                             isFirstTimeUp.value = true
-                            moveToHome(robot)
 
                             if (!serverVision.connect.value) {
                                 controlVM.startTrackingTilt()
@@ -119,7 +119,15 @@ fun MainNavigateScreen(
                     moveInTime = moveInTime,
                     controlVM = controlVM,
                     serverVisionVM = serverVision,
-                    moveByZVM = moveByZVM
+                    moveByZVM = moveByZVM,
+                    onGameEnd = {
+                        moveByZVM.stop()
+                        stayPrizes(robot)
+
+                        // Перемещение надомашний экран
+                        moveToHome(robot)
+                        navigate.moveToHome()
+                    }
                 )
             }
 
