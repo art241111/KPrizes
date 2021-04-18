@@ -90,7 +90,7 @@ class ServerVisionVM : ViewModel() {
     }
 
     fun disconnect() {
-        isHandling = false
+        // isHandling = false
         movePositionHandler.stopHandlePosition()
 
         client.disconnect()

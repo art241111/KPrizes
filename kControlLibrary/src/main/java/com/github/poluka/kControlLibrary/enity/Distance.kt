@@ -11,4 +11,8 @@ class Distance(
     val o: Double = 0.0,
     val a: Double = 0.0,
     val t: Double = 0.0
-)
+) {
+    override fun toString(): String {
+        return "$x;$y;$z;$o;$a;$t;"
+    }
+}
