@@ -108,6 +108,11 @@ fun MainNavigateScreen(
             }
 
             GeneralScreen.TIME_UP_SCREEN -> {
+                serverVision.stopMoving()
+                controlVM.stopTrackingTilt()
+                moveByZVM.stop()
+                timer.stop()
+
                 TimeUpScreen(
                     moveToHomeScreen = {
                         navigate.moveToHome()
