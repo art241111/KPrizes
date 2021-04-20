@@ -1,12 +1,9 @@
 package com.art241111.kprizes.ui.timer
 
+import android.os.CountDownTimer
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * A timer that changes progress while running.
@@ -21,24 +18,32 @@ class TimerVM : ViewModel() {
     private var isFirstStart = true
     private var isWork = true
 
+    private lateinit var timer: CountDownTimer
+
     fun start(time: Long) {
+
         if (isFirstStart) {
             isFirstStart = false
-            isWork = true
 
-            viewModelScope.launch(Dispatchers.IO) {
-                while (_progress.value > 0) {
-                    if (isWork) {
-                        _progress.value = progress.value - 0.001
-                        delay(time / 1000)
-                    }
+            timer = object : CountDownTimer(time, 100) {
+                override fun onTick(millisUntilFinished: Long) {
+                    _progress.value = millisUntilFinished / time.toDouble()
+                }
+
+                override fun onFinish() {
+                    _progress.value = 0.0
                 }
             }
+
+            timer.start()
         }
     }
 
     fun stop() {
-        isWork = false
+        if (::timer.isInitialized) {
+            timer.cancel()
+        }
+
         isFirstStart = true
     }
 
