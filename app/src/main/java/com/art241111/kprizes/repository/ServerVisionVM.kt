@@ -29,6 +29,12 @@ class ServerVisionVM : ViewModel() {
 
     private val moveDistance = movePositionHandler.moveDistance
 
+    fun setScale(scale: Double) {
+        movePositionHandler.scale = scale
+    }
+
+    fun getScale(): Double = movePositionHandler.scale
+
     private var isMoving = false
     fun startMoving(robot: RobotVM) {
         var isGripperClose = false

@@ -30,7 +30,7 @@ fun BoxScope.SettingsScreen(
     sharedPreferences: SharedPreferencesHelperForString,
     controlVM: ControlVM,
     moveInTime: MoveInTime,
-    serverVision: ServerVisionVM
+    serverVision: ServerVisionVM,
 ) {
     val settingsNavVM = viewModel<SettingsNavVM>()
     settingsNavVM.setNavigation(navigate)
@@ -47,7 +47,7 @@ fun BoxScope.SettingsScreen(
                     editPoint.value = point
                     settingsNavVM.moveToAddPoint()
                 },
-                serverVision = serverVision
+                serverVision = serverVision,
             )
         }
 

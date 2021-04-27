@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.hardware.SensorManager.SENSOR_DELAY_NORMAL
 import android.util.Log
 
 class TiltControl(private val sensorManager: SensorManager) {
@@ -13,7 +14,6 @@ class TiltControl(private val sensorManager: SensorManager) {
     private lateinit var listener: SensorEventListener
 
     fun startTracking() {
-        Log.d("START", "START______________________________________________")
         if (sensor != null) {
             listener = if (this::tiltMove.isInitialized) {
                 MySensorEventListener(tiltMove)
@@ -24,7 +24,7 @@ class TiltControl(private val sensorManager: SensorManager) {
             sensorManager.registerListener(
                 listener,
                 sensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                SENSOR_DELAY_NORMAL
             )
         } else {
             Log.e("sensor", "Sensor not detected")

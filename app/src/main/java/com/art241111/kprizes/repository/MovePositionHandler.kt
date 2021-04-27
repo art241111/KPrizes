@@ -21,6 +21,9 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
     private var oldPosition: Point = Point()
     private val _moveDistance: MutableStateFlow<Distance> = MutableStateFlow(Distance())
     val moveDistance: StateFlow<Distance> = _moveDistance
+
+    var scale: Double = 1.0
+
     var gripperState: Boolean = false
         private set
 
@@ -29,7 +32,7 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
         isHandling = true
 
         incomingText.collect { text ->
-            val newPosition = positionParsing(text)
+            val newPosition = positionParsing(text, scale)
             if (newPosition != null) {
                 oldPosition = newPosition
                 gripperState = text.substringAfterLast(";").trim() == "1"
@@ -45,15 +48,16 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
     /**
      * Parse input data.
      * @param position - data to parse,
+     * @param scale - коэфициент, на который изменяется входная дистанция
      * @return new position - when position change,
      * @return null - if old position.
      */
-    private fun positionParsing(position: String): Point? {
+    private fun positionParsing(position: String, scale: Double = 1.0): Point? {
         val newPosition = Point().positionArrayFromString(";$position")
 
         return if (newPosition != oldPosition) {
             if (!oldPosition.isNull()) {
-                _moveDistance.value = newPosition - oldPosition
+                _moveDistance.value = (newPosition - oldPosition) * scale
             }
 
             Log.d("SERVER_VISION", "${_moveDistance.value}")

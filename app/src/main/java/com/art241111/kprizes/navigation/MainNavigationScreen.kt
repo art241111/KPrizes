@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kcontrolsystem.data.ControlVM
 import com.art241111.kcontrolsystem.data.MoveInTime
+import com.art241111.kcontrolsystem.data.SHORT_MOVE_SP
 import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.data.robot.TiltMoveImp
@@ -35,6 +36,7 @@ import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesH
  *
  * @author Created by Artem Gerasimov (gerasimov.av.dev@gmail.com).
  */
+internal const val SCALE_VISION = "SCALE_VISION"
 
 @ExperimentalAnimationApi
 @Composable
@@ -73,6 +75,9 @@ fun MainNavigateScreen(
     }
 
     val serverVision = viewModel<ServerVisionVM>()
+    serverVision.setScale(
+        sharedPreferences.load(SCALE_VISION, 1.0.toString()).toDouble()
+    )
     val moveByZVM = viewModel<MoveByZVM>()
     Background(
         modifier = modifier.fillMaxSize(),

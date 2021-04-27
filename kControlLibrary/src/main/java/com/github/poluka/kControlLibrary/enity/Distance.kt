@@ -15,4 +15,26 @@ class Distance(
     override fun toString(): String {
         return "$x;$y;$z;$o;$a;$t;"
     }
+
+    operator fun times(other: Int): Distance {
+        return Distance(
+            x = x * other,
+            y = y * other,
+            z = z * other,
+            o = o * other,
+            a = a * other,
+            t = t * other,
+        )
+    }
+
+    operator fun times(other: Double): Distance {
+        return Distance(
+            x = x * other,
+            y = y * other,
+            z = z * other,
+            o = o * other,
+            a = a * other,
+            t = t * other,
+        )
+    }
 }

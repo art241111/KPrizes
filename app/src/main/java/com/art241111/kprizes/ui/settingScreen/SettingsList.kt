@@ -23,6 +23,7 @@ import com.art241111.kcontrolsystem.data.LONG_MOVE_SP
 import com.art241111.kcontrolsystem.data.SHORT_MOVE_SP
 import com.art241111.kprizes.data.robot.ROBOT_POSITION_ANGLE
 import com.art241111.kprizes.data.robot.RobotVM
+import com.art241111.kprizes.navigation.SCALE_VISION
 import com.art241111.kprizes.repository.ServerVisionVM
 import com.art241111.kprizes.ui.settingScreen.addPoints.AddHomePoint
 import com.art241111.kprizes.ui.settingScreen.addPoints.AddSetPoint
@@ -136,6 +137,17 @@ fun BoxScope.SettingsList(
                             serverVision.disconnect()
                         },
                         onConnectClick = { settingsNavVM.moveToConnectToTheVisionSever() }
+                    )
+                }
+
+                item {
+                    ParamChangeItem(
+                        defaultValue = serverVision.getScale(),
+                        labelText = "Масштаб перемещений в режими отслеживания руки",
+                        onValueChange = {
+                            serverVision.setScale(it)
+                            sharedPreferences.save(SCALE_VISION, it.toString())
+                        }
                     )
                 }
             }
