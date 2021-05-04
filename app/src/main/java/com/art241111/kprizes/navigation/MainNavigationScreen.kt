@@ -1,5 +1,6 @@
 package com.art241111.kprizes.navigation
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -79,6 +80,7 @@ fun MainNavigateScreen(
         sharedPreferences.load(SCALE_VISION, 1.0.toString()).toDouble()
     )
     val moveByZVM = viewModel<MoveByZVM>()
+
     Background(
         modifier = modifier.fillMaxSize(),
         moveSettings = {

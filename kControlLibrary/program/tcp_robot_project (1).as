@@ -2740,13 +2740,21 @@ N_INT130    "run_move  "
 
 21.10.2020 15:13:27
 
+30.04.2021 16:08:45
+
 @@@ INSPECTION @@@
+ctr
+po[0]
+motion_data[1]
+motion_data[2]
+motion_data[3]
 @@@ CONNECTION @@@
 Standard 1
 192.168.0.2
 23
 @@@ PROGRAM @@@
 0:motion
+.i 
 0:server.pc
 0:open_socket.pc
 .ret 
@@ -2777,6 +2785,7 @@ Standard 1
 .i 
 0:run_motion.pc
 0:sender.pc
+0:parse_new_move.PC
 @@@ TRANS @@@
 @@@ JOINTS @@@
 @@@ REALS @@@
@@ -2821,7 +2830,14 @@ stop_connection
 .END
 .PROGRAM motion ()
   SPEED 300 MM/S ALWAYS
+  HERE po[0]
   WHILE TRUE DO
+   ; FOR ctr = 0 TO points_counter
+      LMOVE poX
+    ;END
+    points_counter = 0
+    
+    
     SCASE $motion_type OF
       SVALUE "JOINT":
         ;
@@ -2853,7 +2869,7 @@ stop_connection
         ;
       SVALUE "LMOVE":
         ;
-        LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+        LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3])
         $motion_type = ""
         BREAK
         $send_message = $PROGRAM_COMP
@@ -2912,8 +2928,14 @@ reconnect:
   PRINT   "Connceted to: " + $client_ip
   PRINT   "Socket: ", sock_id
   ;
+  points_counter = 0
+  cp ON
+  ;
   IF (TASK(1002) == 0)
     PCEXECUTE 2: pos_sender.pc
+  END
+  ;
+  IF (TASK(1005) == 0)
     PCEXECUTE 5: sender.pc
   END
   ;
@@ -3057,6 +3079,10 @@ pg_end:
       SVALUE "MOVE":
         ;
         CALL parse_move.pc(.$data)
+        ;
+      SVALUE "MOVE_NEW":
+        ;
+        CALL parse_new_move.PC(.$data)
         ;
       SVALUE "MOVETO":
         ;
@@ -3291,6 +3317,34 @@ pg_ret:
 pg_end:
   ;
 .END
+.PROGRAM parse_new_move.PC (.$data) ;
+  ;HERE .herePoint
+  ;
+  ;.$temp = $DECODE (.$data, ";",0)
+  ;.$motion_type = .$temp
+  ;.$temp = $DECODE (.$data, ";",1)
+  ;
+  FOR .i = 1 TO 3
+    .$temp = $DECODE (.$data, ";",0)
+    motion_data[.i] = VAL (.$temp)
+    .$temp = $DECODE (.$data, ";",1)
+  END
+  ;
+  ;POINT po[points_counter] = SHIFT (herePoint BY motion_data[1], motion_data[2], motion_data[3])
+  POINT poX = SHIFT (herePoint BY motion_data[1], motion_data[2], motion_data[3])
+  TWAIT 0.1
+  points_counter = points_counter + 1
+  IF points_counter > 1000 THEN
+    points_counter = 0
+  END
+  ;
+  ;motion_data[motion_number] = motion_value
+  ;$motion_type = .$motion_type
+  PRINT $motion_type
+.END
+.TRANS
+po[0] 549.620483 14.970863 -171.268646 47.251446 178.779587 160.503540
+.END
 .REALS
 tcp_start_tmo = 5
 tcp_send_tmo = 1
@@ -3314,6 +3368,8 @@ motion_data[4] = 0
 motion_data[5] = 0
 motion_data[6] = 0
 run_move = 2130
+points_counter = 0
+ctr = 0
 .END
 .STRINGS
 $client_ip = " 192. 168. 31. 88"

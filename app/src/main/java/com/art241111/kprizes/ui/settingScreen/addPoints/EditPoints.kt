@@ -5,5 +5,5 @@ package com.art241111.kprizes.ui.settingScreen.addPoints
  */
 
 enum class EditPoints {
-    HOME_POINT, SET_POINT
+    HOME_POINT, SET_POINT, FIRST_POINT, SECOND_POINT
 }

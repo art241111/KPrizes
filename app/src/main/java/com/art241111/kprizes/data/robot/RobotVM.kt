@@ -1,17 +1,22 @@
 package com.art241111.kprizes.data.robot
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.poluka.kControlLibrary.KRobot
 import com.github.poluka.kControlLibrary.actions.Command
 import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
+import com.github.poluka.kControlLibrary.actions.move.MoveNew
 import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
+import com.github.poluka.kControlLibrary.actions.move.MoveToPoint
 import com.github.poluka.kControlLibrary.dsl.Program
+import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.Distance
 import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 /**
  * Linking the UI to a live robot.
@@ -28,6 +33,48 @@ class RobotVM : ViewModel() {
 
     var homePoint = Point()
     var setPoint = Point()
+
+    var firstPoint = Point()
+        set(value) {
+            setMinPoint(value, minPoint = minPoint)
+            setMaxPoint(value, maxPoint = maxPoint)
+
+            field = value
+        }
+
+    var secondPoint = Point()
+        set(value) {
+            setMinPoint(value, minPoint = minPoint)
+            setMaxPoint(value, maxPoint = maxPoint)
+
+            field = value
+        }
+
+    private fun setMinPoint(newPoint: Point, minPoint: Point) {
+        if (minPoint[Axes.X] > newPoint[Axes.X])
+            minPoint[Axes.X] = newPoint[Axes.X]
+
+        if (minPoint[Axes.Y] > newPoint[Axes.Y])
+            minPoint[Axes.Y] = newPoint[Axes.Y]
+
+        if (minPoint[Axes.Z] > newPoint[Axes.Z])
+            minPoint[Axes.Z] = newPoint[Axes.Z]
+    }
+
+    val minPoint = Point()
+
+    private fun setMaxPoint(newPoint: Point, maxPoint: Point) {
+        if (maxPoint[Axes.X] < newPoint[Axes.X])
+            maxPoint[Axes.X] = newPoint[Axes.X]
+
+        if (maxPoint[Axes.Y] < newPoint[Axes.Y])
+            maxPoint[Axes.Y] = newPoint[Axes.Y]
+
+        if (maxPoint[Axes.Z] < newPoint[Axes.Z])
+            maxPoint[Axes.Z] = newPoint[Axes.Z]
+    }
+
+    val maxPoint = Point()
 
     private val kRobot = KRobot()
     private val connectRobot = ConnectRobot(kRobot)
@@ -48,6 +95,20 @@ class RobotVM : ViewModel() {
 
     infix fun move(distance: Distance) {
         this dangerousRun MoveOnDistance(distance)
+    }
+
+    fun moveOnArea(
+        x: Double = 0.0,
+        y: Double = 0.0,
+        z: Double = 0.0,
+    ) {
+        val area = maxPoint - minPoint
+
+        this dangerousRun MoveNew(
+            x = (-x / 3) * area[Axes.X],
+            y = (y / 3) * area[Axes.Y],
+            z = (z / 3) * area[Axes.Z],
+        )
     }
 
     fun move(

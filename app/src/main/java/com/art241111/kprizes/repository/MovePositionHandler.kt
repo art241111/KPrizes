@@ -19,8 +19,8 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
      * to obtain information about the position.
      */
     private var oldPosition: Point = Point()
-    private val _moveDistance: MutableStateFlow<Distance> = MutableStateFlow(Distance())
-    val moveDistance: StateFlow<Distance> = _moveDistance
+    private val _moveDistance: MutableStateFlow<Point> = MutableStateFlow(Point())
+    val moveDistance: StateFlow<Point> = _moveDistance
 
     var scale: Double = 1.0
 
@@ -55,12 +55,15 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
     private fun positionParsing(position: String, scale: Double = 1.0): Point? {
         val newPosition = Point().positionArrayFromString(";$position")
 
+        _moveDistance.value = newPosition
+
         return if (newPosition != oldPosition) {
             if (!oldPosition.isNull()) {
-                _moveDistance.value = (newPosition - oldPosition) * scale
+//                _moveDistance.value = (newPositxion - oldPosition)
+
+//                _moveDistance.value = newPosition
             }
 
-            Log.d("SERVER_VISION", "${_moveDistance.value}")
             newPosition
         } else {
             null

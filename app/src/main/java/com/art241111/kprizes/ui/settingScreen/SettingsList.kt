@@ -128,6 +128,27 @@ fun BoxScope.SettingsList(
                     )
                 }
 
+                item {
+                    AddSetPoint(
+                        robot = robot,
+                        moveToAddPoint = moveToAddPoint,
+                        text = "Минимальная точка",
+                        coordinatePoint = robot.firstPoint.toString(),
+                        pointFlag = EditPoints.FIRST_POINT
+                    )
+                }
+
+                item {
+                    AddSetPoint(
+                        robot = robot,
+                        moveToAddPoint = moveToAddPoint,
+                        text = "Максимальная точка",
+                        coordinatePoint = robot.secondPoint.toString(),
+                        pointFlag = EditPoints.SECOND_POINT
+                    )
+                }
+
+
                 // Connect to the robot
                 item {
                     ConnectItem(

@@ -91,6 +91,18 @@ fun BoxScope.SettingsScreen(
                                     EditPoints.SET_POINT.name, newPoint.toString()
                                 )
                             }
+                            EditPoints.FIRST_POINT -> {
+                                robot.firstPoint = newPoint
+                                sharedPreferences.save(
+                                    EditPoints.FIRST_POINT.name, newPoint.toString()
+                                )
+                            }
+                            EditPoints.SECOND_POINT -> {
+                                robot.secondPoint = newPoint
+                                sharedPreferences.save(
+                                    EditPoints.SECOND_POINT.name, newPoint.toString()
+                                )
+                            }
                         }
                         editPoint.value = null
                         settingsNavVM.back()

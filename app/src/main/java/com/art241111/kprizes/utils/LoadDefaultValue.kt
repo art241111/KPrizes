@@ -30,6 +30,11 @@ object LoadDefaultValue {
         robotVM.setPoint =
             sharedPreferences.load(EditPoints.SET_POINT.name, Point().toString()).toPoint()
 
+        robotVM.firstPoint =
+            sharedPreferences.load(EditPoints.FIRST_POINT.name, Point().toString()).toPoint()
+        robotVM.secondPoint =
+            sharedPreferences.load(EditPoints.SECOND_POINT.name, Point().toString()).toPoint()
+
         robotVM.robotPositionAngle =
             sharedPreferences.load(ROBOT_POSITION_ANGLE, 0.0.toString()).toDouble()
     }

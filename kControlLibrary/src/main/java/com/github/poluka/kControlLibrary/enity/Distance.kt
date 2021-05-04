@@ -12,6 +12,21 @@ class Distance(
     val a: Double = 0.0,
     val t: Double = 0.0
 ) {
+    /**
+     * Получаем доступ через координаты.
+     * @param axes - координата, по которой нужно олучить значения.
+     */
+    operator fun get(axes: Axes): Double {
+        return when (axes) {
+            Axes.X -> x
+            Axes.Y -> y
+            Axes.Z -> z
+            Axes.O -> o
+            Axes.A -> a
+            Axes.T -> t
+        }
+    }
+
     override fun toString(): String {
         return "$x;$y;$z;$o;$a;$t;"
     }

@@ -9,7 +9,11 @@ import com.art241111.kprizes.data.robot.RobotVM
 import com.github.art241111.tcpClient.Client
 import com.github.art241111.tcpClient.connection.Status
 import com.github.poluka.kControlLibrary.actions.gripper.CloseGripper
+import com.github.poluka.kControlLibrary.enity.Axes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -36,6 +40,7 @@ class ServerVisionVM : ViewModel() {
     fun getScale(): Double = movePositionHandler.scale
 
     private var isMoving = false
+    private var job: Job = Job()
     fun startMoving(robot: RobotVM) {
         var isGripperClose = false
         isMoving = true
@@ -43,7 +48,14 @@ class ServerVisionVM : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             if (isMoving) {
                 moveDistance.collect { newMoveDistance ->
-                    robot move newMoveDistance
+                    if(!isMoving) this.cancel()
+                    ensureActive()
+
+                    robot.moveOnArea(
+                        x = newMoveDistance[Axes.Y],
+                        y = newMoveDistance[Axes.X],
+                        z = newMoveDistance[Axes.Z]
+                    )
 
                     if (movePositionHandler.gripperState) {
                         if (!isGripperClose) {
