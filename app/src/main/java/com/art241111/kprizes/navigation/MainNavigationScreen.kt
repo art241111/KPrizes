@@ -31,6 +31,8 @@ import com.art241111.kprizes.ui.visionGame.VisionGameScreen
 import com.art241111.kprizes.ui.visionGame.VisionGameScreens
 import com.art241111.kprizes.utils.LoadDefaultValue
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
+import com.github.poluka.kControlLibrary.actions.gripper.OpenGripper
+import com.github.poluka.kControlLibrary.dsl.kProgram
 
 /**
  * The main screen, where screens are created depending on the state.
@@ -67,19 +69,28 @@ fun MainNavigateScreen(
     val tintGameNavVM = viewModel<TintGameNavVM>()
     tintGameNavVM.setNavigation(navigate)
 
-    // Setting up the timer
-    val timer = viewModel<TimerVM>()
-    val isFirstTimeUp = remember { mutableStateOf(true) }
-    if (timer.progress.value <= 0 && isFirstTimeUp.value) {
-        isFirstTimeUp.value = false
-        navigate.setScreen(GeneralScreen.TIME_UP_SCREEN)
-    }
-
     val serverVision = viewModel<ServerVisionVM>()
     serverVision.setScale(
         sharedPreferences.load(SCALE_VISION, 1.0.toString()).toDouble()
     )
     val moveByZVM = viewModel<MoveByZVM>()
+
+    // Setting up the timer
+    val timer = viewModel<TimerVM>()
+    val isFirstTimeUp = remember { mutableStateOf(true) }
+    if (timer.progress.value <= 0 && isFirstTimeUp.value) {
+        serverVision.stopMoving()
+        controlVM.stopTrackingTilt()
+        moveByZVM.stop()
+        timer.stop()
+
+        moveToHome(robot)
+
+        isFirstTimeUp.value = false
+        navigate.setScreen(GeneralScreen.TIME_UP_SCREEN)
+
+    }
+
 
     Background(
         modifier = modifier.fillMaxSize(),
@@ -94,6 +105,8 @@ fun MainNavigateScreen(
                 controlVM.stopTrackingTilt()
                 moveByZVM.stop()
                 timer.stop()
+
+                robot run kProgram { OpenGripper() }
 
                 StartScreen(
                     enabled = robot.connect.value,

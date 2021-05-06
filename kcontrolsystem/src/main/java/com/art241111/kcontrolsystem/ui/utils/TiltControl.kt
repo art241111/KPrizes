@@ -6,6 +6,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.SensorManager.SENSOR_DELAY_NORMAL
 import android.util.Log
+import kotlin.math.abs
 
 class TiltControl(private val sensorManager: SensorManager) {
     lateinit var tiltMove: TiltMove
@@ -43,10 +44,12 @@ class TiltControl(private val sensorManager: SensorManager) {
         override fun onSensorChanged(event: SensorEvent?) {
             if (tiltMove != null) {
                 if (event != null) {
-                    tiltMove.move(
-                        x = -1.5 * event.values[0].toDouble(),
-                        y = -1.5 * event.values[1].toDouble()
-                    )
+                    if ((abs(event.values[0]) > 1.0) or (abs(event.values[1]) > 1.0)) {
+                        tiltMove.move(
+                            x = -1.5 * event.values[0].toDouble(),
+                            y = -1.5 * event.values[1].toDouble()
+                        )
+                    }
 
                     Log.d(
                         "sensor",
