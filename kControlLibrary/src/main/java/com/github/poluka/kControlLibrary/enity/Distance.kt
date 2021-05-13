@@ -27,6 +27,18 @@ class Distance(
         }
     }
 
+    operator fun get(axes: Int): Double {
+        return when (axes) {
+            0 -> x
+            1 -> y
+            2 -> z
+            3 -> o
+            4 -> a
+            5 -> t
+            else -> 0.0
+        }
+    }
+
     override fun toString(): String {
         return "$x;$y;$z;$o;$a;$t;"
     }

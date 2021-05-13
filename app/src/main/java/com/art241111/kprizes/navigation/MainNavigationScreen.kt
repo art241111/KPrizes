@@ -1,6 +1,5 @@
 package com.art241111.kprizes.navigation
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -10,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.art241111.kcontrolsystem.data.ControlVM
 import com.art241111.kcontrolsystem.data.MoveInTime
-import com.art241111.kcontrolsystem.data.SHORT_MOVE_SP
 import com.art241111.kcontrolsystem.ui.utils.TiltControl
 import com.art241111.kprizes.data.robot.RobotVM
 import com.art241111.kprizes.data.robot.TiltMoveImp
+import com.art241111.kprizes.repository.MoveInTimeDistance
 import com.art241111.kprizes.repository.ServerVisionVM
 import com.art241111.kprizes.ui.Background
 import com.art241111.kprizes.ui.settingScreen.SettingsScreen
@@ -33,6 +32,7 @@ import com.art241111.kprizes.utils.LoadDefaultValue
 import com.art241111.saveandloadinformation.sharedPreferences.SharedPreferencesHelperForString
 import com.github.poluka.kControlLibrary.actions.gripper.OpenGripper
 import com.github.poluka.kControlLibrary.dsl.kProgram
+import com.github.poluka.kControlLibrary.enity.Axes
 
 /**
  * The main screen, where screens are created depending on the state.
@@ -73,6 +73,17 @@ fun MainNavigateScreen(
     serverVision.setScale(
         sharedPreferences.load(SCALE_VISION, 1.0.toString()).toDouble()
     )
+    serverVision.moveInTimeDistance = MoveInTimeDistance(
+        delaySending = robot.delaySending,
+        move = { newPoint ->
+            robot.moveOnArea(
+                x = newPoint[Axes.Y],
+                y = newPoint[Axes.X],
+                z = newPoint[Axes.Z]
+            )
+        }
+    )
+
     val moveByZVM = viewModel<MoveByZVM>()
 
     // Setting up the timer
@@ -88,9 +99,7 @@ fun MainNavigateScreen(
 
         isFirstTimeUp.value = false
         navigate.setScreen(GeneralScreen.TIME_UP_SCREEN)
-
     }
-
 
     Background(
         modifier = modifier.fillMaxSize(),

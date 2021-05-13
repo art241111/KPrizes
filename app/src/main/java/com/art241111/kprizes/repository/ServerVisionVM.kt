@@ -10,7 +10,6 @@ import com.github.art241111.tcpClient.Client
 import com.github.art241111.tcpClient.connection.Status
 import com.github.poluka.kControlLibrary.actions.gripper.CloseGripper
 import com.github.poluka.kControlLibrary.actions.gripper.OpenGripper
-import com.github.poluka.kControlLibrary.enity.Axes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -23,6 +22,8 @@ import kotlinx.coroutines.launch
  */
 
 class ServerVisionVM : ViewModel() {
+    lateinit var moveInTimeDistance: MoveInTimeDistance
+
     private val client = Client()
     private val movePositionHandler = MovePositionHandler(client.incomingText)
 
@@ -42,19 +43,20 @@ class ServerVisionVM : ViewModel() {
 
     private var isMoving = false
     private var job: Job = Job()
-    fun startMoving(robot: RobotVM, goHome: ()-> Unit) {
+    fun startMoving(robot: RobotVM, goHome: () -> Unit) {
+        moveInTimeDistance.startMoving()
         var isGripperClose = false
         isMoving = true
 
-        viewModelScope.launch (Dispatchers.IO) {
-            movePositionHandler.gripperState.collect{ gripper ->
+        viewModelScope.launch(Dispatchers.IO) {
+            movePositionHandler.gripperState.collect { gripper ->
                 Log.d("GRIPPER", gripper.toString())
-                if(gripper) {
-                    robot dangerousRun   CloseGripper()
+                if (gripper) {
+                    robot dangerousRun CloseGripper()
 //                    stopMoving()
 //                    goHome()
                 } else {
-                    robot run  OpenGripper()
+                    robot run OpenGripper()
                 }
             }
         }
@@ -62,16 +64,10 @@ class ServerVisionVM : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             if (isMoving) {
                 moveDistance.collect { newMoveDistance ->
-                    if(!isMoving) this.cancel()
+                    if (!isMoving) this.cancel()
                     ensureActive()
 
-                    robot.moveOnArea(
-                        x = newMoveDistance[Axes.Y],
-                        y = newMoveDistance[Axes.X],
-                        z = newMoveDistance[Axes.Z]
-                    )
-
-
+                    moveInTimeDistance.newPosition = newMoveDistance
                 }
             }
         }
@@ -79,6 +75,7 @@ class ServerVisionVM : ViewModel() {
 
     fun stopMoving() {
         isMoving = false
+        moveInTimeDistance.stopMoving()
     }
 
     private var isHandling = false

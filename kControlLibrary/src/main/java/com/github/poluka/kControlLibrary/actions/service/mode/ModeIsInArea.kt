@@ -1,8 +1,8 @@
-package com.github.poluka.kControlLibrary.actions.points
+package com.github.poluka.kControlLibrary.actions.service.mode
 
 import com.github.poluka.kControlLibrary.actions.Command
 
-class SetIsInArea(private val isInArea: Boolean): Command {
+class ModeIsInArea(private val isInArea: Boolean) : Command {
     override fun run(): String {
         return if (isInArea)
             "IS_AREA_MODE;TRUE;"

@@ -26,7 +26,7 @@ import com.art241111.kprizes.ui.timer.TimerVM
 fun VisionGameScreen(
     modifier: Modifier = Modifier,
     timer: TimerVM,
-    onEndGame: () -> Unit
+    onEndGame: () -> Unit,
 ) {
     val catTextVM = viewModel<CatTextVisionScreenVM>()
     Box(modifier.fillMaxSize()) {

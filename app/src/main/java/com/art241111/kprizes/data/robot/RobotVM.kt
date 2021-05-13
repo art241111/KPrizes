@@ -1,6 +1,5 @@
 package com.art241111.kprizes.data.robot
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,22 +9,16 @@ import com.github.poluka.kControlLibrary.actions.Command
 import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
 import com.github.poluka.kControlLibrary.actions.move.MoveNew
 import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
-import com.github.poluka.kControlLibrary.actions.move.MoveToPoint
-import com.github.poluka.kControlLibrary.actions.move.moveOnDistance
-import com.github.poluka.kControlLibrary.actions.points.SetIsInArea
 import com.github.poluka.kControlLibrary.actions.points.SetMaxPoint
 import com.github.poluka.kControlLibrary.actions.points.SetMinPoint
+import com.github.poluka.kControlLibrary.actions.service.mode.ModeIsInArea
 import com.github.poluka.kControlLibrary.dsl.Program
-import com.github.poluka.kControlLibrary.dsl.kProgram
 import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.Distance
 import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 /**
  * Linking the UI to a live robot.
@@ -46,8 +39,8 @@ class RobotVM : ViewModel() {
     fun changeIsAreaStatus() {
         val status = !_isInArea.value
         _isInArea.value = status
-        viewModelScope.launch (Dispatchers.IO) {
-            kRobot run SetIsInArea(status)
+        viewModelScope.launch(Dispatchers.IO) {
+            kRobot run ModeIsInArea(status)
             delay(10L)
             if (status) {
                 kRobot run SetMaxPoint(maxPoint)
@@ -103,7 +96,7 @@ class RobotVM : ViewModel() {
         this dangerousRun SetMaxPoint(maxPoint)
     }
 
-    private  suspend fun sendPoints(){
+    private suspend fun sendPoints() {
         this dangerousRun SetMinPoint(minPoint)
         delay(30L)
         this dangerousRun SetMaxPoint(maxPoint)
@@ -143,7 +136,7 @@ class RobotVM : ViewModel() {
     ) {
         val area = maxPoint - minPoint
 
-        this dangerousRun  MoveNew(
+        this dangerousRun MoveNew(
             x = (-x / 2.5) * area[Axes.X],
             y = (y / 2.5) * area[Axes.Y],
             z = (z / 2.5) * area[Axes.Z],
