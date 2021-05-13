@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -170,6 +171,18 @@ fun BoxScope.SettingsList(
                             sharedPreferences.save(SCALE_VISION, it.toString())
                         }
                     )
+                }
+
+                item {
+                    val isInArea = robot.isInArea.value
+                    Row(modifier.fillMaxWidth()) {
+                        Text(text = "Режим ограничения в области")
+                        Button(onClick = { robot.changeIsAreaStatus() }) {
+                            Text(
+                                text = if (isInArea) "Включен" else "Выключен"
+                            )
+                        }
+                    }
                 }
             }
         }

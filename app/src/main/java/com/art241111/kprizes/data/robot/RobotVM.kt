@@ -2,6 +2,7 @@ package com.art241111.kprizes.data.robot
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.poluka.kControlLibrary.KRobot
@@ -10,11 +11,19 @@ import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
 import com.github.poluka.kControlLibrary.actions.move.MoveNew
 import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
 import com.github.poluka.kControlLibrary.actions.move.MoveToPoint
+import com.github.poluka.kControlLibrary.actions.move.moveOnDistance
+import com.github.poluka.kControlLibrary.actions.points.SetIsInArea
+import com.github.poluka.kControlLibrary.actions.points.SetMaxPoint
+import com.github.poluka.kControlLibrary.actions.points.SetMinPoint
 import com.github.poluka.kControlLibrary.dsl.Program
+import com.github.poluka.kControlLibrary.dsl.kProgram
 import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.Distance
 import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
@@ -30,6 +39,22 @@ class RobotVM : ViewModel() {
     var defaultButtonDistanceLong: Double = 10.0
     var delaySending: Long = 10L
     var robotPositionAngle = 0.0
+
+    private val _isInArea = mutableStateOf(false)
+    val isInArea: State<Boolean> = _isInArea
+
+    fun changeIsAreaStatus() {
+        val status = !_isInArea.value
+        _isInArea.value = status
+        viewModelScope.launch (Dispatchers.IO) {
+            kRobot run SetIsInArea(status)
+            delay(10L)
+            if (status) {
+                kRobot run SetMaxPoint(maxPoint)
+                kRobot run SetMinPoint(minPoint)
+            }
+        }
+    }
 
     var homePoint = Point()
     var setPoint = Point()
@@ -59,9 +84,11 @@ class RobotVM : ViewModel() {
 
         if (minPoint[Axes.Z] > newPoint[Axes.Z])
             minPoint[Axes.Z] = newPoint[Axes.Z]
+
+        this dangerousRun SetMinPoint(minPoint)
     }
 
-    val minPoint = Point()
+    private val minPoint = Point(1000.0, 1000.0, 1000.0)
 
     private fun setMaxPoint(newPoint: Point, maxPoint: Point) {
         if (maxPoint[Axes.X] < newPoint[Axes.X])
@@ -72,9 +99,17 @@ class RobotVM : ViewModel() {
 
         if (maxPoint[Axes.Z] < newPoint[Axes.Z])
             maxPoint[Axes.Z] = newPoint[Axes.Z]
+
+        this dangerousRun SetMaxPoint(maxPoint)
     }
 
-    val maxPoint = Point()
+    private  suspend fun sendPoints(){
+        this dangerousRun SetMinPoint(minPoint)
+        delay(30L)
+        this dangerousRun SetMaxPoint(maxPoint)
+    }
+
+    private val maxPoint = Point()
 
     private val kRobot = KRobot()
     private val connectRobot = ConnectRobot(kRobot)
@@ -85,6 +120,10 @@ class RobotVM : ViewModel() {
 
     infix fun run(@ExecutedOnTheRobot program: Program) {
         kRobot.run(program)
+    }
+
+    infix fun run(@ExecutedOnTheRobot command: Command) {
+        kRobot.run(command)
     }
 
     infix fun dangerousRun(command: Command) {
@@ -104,10 +143,10 @@ class RobotVM : ViewModel() {
     ) {
         val area = maxPoint - minPoint
 
-        this dangerousRun MoveNew(
-            x = (-x / 3) * area[Axes.X],
-            y = (y / 3) * area[Axes.Y],
-            z = (z / 3) * area[Axes.Z],
+        this dangerousRun  MoveNew(
+            x = (-x / 2.5) * area[Axes.X],
+            y = (y / 2.5) * area[Axes.Y],
+            z = (z / 2.5) * area[Axes.Z],
         )
     }
 
