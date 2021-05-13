@@ -81,6 +81,9 @@ fun MainNavigateScreen(
                 y = newPoint[Axes.X],
                 z = newPoint[Axes.Z]
             )
+        },
+        changeStatus = { status ->
+                robot.setMoveMode(status)
         }
     )
 
@@ -91,7 +94,6 @@ fun MainNavigateScreen(
     val isFirstTimeUp = remember { mutableStateOf(true) }
     if (timer.progress.value <= 0 && isFirstTimeUp.value) {
         serverVision.stopMoving()
-        robot.setMoveMode(true)
         controlVM.stopTrackingTilt()
         moveByZVM.stop()
         timer.stop()
@@ -123,6 +125,7 @@ fun MainNavigateScreen(
                     enabled = robot.connect.value,
                     startGame = {
                         if (robot.connect.value) {
+                            robot.dangerousRun(OpenGripper())
                             timer.resettingProgress()
                             isFirstTimeUp.value = true
 
@@ -131,7 +134,6 @@ fun MainNavigateScreen(
                                 tintGameNavVM.moveToTintScreen(timer)
                             } else {
                                 navigate.setScreen(VisionGameScreens.MAIN_SCREEN)
-                                robot.setMoveMode(false)
                                 serverVision.startMoving(robot) { stayPrizes(robot) }
                             }
                         }

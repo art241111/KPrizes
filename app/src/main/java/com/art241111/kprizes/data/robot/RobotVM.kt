@@ -138,10 +138,6 @@ class RobotVM : ViewModel() {
         z: Double = 0.0,
     ) {
         val area = maxPoint - minPoint
-        Log.d("AREA", "$x,$y,$z")
-        Log.d("AREA", area.toString())
-        Log.d("AREA", minPoint.toString())
-        Log.d("AREA", maxPoint.toString())
 
         val middlePoint = Point()
         for (i in 0..2) {

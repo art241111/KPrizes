@@ -1,6 +1,5 @@
 package com.art241111.kprizes.repository
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +18,7 @@ import kotlin.math.abs
 class MoveInTimeDistance(
     var delaySending: Long = 70L,
     private val move: (point: Point) -> Unit,
+    private val changeStatus: (Boolean) -> Unit,
 ) {
     var oldPosition = Point()
     var newPosition = Point()
@@ -44,6 +44,7 @@ class MoveInTimeDistance(
     }
 
     fun startMoving() {
+        changeStatus(false)
         isMoving.value = true
 
         if (!this::jobMoving.isInitialized || !jobMoving.isActive) {
@@ -55,7 +56,7 @@ class MoveInTimeDistance(
                             oldPosition = newPosition
                         }
 
-                        delay(delaySending)
+//                        delay(delaySending)
                     }
                 }
             }
@@ -67,6 +68,7 @@ class MoveInTimeDistance(
      */
     fun stopMoving() {
         isMoving.value = false
+        changeStatus(true)
         newPosition = Point()
 
         if (this::jobMoving.isInitialized) jobMoving.cancel()
