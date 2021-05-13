@@ -120,7 +120,7 @@ fun MainNavigateScreen(
                                 tintGameNavVM.moveToTintScreen(timer)
                             } else {
                                 navigate.setScreen(VisionGameScreens.MAIN_SCREEN)
-                                serverVision.startMoving(robot)
+                                serverVision.startMoving(robot) { stayPrizes(robot) }
                             }
                         }
                     }
