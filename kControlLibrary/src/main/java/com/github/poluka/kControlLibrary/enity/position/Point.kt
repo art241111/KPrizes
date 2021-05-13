@@ -2,6 +2,8 @@ package com.github.poluka.kControlLibrary.enity.position
 
 import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.Distance
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * Массив, который хранит позицию робота.
@@ -55,12 +57,12 @@ class Point(
 
     operator fun minus(point: Point): Distance {
         return Distance(
-            x = position[0] - point.position[0],
-            y = position[1] - point.position[1],
-            z = position[2] - point.position[2],
-            o = position[3] - point.position[3],
-            a = position[4] - point.position[4],
-            t = position[5] - point.position[5],
+            x = sqrt((position[0] - point.position[0]).pow(2)),
+            y = sqrt((position[1] - point.position[1]).pow(2)),
+            z = sqrt((position[2] - point.position[2]).pow(2)),
+            o = sqrt((position[3] - point.position[3]).pow(2)),
+            a = sqrt((position[4] - point.position[4]).pow(2)),
+            t = sqrt((position[5] - point.position[5]).pow(2)),
         )
     }
 
