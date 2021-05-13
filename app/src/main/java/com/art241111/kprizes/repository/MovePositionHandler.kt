@@ -22,10 +22,11 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
     private val _moveDistance: MutableStateFlow<Point> = MutableStateFlow(Point())
     val moveDistance: StateFlow<Point> = _moveDistance
 
-    var scale: Double = 1.0
+    private val _gripperState: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val gripperState: StateFlow<Boolean> = _gripperState
 
-    var gripperState: Boolean = false
-        private set
+
+    var scale: Double = 1.0
 
     private var isHandling = false
     suspend fun handlePosition() {
@@ -35,7 +36,8 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
             val newPosition = positionParsing(text, scale)
             if (newPosition != null) {
                 oldPosition = newPosition
-                gripperState = text.substringAfterLast(";").trim() == "1"
+                _gripperState.value = text.substringAfterLast(";").trim() == "1"
+
             }
             if (!isHandling) return@collect
         }
@@ -58,11 +60,11 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
         _moveDistance.value = newPosition
 
         return if (newPosition != oldPosition) {
-            if (!oldPosition.isNull()) {
-//                _moveDistance.value = (newPositxion - oldPosition)
-
-//                _moveDistance.value = newPosition
-            }
+//            if (!oldPosition.isNull()) {
+////                _moveDistance.value = (newPositxion - oldPosition)
+//
+////                _moveDistance.value = newPosition
+//            }
 
             newPosition
         } else {
