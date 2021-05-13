@@ -2788,6 +2788,7 @@ KROSET R01
 0:parse_new_move.PC:B
 0:parce_move_mode.PC:B
 @@@ TRANS @@@
+poX 
 @@@ JOINTS @@@
 @@@ REALS @@@
 @@@ STRINGS @@@
@@ -2843,6 +2844,7 @@ is_in_area
     IF move_mode == FALSE THEN
       ; FOR ctr = 0 TO points_counter
       ;IF points_counter != 0 THEN
+      ;IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
         LMOVE poX
         BREAK
         $send_message = $PROGRAM_COMP
@@ -3436,7 +3438,7 @@ pg_end:
   END
   ;
   ;POINT po[points_counter] = SHIFT (herePoint BY motion_data[1], motion_data[2], motion_data[3])
-  POINT poX = SHIFT (herePoint BY motion_data[1], motion_data[2], motion_data[3])
+  POINT poX = TRANS (motion_data[1], motion_data[2], motion_data[3])
   TWAIT 0.1
   points_counter = points_counter + 1
   IF points_counter > 1000 THEN
@@ -3467,6 +3469,7 @@ pg_end:
 .END
 .TRANS
 po[0] 550.000000 15.000000 -120.000000 47.000000 178.000000 160.000000
+poX 0.000000 514.992920 12.002411 90.000000 179.999222 -90.000397
 .END
 .REALS
 tcp_start_tmo = 5

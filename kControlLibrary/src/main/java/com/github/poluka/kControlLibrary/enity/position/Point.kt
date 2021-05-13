@@ -2,6 +2,7 @@ package com.github.poluka.kControlLibrary.enity.position
 
 import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.Distance
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -68,12 +69,12 @@ class Point(
 
     operator fun plus(point: Point): Distance {
         return Distance(
-            x = position[0] + point.position[0],
-            y = position[1] + point.position[1],
-            z = position[2] + point.position[2],
-            o = position[3] + point.position[3],
-            a = position[4] + point.position[4],
-            t = position[5] + point.position[5],
+            x = abs(position[0]) + abs(point.position[0]),
+            y = abs(position[1]) + abs(point.position[1]),
+            z = abs(position[2]) + abs(point.position[2]),
+            o = abs(position[3]) + abs(point.position[3]),
+            a = abs(position[4]) + abs(point.position[4]),
+            t = abs(position[5]) + abs(point.position[5]),
         )
     }
 

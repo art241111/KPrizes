@@ -23,9 +23,9 @@ data class MoveNew(
 ) : Command {
 
     constructor (distance: Distance) :
-            this(
-                distance.x, distance.y, distance.z,
-            )
+        this(
+            distance.x, distance.y, distance.z,
+        )
 
     /**
      * Start program.

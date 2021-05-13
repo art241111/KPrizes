@@ -1,5 +1,6 @@
 package com.art241111.kprizes.data.robot
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,7 @@ import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 /**
  * Linking the UI to a live robot.
@@ -136,12 +138,26 @@ class RobotVM : ViewModel() {
         z: Double = 0.0,
     ) {
         val area = maxPoint - minPoint
+        Log.d("AREA", "$x,$y,$z")
+        Log.d("AREA", area.toString())
+        Log.d("AREA", minPoint.toString())
+        Log.d("AREA", maxPoint.toString())
 
-        this dangerousRun MoveNew(
-            x = (-x / 2.5) * area[Axes.X],
-            y = (y / 2.5) * area[Axes.Y],
-            z = (z / 2.5) * area[Axes.Z],
-        )
+        val middlePoint = Point()
+        for (i in 0..2) {
+            middlePoint[i] = (maxPoint[i] + minPoint[i]) / 2
+            if (minPoint[i] > maxPoint[i]) middlePoint[i] = -middlePoint[i]
+        }
+
+        Log.d("AREA", middlePoint.toString())
+
+        if ((abs(x) != 0.0) and (abs(y) != 0.0) and (abs(z) != 0.0)) {
+            this dangerousRun MoveNew(
+                x = middlePoint[Axes.X] + (x / 2) * area[Axes.X],
+                y = middlePoint[Axes.Y] + (y / 2) * area[Axes.Y],
+                z = middlePoint[Axes.Z] + (z / 2) * area[Axes.Z],
+            )
+        }
     }
 
     fun move(

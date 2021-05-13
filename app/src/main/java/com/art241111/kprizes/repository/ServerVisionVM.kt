@@ -66,7 +66,6 @@ class ServerVisionVM : ViewModel() {
                 moveDistance.collect { newMoveDistance ->
                     if (!isMoving) this.cancel()
                     ensureActive()
-
                     moveInTimeDistance.newPosition = newMoveDistance
                 }
             }

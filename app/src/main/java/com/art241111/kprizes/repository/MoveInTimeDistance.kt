@@ -7,7 +7,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -21,6 +20,7 @@ class MoveInTimeDistance(
     var delaySending: Long = 70L,
     private val move: (point: Point) -> Unit,
 ) {
+    var oldPosition = Point()
     var newPosition = Point()
 
     private var isMoving = mutableStateOf(false)
@@ -50,15 +50,11 @@ class MoveInTimeDistance(
             jobMoving = scope.launch {
                 while (isMoving.value && this.isActive) {
                     if (isMoving.value) {
-                        Log.d("new_point", newPosition.toString())
-                        if (!isSmallMoving(newPosition)) {
+                        if (newPosition != oldPosition) {
                             move(newPosition)
-                        } else {
-                            isMoving.value = false
-                            scope.cancel()
-                            jobMoving.cancel()
-                            this.cancel()
+                            oldPosition = newPosition
                         }
+
                         delay(delaySending)
                     }
                 }
