@@ -9,6 +9,7 @@ import com.art241111.kprizes.data.robot.RobotVM
 import com.github.art241111.tcpClient.Client
 import com.github.art241111.tcpClient.connection.Status
 import com.github.poluka.kControlLibrary.actions.gripper.CloseGripper
+import com.github.poluka.kControlLibrary.actions.gripper.OpenGripper
 import com.github.poluka.kControlLibrary.enity.Axes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -41,9 +42,22 @@ class ServerVisionVM : ViewModel() {
 
     private var isMoving = false
     private var job: Job = Job()
-    fun startMoving(robot: RobotVM) {
+    fun startMoving(robot: RobotVM, goHome: ()-> Unit) {
         var isGripperClose = false
         isMoving = true
+
+        viewModelScope.launch (Dispatchers.IO) {
+            movePositionHandler.gripperState.collect{ gripper ->
+                Log.d("GRIPPER", gripper.toString())
+                if(gripper) {
+                    robot dangerousRun   CloseGripper()
+//                    stopMoving()
+//                    goHome()
+                } else {
+                    robot run  OpenGripper()
+                }
+            }
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             if (isMoving) {
@@ -57,17 +71,7 @@ class ServerVisionVM : ViewModel() {
                         z = newMoveDistance[Axes.Z]
                     )
 
-                    if (movePositionHandler.gripperState) {
-                        if (!isGripperClose) {
-                            isGripperClose = true
-                            robot dangerousRun CloseGripper()
-                        }
-                    } else {
-                        if (isGripperClose) {
-                            isGripperClose = false
-                            robot dangerousRun CloseGripper()
-                        }
-                    }
+
                 }
             }
         }
