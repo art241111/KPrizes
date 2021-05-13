@@ -55,8 +55,8 @@ class KRobot {
      * Made for security, so that before connecting to the robot,
      * there are no commands other than those that are specifically set.
      */
-    private lateinit var programWhenConnect: Program
-    fun runWhenConnect(@ExecutedOnTheRobot program: Program) {
+    private lateinit var programWhenConnect: Command
+    infix fun runWhenConnect(@ExecutedOnTheRobot program: Command) {
         programWhenConnect = program
     }
 
