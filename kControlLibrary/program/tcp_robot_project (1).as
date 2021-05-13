@@ -2728,6 +2728,8 @@ TP_RECINHI      0   0   0
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
+N_INT132    "is_area_mode  "
+N_INT133    "move_mode  "
 .END
 .SIG_COMMENT
 .IDE_CMT
@@ -2745,9 +2747,9 @@ N_INT130    "run_move  "
 
 @@@ INSPECTION @@@
 @@@ CONNECTION @@@
-Standard 1
-192.168.0.2
-23
+KROSET R01
+127.0.0.1
+9105
 @@@ PROGRAM @@@
 0:motion:F
 0:server.pc:B
@@ -2784,6 +2786,7 @@ Standard 1
 .i 
 0:parce_is_area.PC:B
 0:parse_new_move.PC:B
+0:parce_move_mode.PC:B
 @@@ TRANS @@@
 @@@ JOINTS @@@
 @@@ REALS @@@
@@ -2794,6 +2797,8 @@ $PROGRAM_COMP
 conn_status 
 auto_reconnect 
 run_move 
+move_mode 
+is_area_mode 
 @@@ TOOLS @@@
 @@@ BASE @@@
 @@@ FRAME @@@
@@ -2809,6 +2814,8 @@ is_in_area
 7,8,"sock_id","SOCKET ID","",10,9,2,1,0
 8,10,"","  FORCE","  CLOSE","",10,4,7,2,PCEXEC close_socket.pc,0
 17,2,"","   RUN","  MOTION","",10,4,9,2130,0
+19,1,"is_area","","","",10,15,4,15,2132,0
+20,1,"move_mode","","","",10,15,4,15,2133,0
 21,8,"sock_id_old","OLD SOCKET","",10,9,2,1,0
 22,1,"1","","","",10,15,4,15,2150,0
 23,2,"Try","","","",10,4,15,2140,0
@@ -2830,81 +2837,83 @@ is_in_area
 .PROGRAM motion ()
   SPEED 300 MM/S ALWAYS
   HERE po[0]
-  
+  ;
   WHILE TRUE DO
-    ; FOR ctr = 0 TO points_counter
-    ;IF points_counter != 0 THEN
-      LMOVE poX
-      BREAK
-      $send_message = $PROGRAM_COMP
-    ;END;
-    ;END
-    points_counter = 0
-    
-    SCASE $motion_type OF
-      SVALUE "JOINT":
-        ;
-        DRIVE motion_number, motion_value
-        $motion_type = ""
+    ;
+    IF move_mode == FALSE THEN
+      ; FOR ctr = 0 TO points_counter
+      ;IF points_counter != 0 THEN
+        LMOVE poX
         BREAK
         $send_message = $PROGRAM_COMP
-        ;
-      SVALUE "BASE":
-        IF is_in_area == TRUE THEN
-          IF DX(HERE) + motion_data[1] < max_point[1] AND DX(HERE) + motion_data[1] > min_point[1] AND DY(HERE) + motion_data[2] < max_point[2] AND DY(HERE) + motion_data[2] > min_point[2] AND DZ(HERE) + motion_data[3] < max_point[3] AND DZ(HERE) + motion_data[3] > min_point[3] THEN 
+      ;END;
+      ;END
+      points_counter = 0
+    ELSE
+      SCASE $motion_type OF
+        SVALUE "JOINT":
+          ;
+          DRIVE motion_number, motion_value
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "BASE":
+          IF is_in_area == TRUE THEN
+            IF DX(HERE) + motion_data[1] < max_point[1] AND DX(HERE) + motion_data[1] > min_point[1] AND DY(HERE) + motion_data[2] < max_point[2] AND DY(HERE) + motion_data[2] > min_point[2] AND DZ(HERE) + motion_data[3] < max_point[3] AND DZ(HERE) + motion_data[3] > min_point[3] THEN 
+              DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+            END
+          ELSE
             DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
           END
-        ELSE
-          DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
-        END
-        
-        $motion_type = ""
-        BREAK
-        $send_message = $PROGRAM_COMP
-        ;
-      SVALUE "TOOL":
-        ;
-        TDRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
-        $motion_type = ""
-        BREAK
-        $send_message = $PROGRAM_COMP
-        ;
-      SVALUE "JMOVE":
-        ;
-        JMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
-        $motion_type = ""
-        BREAK
-        $send_message = $PROGRAM_COMP
-        ;
-      SVALUE "LMOVE":
-        ;
-        LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
-        $motion_type = ""
-        BREAK
-        $send_message = $PROGRAM_COMP
-        ;
-     SVALUE "CMOVE":
-        ;
-        C1MOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
-        C2MOVE TRANS (motion_data[7], motion_data[8], motion_data[9], motion_data[10], motion_data[11], motion_data[12])
-        $motion_type = ""
-        BREAK
-        $send_message = $PROGRAM_COMP
-        ;
-      SVALUE "OPEN":
-        PRINT 0: "OPEN"
-        SIG 10, -11
-        BREAK
-        $send_message = $PROGRAM_COMP
-        $motion_type = ""
-      SVALUE "CLOSE":
-        PRINT 0: "CLOSE"
-        SIG -10, 11
-        BREAK
-        $send_message = $PROGRAM_COMP
-        $motion_type = ""  
+          
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "TOOL":
+          ;
+          TDRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "JMOVE":
+          ;
+          JMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "LMOVE":
+          ;
+          LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+       SVALUE "CMOVE":
+          ;
+          C1MOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          C2MOVE TRANS (motion_data[7], motion_data[8], motion_data[9], motion_data[10], motion_data[11], motion_data[12])
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "OPEN":
+          PRINT 0: "OPEN"
+          SIG 10, -11
+          BREAK
+          $send_message = $PROGRAM_COMP
+          $motion_type = ""
+        SVALUE "CLOSE":
+          PRINT 0: "CLOSE"
+          SIG -10, 11
+          BREAK
+          $send_message = $PROGRAM_COMP
+          $motion_type = ""  
+      END
     END
-    
   END
 .END
 .PROGRAM server.pc ()
@@ -2938,6 +2947,12 @@ reconnect:
   ;
   PRINT   "Connceted to: " + $client_ip
   PRINT   "Socket: ", sock_id
+  ;
+  move_mode = TRUE
+  SIG move_mode
+  ;
+  is_in_area = FALSE
+  SIG -is_in_area
   ;
   IF (TASK(1002) == 0)
     PCEXECUTE 2: pos_sender.pc
@@ -3109,6 +3124,10 @@ pg_end:
     SVALUE "IS_AREA_MODE" :
       ;
       CALL parce_is_area.PC (.$data)
+      ;
+    SVALUE "MOVE_MODE" :
+      ;
+      CALL parce_move_mode.PC (.$data)
       ;
     SVALUE "MOVE_NEW":
       ;
@@ -3394,9 +3413,11 @@ pg_end:
   IF .$motion_type == "TRUE" THEN
     PRINT 0:"IS_IN_AREA; TRUE"
     is_in_area = TRUE
+    SIG is_area_mode
   ELSE
      PRINT 0:"IS_IN_AREA; FALSE"
      is_in_area = FALSE
+     SIG -is_area_mode
   END
    
   $send_message = $PROGRAM_COMP
@@ -3425,6 +3446,24 @@ pg_end:
   ;motion_data[motion_number] = motion_value
   ;$motion_type = .$motion_type
   PRINT $motion_type
+.END
+.PROGRAM parce_move_mode.PC(.$data) 
+   ;Point Type
+  .$temp = $DECODE (.$data, ";",0)
+  .$motion_type = .$temp
+  .$temp = $DECODE (.$data, ";",1)
+  ; 
+  IF .$motion_type == "TRUE" THEN
+    PRINT 0:"MOVE_MODE; TRUE"
+    move_mode = TRUE
+    SIG move_mode
+  ELSE
+     PRINT 0:"MOVE_MODE; FALSE"
+     move_mode = FALSE
+     SIG -move_mode
+  END
+   
+  $send_message = $PROGRAM_COMP
 .END
 .TRANS
 po[0] 550.000000 15.000000 -120.000000 47.000000 178.000000 160.000000
@@ -3464,8 +3503,10 @@ min_point[3] = -127.94
 min_point[4] = 0
 min_point[5] = 0
 min_point[6] = 0
-is_in_area = -1
+is_in_area = 0
 points_counter = 0
+move_mode = 2133
+is_area_mode = 2132
 .END
 .STRINGS
 $client_ip = " 192. 168. 43. 132"

@@ -1,5 +1,6 @@
 package com.art241111.kprizes.repository
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.CoroutineScope
@@ -43,10 +44,13 @@ class MoveInTimeDistance(
     }
 
     fun startMoving() {
+        isMoving.value = true
+
         if (!this::jobMoving.isInitialized || !jobMoving.isActive) {
             jobMoving = scope.launch {
                 while (isMoving.value && this.isActive) {
                     if (isMoving.value) {
+                        Log.d("new_point", newPosition.toString())
                         if (!isSmallMoving(newPosition)) {
                             move(newPosition)
                         } else {

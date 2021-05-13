@@ -12,6 +12,7 @@ import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
 import com.github.poluka.kControlLibrary.actions.points.SetMaxPoint
 import com.github.poluka.kControlLibrary.actions.points.SetMinPoint
 import com.github.poluka.kControlLibrary.actions.service.mode.ModeIsInArea
+import com.github.poluka.kControlLibrary.actions.service.mode.MoveMode
 import com.github.poluka.kControlLibrary.dsl.Program
 import com.github.poluka.kControlLibrary.enity.Axes
 import com.github.poluka.kControlLibrary.enity.Distance
@@ -210,4 +211,8 @@ class RobotVM : ViewModel() {
      * Robot coordinates.
      */
     val coordinate = kRobot.positionState
+
+    fun setMoveMode(value: Boolean) {
+        dangerousRun(MoveMode(value))
+    }
 }

@@ -91,6 +91,7 @@ fun MainNavigateScreen(
     val isFirstTimeUp = remember { mutableStateOf(true) }
     if (timer.progress.value <= 0 && isFirstTimeUp.value) {
         serverVision.stopMoving()
+        robot.setMoveMode(true)
         controlVM.stopTrackingTilt()
         moveByZVM.stop()
         timer.stop()
@@ -110,6 +111,7 @@ fun MainNavigateScreen(
         // Changing the screen depending on the state
         when (navigate.state.value) {
             GeneralScreen.HOME -> {
+                robot.setMoveMode(true)
                 serverVision.stopMoving()
                 controlVM.stopTrackingTilt()
                 moveByZVM.stop()
@@ -129,6 +131,7 @@ fun MainNavigateScreen(
                                 tintGameNavVM.moveToTintScreen(timer)
                             } else {
                                 navigate.setScreen(VisionGameScreens.MAIN_SCREEN)
+                                robot.setMoveMode(false)
                                 serverVision.startMoving(robot) { stayPrizes(robot) }
                             }
                         }
@@ -187,7 +190,7 @@ fun MainNavigateScreen(
                         serverVision.stopMoving()
 
                         // Перемещение надомашний экран
-                        moveToHome(robot)
+                        // moveToHome(robot)
                         navigate.moveToHome()
                     }
                 )
