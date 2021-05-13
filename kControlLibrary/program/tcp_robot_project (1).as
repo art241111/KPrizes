@@ -16,11 +16,11 @@
 .NETCONF     0.0.0.0,"",0.0.0.0,0.0.0.0,0.0.0.0,0.0.0.0,""
 .NETCONF2     0.0.0.0,0.0.0.0,0.0.0.0
 .ROBOTDATA1
-ZROBOT.TYPE    30  64   6   1       -1516   RC005L-A001 ( 2021-04-12 00:56 )
+ZROBOT.TYPE    30  64   6   1       -1516   RC005L-A001 ( 2021-05-07 20:44 )
 ZSYSTEM         1   5         -91
 ZLINEAR         0   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1         179
 CONT_CODE     701      -10516
-ZZERO         268435456 268435456 268189696 268435456 268280240 268433408 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   542916271
+ZZERO         268435455 268453089 268187762 268435450 268270770 268433278 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   542824891
 ENDLESS_POS   0 100 1       -1516
 LANGUAGE      2
 ZSIGSPEC      256 256 512      -15361
@@ -56,7 +56,7 @@ ZSETKVFF_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.00
 ZSETKVFFACC_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKVFFJRK_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKAFF2_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000 -1262485505
-ZSAVEMR                 0           0       65506           0       65517       65535           0           0           0           0           0           0           0           0           0           0           0           0    -2948371
+ZSAVEMR                 0           0       65535       65535       65535       65535           0           0           0           0           0           0           0           0           0           0           0           0    -3932101
 ZRADIUS        1146.020  1041.020   661.020   251.020   251.020   142.857     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000  -274064817
 ZJTSPEED        300.000   300.000   300.000   460.000   460.000   740.000  1200.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000  -296493057
 ZACCTIME          0.166     0.180     0.236     0.208     0.298     0.252     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384   886633938
@@ -1265,35 +1265,35 @@ ZSWITCH ZROLLFF         OFF  -505
 .END
 .OPE_INFO1
 OPEINFO  30 64 6 1  1513562540  ;(17/12/18 11:02:20) RC005L-A001 
-CONT_TIM  0.6 
-SERV_TIM  0.1 
-MTON_CNT  2 
+CONT_TIM  1.6 
+SERV_TIM  1.1 
+MTON_CNT  14 
 ESTP_CNT  0 
-BRKE_CNT  2 
-CON_PWR  0.003 
-SUP_PWR  0.003 
+BRKE_CNT  14 
+CON_PWR  0.013 
+SUP_PWR  0.013 
 REG_PWR  0.000 
 MOVE_TJT  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-DIST_DJT  0.040 0.072 0.080 0.000 0.096 0.032 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 0.5 50000 
+DIST_DJT  0.568 0.384 0.408 0.000 0.208 0.544 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+OPEINFO TP_BKLIGHT  0 1.3 50000 
 OPEINFO MC  0 0 2000000 
 OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
 M_OPEINFO  30 64 6 1  1513562540  ;(17/12/18 11:02:20) RC005L-A001 
-M_CONT_TIM  0.6 
-M_SERV_TIM  0.1 
-M_MTON_CNT  2 
+M_CONT_TIM  1.6 
+M_SERV_TIM  1.1 
+M_MTON_CNT  14 
 M_ESTP_CNT  0 
-M_BRKE_CNT  2 
-M_CON_PWR  0.003 
-M_SUP_PWR  0.003 
+M_BRKE_CNT  14 
+M_CON_PWR  0.013 
+M_SUP_PWR  0.013 
 M_REG_PWR  0.000 
 M_MOVE_TJT  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT  0.040 0.072 0.080 0.000 0.096 0.032 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_DIST_DJT  0.568 0.384 0.408 0.000 0.208 0.544 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
 M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
-HOUR_MTR  0.6 
+HOUR_MTR  1.6 
 .END
 .SYSDATA
 REG_POINT       0
@@ -2082,7 +2082,7 @@ SWITCH PGFILE_AUTO_RECOVER OFF
 .END
 .CONDITION
 AS_VER       ASF_01000000P
-ELOG_NUM              2
+ELOG_NUM              3
 CHK_ONCE      255
 MAN_SPEED     1
 CHK_SPEED     1
@@ -2125,14 +2125,14 @@ PRM_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.
 STEP1ENV_CALL_PRGNAME motion
 STEP1ENV_PRG_STEP          1
 STEP2ENV0_CALL_PRGNAME server.pc
-STEP2ENV0_PRG_STEP          1
+STEP2ENV0_PRG_STEP         73
 STEP2ENV1_CALL_PRGNAME pos_sender.pc
-STEP2ENV1_PRG_STEP         17
+STEP2ENV1_PRG_STEP         21
 STEP2ENV2_CALL_PRGNAME run_motion.pc
 STEP2ENV2_PRG_STEP          3
 STEP2ENV4_CALL_PRGNAME sender.pc
-STEP2ENV4_PRG_STEP          7
-USR_DO1      10100000000000000000000100000000
+STEP2ENV4_PRG_STEP         15
+USR_DO1      10110000000000000000000000000000
 USR_DO2      00000000000000000000000000000000
 USR_DO3      00000000000000000000000000000000
 USR_DO4      00000000000000000000000000000000
@@ -2166,7 +2166,7 @@ USR_INTERNAL 00000000000000000000000000000000
 USR_INTERNAL1 00000000000000000000000000000000
 USR_INTERNAL2 00000000000000000000000000000000
 USR_INTERNAL3 00000000000000000000000000000000
-USR_INTERNAL4 10000000000000000000000000001000
+USR_INTERNAL4 00000000000000000000000000001000
 USR_INTERNAL5 00000000000000000000000000000000
 USR_INTERNAL6 00000000000000000000000000000000
 USR_INTERNAL7 00000000000000000000000000000000
@@ -2730,7 +2730,6 @@ N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
 .END
 .SIG_COMMENT
-.END
 .IDE_CMT
 @@@ PROJECT @@@
 @@@ HISTORY @@@
@@ -2740,52 +2739,51 @@ N_INT130    "run_move  "
 
 21.10.2020 15:13:27
 
-30.04.2021 16:08:45
+06.05.2021 15:29:49
+
+07.05.2021 17:23:16
 
 @@@ INSPECTION @@@
-ctr
-po[0]
-motion_data[1]
-motion_data[2]
-motion_data[3]
 @@@ CONNECTION @@@
 Standard 1
 192.168.0.2
 23
 @@@ PROGRAM @@@
-0:motion
-.i 
-0:server.pc
-0:open_socket.pc
+0:motion:F
+0:server.pc:B
+0:open_socket.pc:B
 .ret 
 .i 
-0:close_socket.pc
+0:close_socket.pc:B
 .ret 
-0:send.pc
+0:send.pc:B
 .buf_n 
 .ret 
-0:receive.pc
+0:receive.pc:B
 .max_length 
 .num_of_el 
-0:parse.pc
+0:parse.pc:B
 .ret 
-0:check_data.pc
+0:check_data.pc:B
 .ret 
 .i 
-0:parse_move.pc
+0:parse_move.pc:B
 .i 
-0:parse_cmove.pc
+0:parse_cmove.pc:B
 .i 
-0:parse_moveto.pc
+0:parse_moveto.pc:B
 .i 
-0:parse_service.pc
-0:pos_sender.pc
+0:parse_service.pc:B
+0:pos_sender.pc:B
 .temp 
 .data 
 .i 
-0:run_motion.pc
-0:sender.pc
-0:parse_new_move.PC
+0:run_motion.pc:B
+0:sender.pc:B
+0:parse_point.PC:B
+.i 
+0:parce_is_area.PC:B
+0:parse_new_move.PC:B
 @@@ TRANS @@@
 @@@ JOINTS @@@
 @@@ REALS @@@
@@ -2801,6 +2799,7 @@ run_move
 @@@ FRAME @@@
 @@@ BOOL @@@
 stop_connection 
+is_in_area 
 .END
 .INTER_PANEL_D
 0,1,"CONNECTION","","","",10,7,4,2,2128,0
@@ -2831,12 +2830,16 @@ stop_connection
 .PROGRAM motion ()
   SPEED 300 MM/S ALWAYS
   HERE po[0]
+  
   WHILE TRUE DO
-   ; FOR ctr = 0 TO points_counter
+    ; FOR ctr = 0 TO points_counter
+    ;IF points_counter != 0 THEN
       LMOVE poX
+      BREAK
+      $send_message = $PROGRAM_COMP
+    ;END;
     ;END
     points_counter = 0
-    
     
     SCASE $motion_type OF
       SVALUE "JOINT":
@@ -2847,8 +2850,14 @@ stop_connection
         $send_message = $PROGRAM_COMP
         ;
       SVALUE "BASE":
-        ;
-        DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+        IF is_in_area == TRUE THEN
+          IF DX(HERE) + motion_data[1] < max_point[1] AND DX(HERE) + motion_data[1] > min_point[1] AND DY(HERE) + motion_data[2] < max_point[2] AND DY(HERE) + motion_data[2] > min_point[2] AND DZ(HERE) + motion_data[3] < max_point[3] AND DZ(HERE) + motion_data[3] > min_point[3] THEN 
+            DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+          END
+        ELSE
+          DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+        END
+        
         $motion_type = ""
         BREAK
         $send_message = $PROGRAM_COMP
@@ -2869,7 +2878,7 @@ stop_connection
         ;
       SVALUE "LMOVE":
         ;
-        LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3])
+        LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
         $motion_type = ""
         BREAK
         $send_message = $PROGRAM_COMP
@@ -2883,12 +2892,14 @@ stop_connection
         $send_message = $PROGRAM_COMP
         ;
       SVALUE "OPEN":
-        OPENI
+        PRINT 0: "OPEN"
+        SIG 10, -11
         BREAK
         $send_message = $PROGRAM_COMP
         $motion_type = ""
       SVALUE "CLOSE":
-        CLOSEI
+        PRINT 0: "CLOSE"
+        SIG -10, 11
         BREAK
         $send_message = $PROGRAM_COMP
         $motion_type = ""  
@@ -2928,13 +2939,9 @@ reconnect:
   PRINT   "Connceted to: " + $client_ip
   PRINT   "Socket: ", sock_id
   ;
-  points_counter = 0
-  cp ON
-  ;
   IF (TASK(1002) == 0)
     PCEXECUTE 2: pos_sender.pc
   END
-  ;
   IF (TASK(1005) == 0)
     PCEXECUTE 5: sender.pc
   END
@@ -2954,7 +2961,7 @@ reconnect:
       ;CALL parse (.$recv_buf[1])
       ;
       ;CALL send.pc ($receive_data[1])
-      PRINT   $receive_data[1]
+      ;PRINT   $receive_data[1]
       IF $receive_data[1] == "q" THEN
         stop_connection = TRUE
         TWAIT 2
@@ -3065,41 +3072,52 @@ pg_end:
   END
   ;
 .END
-.PROGRAM parse.pc(.$data)
-    CALL check_data.pc(.$data, .ret)
-    IF NOT .ret THEN
-      GOTO pg_end
-    END
-    ;
-    .$temp = $DECODE (.$data, ";",0)
-    .$command_type = .$temp
-    .$temp = $DECODE (.$data, ";",1)
-    ;
-      SCASE .$command_type OF
-      SVALUE "MOVE":
-        ;
-        CALL parse_move.pc(.$data)
-        ;
-      SVALUE "MOVE_NEW":
-        ;
-        CALL parse_new_move.PC(.$data)
-        ;
-      SVALUE "MOVETO":
-        ;
-        CALL parse_moveto.pc(.$data)
-        ;
-      SVALUE "CMOVE":
-        ;
-        CALL parse_cmove.pc(.$data)
-        ;
-      SVALUE "SERVICE" :
-        ;
-        CALL parse_service.pc(.$data)
-        ;
-      END
-    ;
+.PROGRAM parse.pc (.$data)
+  CALL check_data.pc (.$data, .ret)
+  IF NOT .ret THEN
+    GOTO pg_end
+  END
+  ;
+  
+  .$temp = $DECODE (.$data, ";",0)
+  .$command_type = .$temp
+  .$temp = $DECODE (.$data, ";",1)
+  ;
+  PRINT 0: .$data
+  
+  SCASE .$command_type OF
+    SVALUE "MOVE":
+      ;
+      CALL parse_move.pc (.$data)
+      ;
+    SVALUE "MOVETO":
+      ;
+      CALL parse_moveto.pc (.$data)
+      ;
+    SVALUE "CMOVE":
+      ;
+      CALL parse_cmove.pc (.$data)
+      ;
+    SVALUE "SERVICE" :
+      ;
+      CALL parse_service.pc (.$data)
+      ;
+    SVALUE "POINTS" :
+      ;
+      CALL parse_point.PC (.$data)
+      ;
+    SVALUE "IS_AREA_MODE" :
+      ;
+      CALL parce_is_area.PC (.$data)
+      ;
+    SVALUE "MOVE_NEW":
+      ;
+      CALL parse_new_move.PC (.$data)
+      ;
+  END
+  ;
 pg_end:
-    ;
+  ;
 .END
 .PROGRAM check_data.pc (.$data,.ret) ; 
   .ret = FALSE
@@ -3113,7 +3131,7 @@ pg_end:
 .END
 .PROGRAM parse_move.pc (.$data) ; 
   ;
-  PRINT   .$data
+  ;PRINT   .$data
   .$temp = $DECODE (.$data, ";",0)
   .$motion_type = .$temp
   .$temp = $DECODE (.$data, ";",1)
@@ -3141,11 +3159,11 @@ pg_end:
   ;
   ;motion_data[motion_number] = motion_value
   $motion_type = .$motion_type
-  PRINT $motion_type
+  ;PRINT $motion_type
   ;
 .END
 .PROGRAM parse_cmove.pc (.$data) ; 
-  PRINT   .$data
+  ;PRINT   .$data
   ;.$temp = $DECODE (.$data, ";",0)
   ;.$motion_type = .$temp
   ;.$temp = $DECODE (.$data, ";",1)
@@ -3160,11 +3178,11 @@ pg_end:
   ;
   ;motion_data[] = motion_value
   $motion_type = "CMOVE"
-  PRINT $motion_type
+  ;PRINT $motion_type
 .END
 .PROGRAM parse_moveto.pc (.$data) ;
   ;
-  PRINT   .$data
+  ;PRINT   .$data
   .$temp = $DECODE (.$data, ";",0)
   .$motion_type = .$temp
   .$temp = $DECODE (.$data, ";",1)
@@ -3179,16 +3197,21 @@ pg_end:
   ;
   ;motion_data[] = motion_value
   $motion_type = .$motion_type
-  PRINT $motion_type
+  ;PRINT $motion_type
   ;
 .END
 .PROGRAM parse_service.pc (.$data) ;
-  PRINT   .$data
+  ;PRINT   .$data
   .$temp = $DECODE (.$data, ";",0)
   .$service_type = .$temp
   .$temp = $DECODE (.$data, ";",1)
-  PRINT   .$service_type
-  PRINT   .$data
+  ;PRINT   .$service_type
+  ;PRINT   .$data
+  ;IF SIG (11) THEN
+  ;  SIG -11, 10
+  ;ELSE
+  ;  SIG 11, -10
+  ;END
   SCASE .$service_type OF
     SVALUE "ERESET":
       MC ERESET
@@ -3196,36 +3219,51 @@ pg_end:
     SVALUE "MOTOR":
       ;PRINT   .$data
       ;.$temp = $DECODE (.$data, ";",0)
-      IF (.$data == "ON\n") THEN
+      IF (.$data == "ON") THEN
         ;PRINT   .$temp
         MC ZPOWER ON
         TWAIT 0.2
-        CALL send.pc($PROGRAM_COMP)
+        CALL send.pc ($PROGRAM_COMP)
       ELSE
         MC ZPOWER OFF
         TWAIT 0.2
-        CALL send.pc($PROGRAM_COMP)
+        CALL send.pc ($PROGRAM_COMP)
       END
     SVALUE "SIGNAL":
       .$temp = $DECODE (.$data, ";",0)
       SIGNAL VAL (.$temp)
       TWAIT 0.2
-      CALL send.pc($PROGRAM_COMP)
+      CALL send.pc ($PROGRAM_COMP)
     SVALUE "WSIGNAL":
       .$temp = $DECODE (.$data, ";",0)
       SWAIT VAL (.$temp)
-      CALL send.pc($PROGRAM_COMP)
+      CALL send.pc ($PROGRAM_COMP)
     SVALUE "CLAMP":
       ;.$temp = $DECODE (.$data, ";",0)
       ;PRINT   .$temp
       ;PRINT   .$data
-      IF (.$data == "ON\n") THEN
-        PRINT   "OP"
-        $motion_type = "OPEN"
+      PRINT 0: .$data
+      ;IF SIG (11) THEN
+      ;  SIG -11, 10
+      ;ELSE
+      ;  SIG 11, -10
+      ;END
+      IF (.$data == "ON") THEN
+        PRINT 0:   "OP"
+      
+        SIG 10, -11
+      
+        $send_message = $PROGRAM_COMP
+      
         TWAIT 0.2
       ELSE
-        PRINT   "CL"
-        $motion_type = "CLOSE"
+        PRINT 0:   "CL"
+      
+      
+        SIG -10, 11
+      
+        $send_message = $PROGRAM_COMP
+      
         TWAIT 0.2
       END
   END
@@ -3317,7 +3355,53 @@ pg_ret:
 pg_end:
   ;
 .END
-.PROGRAM parse_new_move.PC (.$data) ;
+.PROGRAM parse_point.PC  (.$data) ;
+  ;Point Type
+  .$temp = $DECODE (.$data, ";",0)
+  .$motion_type = .$temp
+  .$temp = $DECODE (.$data, ";",1)
+  ; 
+  FOR .i = 1 TO 5
+    .$temp = $DECODE (.$data, ";",0)
+    motion_data[.i] = VAL(.$temp)
+    .$temp = $DECODE (.$data, ";",1)
+  END
+  
+  .$temp = $DECODE (.$data, ";",0)
+   motion_data[6] = VAL(.$temp)
+  ; 
+   PRINT 0:.$motion_type
+   IF (.$motion_type == "MAX") THEN 
+      FOR .i = 1 TO 6
+        max_point[.i] = motion_data[.i]
+      END
+   ELSE
+      PRINT 0:"ADD_POINT;MIN"
+      FOR .i = 1 TO 6
+        min_point[.i] = motion_data[.i]
+      END
+   END
+    
+    $send_message = $PROGRAM_COMP
+    ;END  
+.END
+.PROGRAM parce_is_area.PC(.$data) 
+   ;Point Type
+  .$temp = $DECODE (.$data, ";",0)
+  .$motion_type = .$temp
+  .$temp = $DECODE (.$data, ";",1)
+  ; 
+  IF .$motion_type == "TRUE" THEN
+    PRINT 0:"IS_IN_AREA; TRUE"
+    is_in_area = TRUE
+  ELSE
+     PRINT 0:"IS_IN_AREA; FALSE"
+     is_in_area = FALSE
+  END
+   
+  $send_message = $PROGRAM_COMP
+.END
+.PROGRAM parse_new_move.PC (.$data)
   ;HERE .herePoint
   ;
   ;.$temp = $DECODE (.$data, ";",0)
@@ -3343,39 +3427,51 @@ pg_end:
   PRINT $motion_type
 .END
 .TRANS
-po[0] 549.620483 14.970863 -171.268646 47.251446 178.779587 160.503540
+po[0] 550.000000 15.000000 -120.000000 47.000000 178.000000 160.000000
 .END
 .REALS
 tcp_start_tmo = 5
 tcp_send_tmo = 1
 tcp_receive_tmo = 1
-stop_connection = 0
-sock_id = 472
+stop_connection = -1
+sock_id = -1
 client_ip[1] = 192
 client_ip[2] = 168
-client_ip[3] = 31
-client_ip[4] = 88
-sock_id_old = 472
+client_ip[3] = 43
+client_ip[4] = 132
+sock_id_old = 492
 conn_status = 2128
-receive_ret = -34024
+receive_ret = 0
 auto_reconnect = 2129
 motion_value = 20
 motion_number = 3
 motion_data[1] = 0
-motion_data[2] = -10
+motion_data[2] = 10
 motion_data[3] = 0
 motion_data[4] = 0
 motion_data[5] = 0
 motion_data[6] = 0
 run_move = 2130
+min_point[1] = -229.99
+max_point[1] = 290.01
+max_point[2] = 595.05
+max_point[3] = 462.06
+max_point[4] = 0
+max_point[5] = 0
+max_point[6] = 0
+min_point[2] = 325.04
+min_point[3] = -127.94
+min_point[4] = 0
+min_point[5] = 0
+min_point[6] = 0
+is_in_area = -1
 points_counter = 0
-ctr = 0
 .END
 .STRINGS
-$client_ip = " 192. 168. 31. 88"
-$receive_data[1] = ""
+$client_ip = " 192. 168. 43. 132"
+$receive_data[1] = "q"
 $send_data[1] = ""
-$motion_type = "BASE"
+$motion_type = ""
 $PROGRAM_COMP = "PROGRAM;SUCCESSFULLY"
 $send_message = ""
 .END
