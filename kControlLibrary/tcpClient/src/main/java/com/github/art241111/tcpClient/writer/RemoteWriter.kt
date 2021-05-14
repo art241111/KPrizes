@@ -31,7 +31,7 @@ class RemoteWriter : RemoteWriterImp, Sender, SafeSender {
      */
     override fun send(text: String) {
         println(text)
-        writer.print(text)
+        writer.print(text + "\n")
         writer.flush()
     }
 

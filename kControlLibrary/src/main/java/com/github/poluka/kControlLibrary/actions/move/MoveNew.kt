@@ -31,7 +31,7 @@ data class MoveNew(
      * Start program.
      */
     override fun run(): String {
-        return "$MOVE_BY_COORDINATE;$x;$y;$z;\n"
+        return "$MOVE_BY_COORDINATE;$x;$y;$z;"
     }
 }
 

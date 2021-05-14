@@ -4,7 +4,7 @@ import com.github.poluka.kControlLibrary.actions.Command
 import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
 import com.github.poluka.kControlLibrary.dsl.Program
 
-private const val OPEN_GRIPPER = "SERVICE;CLAMP;ON;\n"
+private const val OPEN_GRIPPER = "SERVICE;CLAMP;ON;"
 
 @ExecutedOnTheRobot
 class OpenGripper : Command {
