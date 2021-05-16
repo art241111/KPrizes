@@ -75,11 +75,12 @@ fun MainNavigateScreen(
     )
     serverVision.moveInTimeDistance = MoveInTimeDistance(
         delaySending = robot.delaySending,
-        move = { newPoint ->
+        move = { newPoint, gripperState ->
             robot.moveOnArea(
                 x = newPoint[Axes.Y],
                 y = newPoint[Axes.X],
-                z = newPoint[Axes.Z]
+                z = newPoint[Axes.Z],
+                gripperState = gripperState
             )
         },
         changeStatus = { status ->

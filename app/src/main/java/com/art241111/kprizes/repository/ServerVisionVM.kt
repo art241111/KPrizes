@@ -14,6 +14,7 @@ import com.github.poluka.kControlLibrary.enity.Axes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 
 class ServerVisionVM : ViewModel() {
     lateinit var moveInTimeDistance: MoveInTimeDistance
+
 
     private val client = Client()
     private val movePositionHandler = MovePositionHandler(client.incomingText)
@@ -44,25 +46,35 @@ class ServerVisionVM : ViewModel() {
 
     private var isMoving = false
     private var job: Job = Job()
+    private val oldGripperState = mutableStateOf(true)
     fun startMoving(robot: RobotVM, goHome: () -> Unit) {
         moveInTimeDistance.startMoving()
         var isGripperClose = false
         isMoving = true
 
-        viewModelScope.launch(Dispatchers.IO) {
-            movePositionHandler.gripperState.collect { gripper ->
-                Log.d("GRIPPER", gripper.toString())
-                if (gripper) {
-                    robot dangerousRun CloseGripper()
-//                    if (1 == 0) {
-//                        stopMoving()
-//                        goHome()
+//        viewModelScope.launch(Dispatchers.IO) {
+//
+//            movePositionHandler.gripperState.collect { gripper ->
+//                Log.d("GRIPPER", gripper.toString())
+//                if (oldGripperState.value != gripper){
+//                    if (gripper) {
+////                        stopMoving()
+////
+////                        delay(10)
+//                        robot dangerousRun CloseGripper()
+////                        delay(10)
+////                        robot.setMoveMode(false)
+////                        delay(10)
+////                        goHome()
+////                    }
+//                    } else {
+//                        robot run OpenGripper()
 //                    }
-                } else {
-                    robot run OpenGripper()
-                }
-            }
-        }
+//                    oldGripperState.value = gripper
+//                }
+//
+//            }
+//        }
 
         viewModelScope.launch(Dispatchers.IO) {
             if (isMoving) {
@@ -70,12 +82,15 @@ class ServerVisionVM : ViewModel() {
                     Log.d("Move", newMoveDistance.toString())
                     if (!isMoving) this.cancel()
                     ensureActive()
-                    robot.moveOnArea(
-                        x = newMoveDistance[Axes.Y],
-                        y =  newMoveDistance[Axes.X],
-                        z = newMoveDistance[Axes.Z]
-                    )
-//                    moveInTimeDistance.newPosition = newMoveDistance
+//                    robot.moveOnArea(
+//                        x = newMoveDistance[Axes.Y],
+//                        y =  newMoveDistance[Axes.X],
+//                        z = newMoveDistance[Axes.Z]
+//                    )
+                    with(moveInTimeDistance){
+                        newPosition = newMoveDistance
+                        gripperState = movePositionHandler.gripperState.value
+                    }
                 }
             }
         }

@@ -2717,6 +2717,10 @@ EESTOP_DELAY_TIME      3.000
 TP_RECINHI      0   0   0
 
 
+
+
+
+
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -2842,7 +2846,6 @@ mm
     ;
     ;IF SIG(-2222) THEN
     IF mm == FALSE THEN
-      PRINT 0: "MOVE"
       ; THEN
       ; FOR ctr = 0 TO points_counter
       ;IF points_counter != 0 THEN
@@ -2952,7 +2955,7 @@ reconnect:
   PRINT   "Connceted to: " + $client_ip
   PRINT   "Socket: ", sock_id
   ;
-  move_mode = TRUE
+  mm = TRUE
   SIG move_mode
   ;
   is_in_area = FALSE
@@ -2989,7 +2992,7 @@ reconnect:
         CALL close_socket.pc
       END
       ;
-      CALL parse.pc($receive_data[1])
+      ;CALL parse.pc($receive_data[1])
       ;
     END
   END
@@ -3084,12 +3087,35 @@ pg_end:
   ;
   TCP_RECV receive_ret, sock_id, $receive_data[1], .num_of_el, tcp_receive_tmo, .max_length
   ;
+  ;
   IF receive_ret < 0 THEN
     $receive_data[1] = ""
   ELSE
     IF .num_of_el <= 0 THEN
       $receive_data[1] = ""
     END
+    ;
+    $edit_string = ""
+   ;
+    FOR i = 1 TO .num_of_el
+      .$data = $receive_data[i]
+      DO  
+        .$string = .$data
+        .$temp = $DECODE (.$data, "\n",0)
+        .$not_line = $DECODE (.$data, "\n",1)
+        ;
+        IF .$temp <> .$string THEN
+          ;$edit_string = $edit_string + .$temp
+          CALL parse.pc(.$temp)
+          ;$edit_string = ""
+        END
+      UNTIL .$temp <> .$string
+      ;
+      IF .$string <> "" THEN
+        ;$edit_string = $edit_string + .$string
+      END
+    END
+   ; 
   END
   ;
 .END
@@ -3568,7 +3594,7 @@ xend = 175
 xstart = 125
 yend = 425
 ystart = 325
-mm = 0
+mm = -1
 .END
 .STRINGS
 $client_ip = " 192. 168. 31. 63"

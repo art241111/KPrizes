@@ -17,11 +17,12 @@ import kotlin.math.abs
 
 class MoveInTimeDistance(
     var delaySending: Long = 70L,
-    private val move: (point: Point) -> Unit,
+    private val move: (point: Point, gripperState: Boolean) -> Unit,
     private val changeStatus: (Boolean) -> Unit,
 ) {
-    var oldPosition = Point()
+    private var oldPosition = Point()
     var newPosition = Point()
+    var gripperState = false
 
     private var isMoving = mutableStateOf(false)
 
@@ -52,7 +53,7 @@ class MoveInTimeDistance(
                 while (isMoving.value && this.isActive) {
                     if (isMoving.value) {
                         if (newPosition != oldPosition) {
-                            move(newPosition)
+                            move(newPosition, gripperState)
                             oldPosition = newPosition
                         }
 

@@ -20,6 +20,7 @@ data class MoveNew(
     private val x: Double = 0.0,
     private val y: Double = 0.0,
     private val z: Double = 0.0,
+    private val gripperState: Boolean = true
 ) : Command {
 
     constructor (distance: Distance) :
@@ -31,7 +32,8 @@ data class MoveNew(
      * Start program.
      */
     override fun run(): String {
-        return "$MOVE_BY_COORDINATE;$x;$y;$z;"
+        val state = if(gripperState) 0 else 1
+        return "$MOVE_BY_COORDINATE;$x;$y;$z;$state;"
     }
 }
 

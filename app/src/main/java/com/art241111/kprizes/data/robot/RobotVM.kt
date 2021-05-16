@@ -136,6 +136,7 @@ class RobotVM : ViewModel() {
         x: Double = 0.0,
         y: Double = 0.0,
         z: Double = 0.0,
+        gripperState: Boolean
     ) {
         val area = maxPoint - minPoint
 
@@ -147,11 +148,21 @@ class RobotVM : ViewModel() {
 
         Log.d("AREA", middlePoint.toString())
 
+//        if ((abs(x) != 0.0) and (abs(y) != 0.0) and (abs(z) != 0.0)) {
+//            this dangerousRun MoveNew(
+//                x = middlePoint[Axes.X] + (x / 2) * area[Axes.X],
+//                y = middlePoint[Axes.Y] + (y / 2) * area[Axes.Y],
+//                z = middlePoint[Axes.Z] + (z / 2) * area[Axes.Z],
+//                gripperState = gripperState
+//            )
+//        }
+
         if ((abs(x) != 0.0) and (abs(y) != 0.0) and (abs(z) != 0.0)) {
             this dangerousRun MoveNew(
-                x = middlePoint[Axes.X] + (x / 2) * area[Axes.X],
-                y = middlePoint[Axes.Y] + (y / 2) * area[Axes.Y],
-                z = middlePoint[Axes.Z] + (z / 2) * area[Axes.Z],
+                x = (x / 2) * area[Axes.X],
+                y = (y / 2) * area[Axes.Y],
+                z = (z / 2) * area[Axes.Z],
+                gripperState = gripperState
             )
         }
     }
