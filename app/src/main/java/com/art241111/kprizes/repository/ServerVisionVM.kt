@@ -10,7 +10,6 @@ import com.github.art241111.tcpClient.Client
 import com.github.art241111.tcpClient.connection.Status
 import com.github.poluka.kControlLibrary.actions.gripper.CloseGripper
 import com.github.poluka.kControlLibrary.actions.gripper.OpenGripper
-import com.github.poluka.kControlLibrary.enity.Axes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -25,7 +24,6 @@ import kotlinx.coroutines.launch
 
 class ServerVisionVM : ViewModel() {
     lateinit var moveInTimeDistance: MoveInTimeDistance
-
 
     private val client = Client()
     private val movePositionHandler = MovePositionHandler(client.incomingText)
@@ -44,50 +42,74 @@ class ServerVisionVM : ViewModel() {
 
     fun getScale(): Double = movePositionHandler.scale
 
-    private var isMoving = false
+    private var isMoving = mutableStateOf(false)
     private var job: Job = Job()
-    private val oldGripperState = mutableStateOf(true)
-    fun startMoving(robot: RobotVM, goHome: () -> Unit) {
-        moveInTimeDistance.startMoving()
-        var isGripperClose = false
-        isMoving = true
 
-//        viewModelScope.launch(Dispatchers.IO) {
-//
-//            movePositionHandler.gripperState.collect { gripper ->
-//                Log.d("GRIPPER", gripper.toString())
-//                if (oldGripperState.value != gripper){
-//                    if (gripper) {
-////                        stopMoving()
-////
-////                        delay(10)
-//                        robot dangerousRun CloseGripper()
-////                        delay(10)
-////                        robot.setMoveMode(false)
-////                        delay(10)
-////                        goHome()
-////                    }
-//                    } else {
-//                        robot run OpenGripper()
-//                    }
-//                    oldGripperState.value = gripper
-//                }
-//
-//            }
-//        }
+    /**
+     * @param mode - тип игры.
+     * Если 0 - то пользователь переносит игрушку самостоятельно.
+     * Если 1 - то робот перемещает игрушку, когда пользователь захватил ее.
+     */
+    fun startGame(mode: State<Int>, robot: RobotVM, stayPrize: () -> Unit, goHome: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            movePositionHandler.isGameStart.collect { isGameStart ->
+                if (isGameStart) {
+                    startMoving()
+                }
+            }
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (isMoving) {
+            val oldGripperState = mutableStateOf(true)
+
+            movePositionHandler.gripperState.collect { gripper ->
+                Log.d("GRIPPER", gripper.toString())
+                if (oldGripperState.value != gripper) {
+                    oldGripperState.value = gripper
+
+                    when (mode.value) {
+                        0 -> {
+                            if (gripper) {
+                                robot dangerousRun CloseGripper()
+                            } else {
+                                stopMoving()
+                                robot run OpenGripper()
+
+                                delay(20)
+                                goHome()
+                            }
+                        }
+
+                        1 -> {
+                            if (gripper) {
+                                stopMoving()
+
+                                robot dangerousRun CloseGripper()
+                                delay(20)
+                                stayPrize()
+                                goHome()
+                            } else {
+                                robot run OpenGripper()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startMoving() {
+        isMoving.value = true
+        moveInTimeDistance.startMoving()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            if (isMoving.value) {
                 moveDistance.collect { newMoveDistance ->
                     Log.d("Move", newMoveDistance.toString())
-                    if (!isMoving) this.cancel()
+                    if (!isMoving.value) this.cancel()
                     ensureActive()
-//                    robot.moveOnArea(
-//                        x = newMoveDistance[Axes.Y],
-//                        y =  newMoveDistance[Axes.X],
-//                        z = newMoveDistance[Axes.Z]
-//                    )
-                    with(moveInTimeDistance){
+
+                    with(moveInTimeDistance) {
                         newPosition = newMoveDistance
                         gripperState = movePositionHandler.gripperState.value
                     }
@@ -97,7 +119,7 @@ class ServerVisionVM : ViewModel() {
     }
 
     fun stopMoving() {
-        isMoving = false
+        isMoving.value = false
         moveInTimeDistance.stopMoving()
     }
 

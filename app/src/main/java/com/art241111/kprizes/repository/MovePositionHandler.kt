@@ -1,7 +1,5 @@
 package com.art241111.kprizes.repository
 
-import android.util.Log
-import com.github.poluka.kControlLibrary.enity.Distance
 import com.github.poluka.kControlLibrary.enity.position.Point
 import com.github.poluka.kControlLibrary.enity.position.positionArrayFromString
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,19 +23,26 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
     private val _gripperState: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val gripperState: StateFlow<Boolean> = _gripperState
 
-
     var scale: Double = 1.0
+
+    private val _isGameStart: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isGameStart: StateFlow<Boolean> = _isGameStart
 
     private var isHandling = false
     suspend fun handlePosition() {
         isHandling = true
 
         incomingText.collect { text ->
-            val newPosition = positionParsing(text, scale)
-            if (newPosition != null) {
-                oldPosition = newPosition
-                _gripperState.value = text.substringAfterLast(";").trim() == "1"
+            if (text == "START") {
+                _isGameStart.value = true
+            } else {
+                _isGameStart.value = false
 
+                val newPosition = positionParsing(text, scale)
+                if (newPosition != null) {
+                    oldPosition = newPosition
+                    _gripperState.value = text.substringAfterLast(";").trim() == "1"
+                }
             }
             if (!isHandling) return@collect
         }
@@ -61,9 +66,9 @@ class MovePositionHandler(private val incomingText: SharedFlow<String>) {
 
         return if (newPosition != oldPosition) {
 //            if (!oldPosition.isNull()) {
-////                _moveDistance.value = (newPositxion - oldPosition)
+// //                _moveDistance.value = (newPositxion - oldPosition)
 //
-////                _moveDistance.value = newPosition
+// //                _moveDistance.value = newPosition
 //            }
 
             newPosition

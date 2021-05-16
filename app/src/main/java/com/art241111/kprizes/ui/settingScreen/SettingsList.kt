@@ -16,6 +16,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -47,6 +48,7 @@ fun BoxScope.SettingsList(
     sharedPreferences: SharedPreferencesHelperForString,
     moveToAddPoint: (EditPoints) -> Unit,
     serverVision: ServerVisionVM,
+    visionGameMode: MutableState<Int>,
 ) {
     Column(modifier.align(Alignment.Center)) {
         Surface(
@@ -149,7 +151,6 @@ fun BoxScope.SettingsList(
                     )
                 }
 
-
                 // Connect to the robot
                 item {
                     ConnectItem(
@@ -176,10 +177,33 @@ fun BoxScope.SettingsList(
                 item {
                     val isInArea = robot.isInArea.value
                     Row(modifier.fillMaxWidth()) {
-                        Text(text = "Режим ограничения в области")
+                        Text(
+                            modifier = Modifier.weight(1.0F),
+                            text = "Режим ограничения в области"
+                        )
                         Button(onClick = { robot.changeIsAreaStatus() }) {
                             Text(
                                 text = if (isInArea) "Включен" else "Выключен"
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    val visionGameModeState = visionGameMode.value == 1
+                    Row(modifier.fillMaxWidth()) {
+                        Text(
+                            modifier = Modifier.weight(1.0F),
+                            text = "Кто перемещает игрушку до зоны выигрыша"
+                        )
+                        Button(
+                            onClick = {
+                                if (visionGameModeState) visionGameMode.value = 0
+                                else visionGameMode.value = 1
+                            }
+                        ) {
+                            Text(
+                                text = if (visionGameModeState) "Робот" else "Человек"
                             )
                         }
                     }

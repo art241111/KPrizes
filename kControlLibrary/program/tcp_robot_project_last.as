@@ -2728,6 +2728,11 @@ TP_RECINHI      0   0   0
 
 
 
+
+
+
+
+
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -2862,15 +2867,13 @@ mm
   WHILE TRUE DO
     ;IF SIG(-2222) THEN
     IF mm == FALSE THEN
-      LMOVE poX
-     
       ;FOR ctr = 0 TO points_counter
       ;IF points_counter != 0 THEN
-      ;IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
-      ;  LMOVE poX
+      IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
+        LMOVE poX
       ;  BREAK
       ;  $send_message = $PROGRAM_COMP
-      ;END;
+      END;
       ;END
       ;points_counter = 0
     ELSE
@@ -3077,7 +3080,7 @@ pg_end:
 pg_end:
   ;
 .END
-.PROGRAM receive.pc()
+.PROGRAM receive.pc ()
   ;
   .max_length = 255
   ;
@@ -3090,19 +3093,24 @@ pg_end:
     IF .num_of_el <= 0 THEN
       $receive_data[1] = ""
     END
+    IF $receive_data[1] == "q" THEN
+      stop_connection = TRUE
+      TWAIT 2
+      CALL close_socket.pc
+    END
     ;
     $edit_string = ""
-   ;
+    ;
     FOR i = 1 TO .num_of_el
       .$data = $receive_data[i]
-      DO  
+      DO
         .$string = .$data
-        .$temp = $DECODE (.$data, "\n",0)
-        .$not_line = $DECODE (.$data, "\n",1)
+        .$temp = $DECODE (.$data, "\n", 0)
+        .$not_line = $DECODE (.$data, "\n", 1)
         ;
         IF .$temp <> .$string THEN
           ;$edit_string = $edit_string + .$temp
-          CALL parse.pc(.$temp)
+          CALL parse.pc (.$temp)
           $receive_data[i] = ""
           ;$edit_string = ""
         END
@@ -3112,7 +3120,7 @@ pg_end:
         ;$edit_string = $edit_string + .$string
       END
     END
-   ; 
+    ;
   END
   ;
 .END
@@ -3254,11 +3262,6 @@ reconnect:
       ;
       ;CALL send.pc ($receive_data[1])
       ;;;PRINT   $receive_data[1]
-      IF $receive_data[1] == "q" THEN
-        stop_connection = TRUE
-        TWAIT 2
-        CALL close_socket.pc
-      END
       ;
       ;CALL parse.pc($receive_data[1])
       ;
@@ -3440,14 +3443,14 @@ pg_end:
     SVALUE "CLAMP":
       IF (.$data == "ON;") THEN
         SIG 10, -11  
+        TWAIT 0.2
         $send_message = $PROGRAM_COMP
-        TWAIT 0.2
-        TYPE 0: "CLAMP ON"
+        ;TYPE 0: "CLAMP ON"
       ELSE
-        SIG -10, 11
-        $send_message = $PROGRAM_COMP    
+        SIG -10, 11  
         TWAIT 0.2
-        TYPE 0: "CLAMP OFF"
+        $send_message = $PROGRAM_COMP  
+        ;TYPE 0: "CLAMP OFF"
       END
   END
   
@@ -3567,18 +3570,18 @@ pg_end:
   ;
   ;;;;PRINT 0:.$motion_type
   IF (.$motion_type == "MAX") THEN
-    PRINT 0:"ADD_POINT;MAX"
+    ;PRINT 0:"ADD_POINT;MAX"
     FOR .i = 1 TO 6
       max_point[.i] = motion_data[.i]
     END
   ELSE
     IF (.$motion_type == "MIN")THEN
-      PRINT 0:"ADD_POINT;MIN"
+      ;PRINT 0:"ADD_POINT;MIN"
       FOR .i = 1 TO 6
         min_point[.i] = motion_data[.i]
       END
     ELSE
-      PRINT 0:"ADD_POINT;MIDDLE"
+      ;PRINT 0:"ADD_POINT;MIDDLE"
       ;
       POINT/X herePoint = TRANS (motion_data[1])
       POINT/Y herePoint = TRANS (0, motion_data[2])

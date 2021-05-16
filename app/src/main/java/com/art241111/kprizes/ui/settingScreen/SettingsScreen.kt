@@ -2,6 +2,7 @@ package com.art241111.kprizes.ui.settingScreen
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,6 +32,7 @@ fun BoxScope.SettingsScreen(
     controlVM: ControlVM,
     moveInTime: MoveInTime,
     serverVision: ServerVisionVM,
+    visionGameMode: MutableState<Int>
 ) {
     val settingsNavVM = viewModel<SettingsNavVM>()
     settingsNavVM.setNavigation(navigate)
@@ -48,6 +50,7 @@ fun BoxScope.SettingsScreen(
                     settingsNavVM.moveToAddPoint()
                 },
                 serverVision = serverVision,
+                visionGameMode = visionGameMode
             )
         }
 

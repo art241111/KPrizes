@@ -84,7 +84,7 @@ fun MainNavigateScreen(
             )
         },
         changeStatus = { status ->
-                robot.setMoveMode(status)
+            robot.setMoveMode(status)
         }
     )
 
@@ -104,6 +104,8 @@ fun MainNavigateScreen(
         isFirstTimeUp.value = false
         navigate.setScreen(GeneralScreen.TIME_UP_SCREEN)
     }
+
+    val visionGameMode = remember { mutableStateOf(1) }
 
     Background(
         modifier = modifier.fillMaxSize(),
@@ -135,7 +137,12 @@ fun MainNavigateScreen(
                                 tintGameNavVM.moveToTintScreen(timer)
                             } else {
                                 navigate.setScreen(VisionGameScreens.MAIN_SCREEN)
-                                serverVision.startMoving(robot) { stayPrizes(robot) }
+                                serverVision.startGame(
+                                    robot = robot,
+                                    stayPrize = { stayPrizes(robot) },
+                                    goHome = { moveToHome(robot) },
+                                    mode = visionGameMode
+                                )
                             }
                         }
                     }
@@ -183,6 +190,7 @@ fun MainNavigateScreen(
                     sharedPreferences = sharedPreferences,
                     controlVM = controlVM,
                     moveInTime = moveInTime,
+                    visionGameMode = visionGameMode
                 )
             }
 
