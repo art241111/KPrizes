@@ -2720,7 +2720,6 @@ TP_RECINHI      0   0   0
 
 
 
-
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -3082,7 +3081,6 @@ pg_end:
   ;
 .END
 .PROGRAM receive.pc()
-  ;
   .max_length = 255
   ;
   TCP_RECV receive_ret, sock_id, $receive_data[1], .num_of_el, tcp_receive_tmo, .max_length
@@ -3093,6 +3091,23 @@ pg_end:
   ELSE
     IF .num_of_el <= 0 THEN
       $receive_data[1] = ""
+    ELSE
+      FOR .el = 1 TO .num_of_el
+        i = -1
+        DO  
+          i = i + 1
+          .$temp = $DECODE ($receive_data[1], "\n",0)
+          .$value[i] = .$temp
+          .$temp = $DECODE ($receive_data[1], "\n",1)
+        UNTIL
+        
+        
+        .$temp = $DECODE ($receive_data[1], "\n",0)
+        .$command_type = .$temp
+        .$temp = $DECODE ($receive_data[1], "\n",1)
+        
+        $input_data[.el] = .$command_type
+      END
     END
     ;
     $edit_string = ""
@@ -3117,7 +3132,6 @@ pg_end:
     END
    ; 
   END
-  ;
 .END
 .PROGRAM parse.pc (.$data)
   CALL check_data.pc (.$data, .ret)

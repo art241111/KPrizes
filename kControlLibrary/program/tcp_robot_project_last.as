@@ -2722,6 +2722,12 @@ TP_RECINHI      0   0   0
 
 
 
+
+
+
+
+
+
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -2744,55 +2750,57 @@ N_INT132    "is_area_mode  "
 13.05.2021 16:43:15
 
 @@@ INSPECTION @@@
-$receive_data[1]
-motion_data[1]
+herePoint
 @@@ CONNECTION @@@
-Standard 1
-192.168.0.2
-23
+KROSET R01
+127.0.0.1
+9105
 @@@ PROGRAM @@@
 0:motion:F
 0:motion2:F
-0:server.pc:B
-0:open_socket.pc:B
+Group:server:1
+1:check_data.pc:B
 .ret 
 .i 
-0:close_socket.pc:B
-.ret 
-0:send.pc:B
-.buf_n 
-.ret 
-0:receive.pc:B
-.max_length 
-.num_of_el 
-0:parse.pc:B
-.ret 
-0:check_data.pc:B
-.ret 
-.i 
-0:parse_move.pc:B
-.i 
-0:RMSOCKERR.PC:B
-.ret 
-0:parse_cmove.pc:B
-.i 
-0:parse_moveto.pc:B
-.i 
-0:parse_service.pc:B
-0:pos_sender.pc:B
+1:sender.pc:B
+1:pos_sender.pc:B
 .temp 
 .data 
 .i 
+1:receive.pc:B
+.max_length 
+.num_of_el 
+1:send.pc:B
+.buf_n 
+.ret 
+1:close_socket.pc:B
+.ret 
+1:open_socket.pc:B
+.ret 
+.i 
+1:server.pc:B
+Group:parse:2
+2:parse.pc:B
+.ret 
+2:parse_move.pc:B
+.i 
+2:parse_moveto.pc:B
+.i 
+2:parse_cmove.pc:B
+.i 
+2:parse_service.pc:B
+2:parce_move_mode.PC:B
+2:parse_new_move.PC:B
+.i 
+2:parce_is_area.PC:B
+2:parse_point.PC:B
+.i 
+0:RMSOCKERR.PC:B
+.ret 
 0:run_motion.pc:B
-0:sender.pc:B
-0:parse_point.PC:B
-.i 
-0:parce_is_area.PC:B
-0:parse_new_move.PC:B
-.i 
-0:parce_move_mode.PC:B
 @@@ TRANS @@@
 poX 
+herePoint 
 @@@ JOINTS @@@
 @@@ REALS @@@
 @@@ STRINGS @@@
@@ -2852,87 +2860,84 @@ mm
   HERE lol
   ;PMODSTART
   WHILE TRUE DO
-    ;
-   ;
-   LMOVE poX
-    
     ;IF SIG(-2222) THEN
-    ;IF mm == FALSE THEN
-    ;   THEN
-    ;   FOR ctr = 0 TO points_counter
-    ;  IF points_counter != 0 THEN
-    ;  IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
-    ;    LMOVE poX
-    ;    BREAK
-    ;    $send_message = $PROGRAM_COMP
-    ;  END;
-    ;  END
-    ;  points_counter = 0
-    ;ELSE
-    ;  SCASE $motion_type OF
-    ;    SVALUE "JOINT":
-    ;      
-    ;      DRIVE motion_number, motion_value
-    ;      $motion_type = ""
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      
-    ;    SVALUE "BASE":
-    ;      IF is_in_area == TRUE THEN
-    ;        IF DX(HERE) + motion_data[1] < max_point[1] AND DX(HERE) + motion_data[1] > min_point[1] AND DY(HERE) + motion_data[2] < max_point[2] AND DY(HERE) + motion_data[2] > min_point[2] AND DZ(HERE) + motion_data[3] < max_point[3] AND DZ(HERE) + motion_data[3] > min_point[3] THEN 
-    ;          DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
-    ;        END
-    ;      ELSE
-    ;        DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
-    ;      END
-    ;      
-    ;      $motion_type = ""
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      
-    ;    SVALUE "TOOL":
-    ;      
-    ;      TDRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
-    ;      $motion_type = ""
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      
-    ;    SVALUE "JMOVE":
-    ;      
-    ;      JMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
-    ;      $motion_type = ""
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      
-    ;    SVALUE "LMOVE":
-    ;      
-    ;      LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
-    ;      $motion_type = ""
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      
-    ;   SVALUE "CMOVE":
-    ;      
-    ;      C1MOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
-    ;      C2MOVE TRANS (motion_data[7], motion_data[8], motion_data[9], motion_data[10], motion_data[11], motion_data[12])
-    ;      $motion_type = ""
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      
-    ;    SVALUE "OPEN":
-    ;      ;;;;PRINT 0: "OPEN"
-    ;      SIG 10, -11
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      $motion_type = ""
-    ;    SVALUE "CLOSE":
-    ;      ;;;;PRINT 0: "CLOSE"
-    ;      SIG -10, 11
-    ;      BREAK
-    ;      $send_message = $PROGRAM_COMP
-    ;      $motion_type = ""  
-    ;  END
-    ;END
+    IF mm == FALSE THEN
+      LMOVE poX
+     
+      ;FOR ctr = 0 TO points_counter
+      ;IF points_counter != 0 THEN
+      ;IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
+      ;  LMOVE poX
+      ;  BREAK
+      ;  $send_message = $PROGRAM_COMP
+      ;END;
+      ;END
+      ;points_counter = 0
+    ELSE
+      SCASE $motion_type OF
+        SVALUE "JOINT":
+          ;
+          DRIVE motion_number, motion_value
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "BASE":
+          IF is_in_area == TRUE THEN
+            IF DX(HERE) + motion_data[1] < max_point[1] AND DX(HERE) + motion_data[1] > min_point[1] AND DY(HERE) + motion_data[2] < max_point[2] AND DY(HERE) + motion_data[2] > min_point[2] AND DZ(HERE) + motion_data[3] < max_point[3] AND DZ(HERE) + motion_data[3] > min_point[3] THEN 
+              DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+            END
+          ELSE
+            DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+          END
+          ;
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "TOOL":
+          ;
+          TDRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "JMOVE":
+          ;
+          JMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "LMOVE":
+          ;
+          LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+       SVALUE "CMOVE":
+          ;
+          C1MOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          C2MOVE TRANS (motion_data[7], motion_data[8], motion_data[9], motion_data[10], motion_data[11], motion_data[12])
+          $motion_type = ""
+          BREAK
+          $send_message = $PROGRAM_COMP
+          ;
+        SVALUE "OPEN":
+          ;;;;PRINT 0: "OPEN"
+          SIG 10, -11
+          BREAK
+          $send_message = $PROGRAM_COMP
+          $motion_type = ""
+        SVALUE "CLOSE":
+          ;;;;PRINT 0: "CLOSE"
+          SIG -10, 11
+          BREAK
+          $send_message = $PROGRAM_COMP
+          $motion_type = ""  
+      END
+    END
   END
   PMODEND
 .END
@@ -3021,6 +3026,169 @@ mm
     END
   END
 .END
+.PROGRAM check_data.pc (.$data,.ret) ; 
+  .ret = FALSE
+  FOR .i = 1 TO LEN(.$data)
+    .$tmp = $MID(.$data, .i, 1)
+    IF .$tmp == ";" THEN
+      .ret = TRUE
+      RETURN
+    END
+  END
+.END
+.PROGRAM sender.pc()
+  SWAIT conn_status
+  TWAIT 1
+  WHILE TRUE DO
+    IF stop_connection THEN
+      GOTO pg_end
+    END
+    IF($send_message <> "") THEN
+      CALL send.pc($send_message + "\n")
+      $send_message = ""
+    END
+    TWAIT 1
+  END
+  ;
+pg_end:
+  ;
+.END
+.PROGRAM pos_sender.pc () ; 
+  SWAIT conn_status
+  TWAIT 1
+  WHILE TRUE DO
+    IF stop_connection THEN
+      GOTO pg_end
+    END
+    HERE .temp
+    DECOMPOSE .data[0] = .temp
+    .$coordinates = ""
+    FOR .i = 0 TO 5
+      TYPE .data[.i]
+      .$coordinates = .$coordinates + $ENCODE (/D, .data[.i]) + ";"
+    END
+    
+    IF ($send_message == "") THEN
+      $send_message = "POINT;" + .$coordinates
+    END
+    TWAIT 2
+  END
+  ;
+pg_end:
+  ;
+.END
+.PROGRAM receive.pc()
+  ;
+  .max_length = 255
+  ;
+  TCP_RECV receive_ret, sock_id, $receive_data[1], .num_of_el, tcp_receive_tmo, .max_length
+  ;
+  ;
+  IF receive_ret < 0 THEN
+    $receive_data[1] = ""
+  ELSE
+    IF .num_of_el <= 0 THEN
+      $receive_data[1] = ""
+    END
+    ;
+    $edit_string = ""
+   ;
+    FOR i = 1 TO .num_of_el
+      .$data = $receive_data[i]
+      DO  
+        .$string = .$data
+        .$temp = $DECODE (.$data, "\n",0)
+        .$not_line = $DECODE (.$data, "\n",1)
+        ;
+        IF .$temp <> .$string THEN
+          ;$edit_string = $edit_string + .$temp
+          CALL parse.pc(.$temp)
+          $receive_data[i] = ""
+          ;$edit_string = ""
+        END
+      UNTIL .$temp <> .$string
+      ;
+      IF .$string <> "" THEN
+        ;$edit_string = $edit_string + .$string
+      END
+    END
+   ; 
+  END
+  ;
+.END
+.PROGRAM send.pc (.$send_data) ; 
+  ;
+  .buf_n = 1
+  ;
+  .$data[1] = .$send_data
+  ;
+  IF(sock_id > 0) THEN
+    TCP_SEND .ret, sock_id, .$data[1], .buf_n, tcp_send_tmo
+  END
+  ;
+.END
+.PROGRAM close_socket.pc()
+  ;
+  stop_connection = TRUE
+  ;
+  IF sock_id > 0 THEN
+    TCP_CLOSE .ret, sock_id
+    ;
+     ; 
+    IF .ret < 0 THEN
+      TCP_CLOSE .ret, sock_id
+    END
+    ;
+    ;;PRINT   "TCP_CLOSE OK"
+    
+    TCP_END_LISTEN .ret, port
+    ;;PRINT   "TCP_END_LISTEN OK"
+  END
+  ;
+  sock_id = -1
+  TWAIT 2
+  SIG -conn_status
+.END
+.PROGRAM open_socket.pc ()
+  ;
+  ;;PRINT   "TCP_LISTEN START"
+  DO
+    IF stop_connection THEN
+      sock_id = -1
+      GOTO pg_end
+    END
+    TCP_LISTEN .ret, port
+    IF .ret < 0 THEN
+      TWAIT 1
+    END
+  UNTIL .ret >= 0
+  ;;PRINT   "TCP_LISTEN OK"
+  ;
+  ;;PRINT   "TCP_ACCEPT START"
+  DO
+    IF stop_connection THEN
+      TCP_END_LISTEN .ret, port
+      ;;PRINT   "TCP_END_LISTEN OK"
+      sock_id = -1
+      GOTO pg_end
+    END
+    TCP_ACCEPT sock_id, port, tcp_start_tmo, client_ip[1]
+  UNTIL sock_id >= 0
+  ;;PRINT   "TCP_ACCEPT OK"
+  ;
+  $client_ip = ""
+  FOR .i = 1 TO 4
+    $client_ip = $client_ip + $ENCODE (client_ip[.i])
+    IF .i < 4 THEN
+      $client_ip = $client_ip + "."
+    END
+  END
+  ;
+  SIG conn_status
+  ;
+pg_end:
+  ;
+.END
 .PROGRAM server.pc ()
   ;
   ; Timeout default values
@@ -3108,118 +3276,6 @@ pg_end:
   END
   ;
 .END
-.PROGRAM open_socket.pc ()
-  ;
-  ;;PRINT   "TCP_LISTEN START"
-  DO
-    IF stop_connection THEN
-      sock_id = -1
-      GOTO pg_end
-    END
-    TCP_LISTEN .ret, port
-    IF .ret < 0 THEN
-      TWAIT 1
-    END
-  UNTIL .ret >= 0
-  ;;PRINT   "TCP_LISTEN OK"
-  ;
-  ;;PRINT   "TCP_ACCEPT START"
-  DO
-    IF stop_connection THEN
-      TCP_END_LISTEN .ret, port
-      ;;PRINT   "TCP_END_LISTEN OK"
-      sock_id = -1
-      GOTO pg_end
-    END
-    TCP_ACCEPT sock_id, port, tcp_start_tmo, client_ip[1]
-  UNTIL sock_id >= 0
-  ;;PRINT   "TCP_ACCEPT OK"
-  ;
-  $client_ip = ""
-  FOR .i = 1 TO 4
-    $client_ip = $client_ip + $ENCODE (client_ip[.i])
-    IF .i < 4 THEN
-      $client_ip = $client_ip + "."
-    END
-  END
-  ;
-  SIG conn_status
-  ;
-pg_end:
-  ;
-.END
-.PROGRAM close_socket.pc()
-  ;
-  stop_connection = TRUE
-  ;
-  IF sock_id > 0 THEN
-    TCP_CLOSE .ret, sock_id
-    ;
-     ; 
-    IF .ret < 0 THEN
-      TCP_CLOSE .ret, sock_id
-    END
-    ;
-    ;;PRINT   "TCP_CLOSE OK"
-    
-    TCP_END_LISTEN .ret, port
-    ;;PRINT   "TCP_END_LISTEN OK"
-  END
-  ;
-  sock_id = -1
-  TWAIT 2
-  SIG -conn_status
-.END
-.PROGRAM send.pc (.$send_data) ; 
-  ;
-  .buf_n = 1
-  ;
-  .$data[1] = .$send_data
-  ;
-  IF(sock_id > 0) THEN
-    TCP_SEND .ret, sock_id, .$data[1], .buf_n, tcp_send_tmo
-  END
-  ;
-.END
-.PROGRAM receive.pc()
-  ;
-  .max_length = 255
-  ;
-  TCP_RECV receive_ret, sock_id, $receive_data[1], .num_of_el, tcp_receive_tmo, .max_length
-  ;
-  ;
-  IF receive_ret < 0 THEN
-    $receive_data[1] = ""
-  ELSE
-    IF .num_of_el <= 0 THEN
-      $receive_data[1] = ""
-    END
-    ;
-    $edit_string = ""
-   ;
-    FOR i = 1 TO .num_of_el
-      .$data = $receive_data[i]
-      DO  
-        .$string = .$data
-        .$temp = $DECODE (.$data, "\n",0)
-        .$not_line = $DECODE (.$data, "\n",1)
-        ;
-        IF .$temp <> .$string THEN
-          ;$edit_string = $edit_string + .$temp
-          CALL parse.pc(.$temp)
-          $receive_data[i] = ""
-          ;$edit_string = ""
-        END
-      UNTIL .$temp <> .$string
-      ;
-      IF .$string <> "" THEN
-        ;$edit_string = $edit_string + .$string
-      END
-    END
-   ; 
-  END
-  ;
-.END
 .PROGRAM parse.pc (.$data)
   CALL check_data.pc (.$data, .ret)
   IF NOT .ret THEN
@@ -3232,6 +3288,7 @@ pg_end:
   .$temp = $DECODE (.$data, ";",1)
   ;
   ;;;;PRINT 0: .$data
+  mm = TRUE
   SCASE .$command_type OF
     SVALUE "MOVE":
       ;
@@ -3263,22 +3320,13 @@ pg_end:
       ;
     SVALUE "MOVE_NEW":
       ;
+      mm = FALSE
       CALL parse_new_move.PC (.$data)
       ;
   END
   ;
 pg_end:
   ;
-.END
-.PROGRAM check_data.pc (.$data,.ret) ; 
-  .ret = FALSE
-  FOR .i = 1 TO LEN(.$data)
-    .$tmp = $MID(.$data, .i, 1)
-    IF .$tmp == ";" THEN
-      .ret = TRUE
-      RETURN
-    END
-  END
 .END
 .PROGRAM parse_move.pc (.$data) ; 
   ;
@@ -3313,37 +3361,6 @@ pg_end:
   ;;;PRINT $motion_type
   ;
 .END
-.PROGRAM RMSOCKERR.PC () ; 
-  ; *******************************************************************
-  ;
-  ; Program:      test.PC
-  ; Comment:      
-  ; Author:       User
-  ;
-  ; Date:         5/13/2021
-  ;
-  ; *******************************************************************
-  ;
-    TCP_END_LISTEN .ret, port
-.END
-.PROGRAM parse_cmove.pc (.$data) ; 
-  ;;;PRINT   .$data
-  ;.$temp = $DECODE (.$data, ";",0)
-  ;.$motion_type = .$temp
-  ;.$temp = $DECODE (.$data, ";",1)
-  ;
-  FOR .i = 1 TO 11
-    .$temp = $DECODE (.$data, ";",0)
-    motion_data[.i] = VAL(.$temp)
-    .$temp = $DECODE (.$data, ";",1)
-  END
-  .$temp = $DECODE (.$data, ";",0)
-  motion_data[12] = VAL(.$temp)
-  ;
-  ;motion_data[] = motion_value
-  $motion_type = "CMOVE"
-  ;;;PRINT $motion_type
-.END
 .PROGRAM parse_moveto.pc (.$data) ;
   ;
   ;;;PRINT   .$data
@@ -3363,6 +3380,24 @@ pg_end:
   $motion_type = .$motion_type
   ;;;PRINT $motion_type
   ;
+.END
+.PROGRAM parse_cmove.pc (.$data) ; 
+  ;;;PRINT   .$data
+  ;.$temp = $DECODE (.$data, ";",0)
+  ;.$motion_type = .$temp
+  ;.$temp = $DECODE (.$data, ";",1)
+  ;
+  FOR .i = 1 TO 11
+    .$temp = $DECODE (.$data, ";",0)
+    motion_data[.i] = VAL(.$temp)
+    .$temp = $DECODE (.$data, ";",1)
+  END
+  .$temp = $DECODE (.$data, ";",0)
+  motion_data[12] = VAL(.$temp)
+  ;
+  ;motion_data[] = motion_value
+  $motion_type = "CMOVE"
+  ;;;PRINT $motion_type
 .END
 .PROGRAM parse_service.pc (.$data) ;
   ;;;PRINT   .$data
@@ -3428,128 +3463,22 @@ pg_end:
   ;$motion_type = .$motion_type
   ;;;PRINT $motion_type
 .END
-.PROGRAM pos_sender.pc () ; 
-  SWAIT conn_status
-  TWAIT 1
-  WHILE TRUE DO
-    IF stop_connection THEN
-      GOTO pg_end
-    END
-    HERE .temp
-    DECOMPOSE .data[0] = .temp
-    .$coordinates = ""
-    FOR .i = 0 TO 5
-      TYPE .data[.i]
-      .$coordinates = .$coordinates + $ENCODE (/D, .data[.i]) + ";"
-    END
-    
-    IF ($send_message == "") THEN
-      $send_message = "POINT;" + .$coordinates
-    END
-    TWAIT 2
-  END
-  ;
-pg_end:
-  ;
-.END
-.PROGRAM run_motion.pc ()
-  WHILE TRUE DO
-    ;
-    IF SIG (2130) THEN
-      ;
-      IF NOT SWITCH (REPEAT) THEN
-        IFPWPRINT 1, 1, 1 = "Controller is not in repeat mode"
-        GOTO pg_ret
-      END
-      IF NOT SWITCH (RUN) THEN
-        IFPWPRINT 1, 1, 1 = "Controller is in HOLD"
-        GOTO pg_ret
-      END
-      IF SWITCH (TEACH_LOCK) THEN
-        IFPWPRINT 1, 1, 1 = "Teach pendant is in TEACH mode"
-        GOTO pg_ret
-      END
-      IF TASK (1) == 1 THEN
-        IFPWPRINT 1, 1, 1 = "Another program is running"
-        GOTO pg_ret
-      END
-      IF NOT SWITCH (POWER) THEN
-        MC ZPOWER ON
-        TWAIT 0.5
-        GOTO pg_ret
-      END
-      type 0: "motion started"
-      ; IFPW;;PRINT 1, 1, 1 = ""
-      MC EXECUTE motion
-      TWAIT 5
-      ;
-    END
-pg_ret:
-    ;
-  END
-  ;
-.END
-.PROGRAM sender.pc()
-  SWAIT conn_status
-  TWAIT 1
-  WHILE TRUE DO
-    IF stop_connection THEN
-      GOTO pg_end
-    END
-    IF($send_message <> "") THEN
-      CALL send.pc($send_message + "\n")
-      $send_message = ""
-    END
-    TWAIT 1
-  END
-  ;
-pg_end:
-  ;
-.END
-.PROGRAM parse_point.PC  (.$data) ;
-  ;Point Type
-  .$temp = $DECODE (.$data, ";",0)
-  .$motion_type = .$temp
-  .$temp = $DECODE (.$data, ";",1)
-  ; 
-  FOR .i = 1 TO 5
-    .$temp = $DECODE (.$data, ";",0)
-    motion_data[.i] = VAL(.$temp)
-    .$temp = $DECODE (.$data, ";",1)
-  END
-  
-  .$temp = $DECODE (.$data, ";",0)
-   motion_data[6] = VAL(.$temp)
-  ; 
-   ;;;;PRINT 0:.$motion_type
-   IF (.$motion_type == "MAX") THEN 
-      FOR .i = 1 TO 6
-        max_point[.i] = motion_data[.i]
-      END
-   ELSE
-      ;;;;PRINT 0:"ADD_POINT;MIN"
-      FOR .i = 1 TO 6
-        min_point[.i] = motion_data[.i]
-      END
-   END
-    
-    $send_message = $PROGRAM_COMP
-    ;END  
-.END
-.PROGRAM parce_is_area.PC(.$data) 
+.PROGRAM parce_move_mode.PC(.$data) 
    ;Point Type
   .$temp = $DECODE (.$data, ";",0)
   .$motion_type = .$temp
   .$temp = $DECODE (.$data, ";",1)
   ; 
   IF .$motion_type == "TRUE" THEN
-    ;;;;PRINT 0:"IS_IN_AREA; TRUE"
-    is_in_area = TRUE
-    SIG is_area_mode
+    ;;PRINT 0:"MOVE_MODE; TRUE"
+    mm = TRUE
+    SIG move_mode
+    SIG 2222
   ELSE
-     ;;;;PRINT 0:"IS_IN_AREA; FALSE"
-     is_in_area = FALSE
-     SIG -is_area_mode
+     ;;PRINT 0:"MOVE_MODE; FALSE"
+     mm = FALSE
+     SIG -move_mode
+     SIG -2222
   END
    
   $send_message = $PROGRAM_COMP
@@ -3603,29 +3532,116 @@ pg_end:
   ;$motion_type = .$motion_type
   ;;;PRINT $motion_type
 .END
-.PROGRAM parce_move_mode.PC(.$data) 
+.PROGRAM parce_is_area.PC(.$data) 
    ;Point Type
   .$temp = $DECODE (.$data, ";",0)
   .$motion_type = .$temp
   .$temp = $DECODE (.$data, ";",1)
   ; 
   IF .$motion_type == "TRUE" THEN
-    ;;PRINT 0:"MOVE_MODE; TRUE"
-    mm = TRUE
-    SIG move_mode
-    SIG 2222
+    ;;;;PRINT 0:"IS_IN_AREA; TRUE"
+    is_in_area = TRUE
+    SIG is_area_mode
   ELSE
-     ;;PRINT 0:"MOVE_MODE; FALSE"
-     mm = FALSE
-     SIG -move_mode
-     SIG -2222
+     ;;;;PRINT 0:"IS_IN_AREA; FALSE"
+     is_in_area = FALSE
+     SIG -is_area_mode
   END
    
   $send_message = $PROGRAM_COMP
 .END
+.PROGRAM parse_point.PC  (.$data) ;
+  ;Point Type
+  .$temp = $DECODE (.$data, ";",0)
+  .$motion_type = .$temp
+  .$temp = $DECODE (.$data, ";",1)
+  ;
+  FOR .i = 1 TO 5
+    .$temp = $DECODE (.$data, ";",0)
+    motion_data[.i] = VAL (.$temp)
+    .$temp = $DECODE (.$data, ";",1)
+  END
+  ;
+  .$temp = $DECODE (.$data, ";",0)
+  motion_data[6] = VAL (.$temp)
+  ;
+  ;;;;PRINT 0:.$motion_type
+  IF (.$motion_type == "MAX") THEN
+    PRINT 0:"ADD_POINT;MAX"
+    FOR .i = 1 TO 6
+      max_point[.i] = motion_data[.i]
+    END
+  ELSE
+    IF (.$motion_type == "MIN")THEN
+      PRINT 0:"ADD_POINT;MIN"
+      FOR .i = 1 TO 6
+        min_point[.i] = motion_data[.i]
+      END
+    ELSE
+      PRINT 0:"ADD_POINT;MIDDLE"
+      ;
+      POINT/X herePoint = TRANS (motion_data[1])
+      POINT/Y herePoint = TRANS (0, motion_data[2])
+      POINT/Z herePoint = TRANS (0, 0, motion_data[3])    
+    END
+  END
+  
+  $send_message = $PROGRAM_COMP
+  ;END
+.END
+.PROGRAM RMSOCKERR.PC () ; 
+  ; *******************************************************************
+  ;
+  ; Program:      test.PC
+  ; Comment:      
+  ; Author:       User
+  ;
+  ; Date:         5/13/2021
+  ;
+  ; *******************************************************************
+  ;
+    TCP_END_LISTEN .ret, port
+.END
+.PROGRAM run_motion.pc ()
+  WHILE TRUE DO
+    ;
+    IF SIG (2130) THEN
+      ;
+      IF NOT SWITCH (REPEAT) THEN
+        IFPWPRINT 1, 1, 1 = "Controller is not in repeat mode"
+        GOTO pg_ret
+      END
+      IF NOT SWITCH (RUN) THEN
+        IFPWPRINT 1, 1, 1 = "Controller is in HOLD"
+        GOTO pg_ret
+      END
+      IF SWITCH (TEACH_LOCK) THEN
+        IFPWPRINT 1, 1, 1 = "Teach pendant is in TEACH mode"
+        GOTO pg_ret
+      END
+      IF TASK (1) == 1 THEN
+        IFPWPRINT 1, 1, 1 = "Another program is running"
+        GOTO pg_ret
+      END
+      IF NOT SWITCH (POWER) THEN
+        MC ZPOWER ON
+        TWAIT 0.5
+        GOTO pg_ret
+      END
+      ; IFPW;;PRINT 1, 1, 1 = ""
+      MC EXECUTE motion
+      TWAIT 5
+      ;
+    END
+pg_ret:
+    ;
+  END
+  ;
+.END
 .TRANS
 po[0] 19.987339 595.009766 163.070511 -90.002869 170.000748 -104.999680
 poX 469.210266 32.905201 198.907837 -12.053053 179.985275 93.050896
+herePoint 0.000000 515.000671 382.000031 90.000000 179.999512 -89.999992
 .END
 .REALS
 tcp_start_tmo = 5

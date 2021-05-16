@@ -11,6 +11,7 @@ import com.github.poluka.kControlLibrary.actions.annotation.ExecutedOnTheRobot
 import com.github.poluka.kControlLibrary.actions.move.MoveNew
 import com.github.poluka.kControlLibrary.actions.move.MoveOnDistance
 import com.github.poluka.kControlLibrary.actions.points.SetMaxPoint
+import com.github.poluka.kControlLibrary.actions.points.SetMiddlePoint
 import com.github.poluka.kControlLibrary.actions.points.SetMinPoint
 import com.github.poluka.kControlLibrary.actions.service.mode.ModeIsInArea
 import com.github.poluka.kControlLibrary.actions.service.mode.MoveMode
@@ -57,55 +58,59 @@ class RobotVM : ViewModel() {
 
     var firstPoint = Point()
         set(value) {
-            setMinPoint(value, minPoint = minPoint)
-            setMaxPoint(value, maxPoint = maxPoint)
-
             field = value
+
+            setMinAndMaxPoint()
         }
 
     var secondPoint = Point()
         set(value) {
-            setMinPoint(value, minPoint = minPoint)
-            setMaxPoint(value, maxPoint = maxPoint)
-
             field = value
+
+            setMinAndMaxPoint()
         }
 
-    private fun setMinPoint(newPoint: Point, minPoint: Point) {
-        if (minPoint[Axes.X] > newPoint[Axes.X])
-            minPoint[Axes.X] = newPoint[Axes.X]
+    private val minPoint = Point()
+    private val maxPoint = Point()
 
-        if (minPoint[Axes.Y] > newPoint[Axes.Y])
-            minPoint[Axes.Y] = newPoint[Axes.Y]
+    private val middlePoint = Point()
+        get() {
+            for (i in 0..2) {
+                field[i] = (maxPoint[i] + minPoint[i]) / 2
+                if (minPoint[i] > maxPoint[i]) field[i] = -field[i]
+            }
 
-        if (minPoint[Axes.Z] > newPoint[Axes.Z])
-            minPoint[Axes.Z] = newPoint[Axes.Z]
+            return field
+        }
 
-        this dangerousRun SetMinPoint(minPoint)
-    }
+    private fun setMinAndMaxPoint() {
+        for (i in 0..3) {
+            if (firstPoint[i] > secondPoint[i]) {
+                maxPoint[i] = firstPoint[i]
+                minPoint[i] = secondPoint[i]
+            } else {
+                maxPoint[i] = secondPoint[i]
+                minPoint[i] = firstPoint[i]
+            }
+        }
 
-    private val minPoint = Point(1000.0, 1000.0, 1000.0)
-
-    private fun setMaxPoint(newPoint: Point, maxPoint: Point) {
-        if (maxPoint[Axes.X] < newPoint[Axes.X])
-            maxPoint[Axes.X] = newPoint[Axes.X]
-
-        if (maxPoint[Axes.Y] < newPoint[Axes.Y])
-            maxPoint[Axes.Y] = newPoint[Axes.Y]
-
-        if (maxPoint[Axes.Z] < newPoint[Axes.Z])
-            maxPoint[Axes.Z] = newPoint[Axes.Z]
-
-        this dangerousRun SetMaxPoint(maxPoint)
+        val robot = this
+        viewModelScope.launch {
+            robot dangerousRun SetMaxPoint(maxPoint)
+            delay(20L)
+            robot dangerousRun SetMinPoint(minPoint)
+            delay(20L)
+            robot dangerousRun SetMiddlePoint(middlePoint)
+        }
     }
 
     private suspend fun sendPoints() {
         this dangerousRun SetMinPoint(minPoint)
         delay(30L)
         this dangerousRun SetMaxPoint(maxPoint)
+        delay(30L)
+        this dangerousRun SetMiddlePoint(middlePoint)
     }
-
-    private val maxPoint = Point()
 
     private val kRobot = KRobot()
     private val connectRobot = ConnectRobot(kRobot)
@@ -139,12 +144,6 @@ class RobotVM : ViewModel() {
         gripperState: Boolean
     ) {
         val area = maxPoint - minPoint
-
-        val middlePoint = Point()
-        for (i in 0..2) {
-            middlePoint[i] = (maxPoint[i] + minPoint[i]) / 2
-            if (minPoint[i] > maxPoint[i]) middlePoint[i] = -middlePoint[i]
-        }
 
         Log.d("AREA", middlePoint.toString())
 
