@@ -2719,20 +2719,6 @@ TP_RECINHI      0   0   0
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -2757,9 +2743,9 @@ N_INT132    "is_area_mode  "
 @@@ INSPECTION @@@
 herePoint
 @@@ CONNECTION @@@
-KROSET R01
-127.0.0.1
-9105
+Standard 1
+192.168.0.2
+23
 @@@ PROGRAM @@@
 0:motion:F
 0:motion2:F
@@ -2869,11 +2855,11 @@ mm
     IF mm == FALSE THEN
       ;FOR ctr = 0 TO points_counter
       ;IF points_counter != 0 THEN
-      IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
+      ;IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
         LMOVE poX
       ;  BREAK
       ;  $send_message = $PROGRAM_COMP
-      END;
+      ;END;
       ;END
       ;points_counter = 0
     ELSE
@@ -3093,32 +3079,27 @@ pg_end:
     IF .num_of_el <= 0 THEN
       $receive_data[1] = ""
     END
-    IF $receive_data[1] == "q" THEN
-      stop_connection = TRUE
-      TWAIT 2
-      CALL close_socket.pc
-    END
     ;
     $edit_string = ""
     ;
     FOR i = 1 TO .num_of_el
       .$data = $receive_data[i]
-      DO
-        .$string = .$data
+      ;DO
+        ;.$string = .$data
         .$temp = $DECODE (.$data, "\n", 0)
-        .$not_line = $DECODE (.$data, "\n", 1)
+        ;.$not_line = $DECODE (.$data, "\n", 1)
         ;
-        IF .$temp <> .$string THEN
+        ;IF .$temp <> .$string THEN
           ;$edit_string = $edit_string + .$temp
           CALL parse.pc (.$temp)
           $receive_data[i] = ""
           ;$edit_string = ""
-        END
-      UNTIL .$temp <> .$string
+        ;END
+      ;UNTIL .$temp <> .$string
       ;
-      IF .$string <> "" THEN
+      ;IF .$string <> "" THEN
         ;$edit_string = $edit_string + .$string
-      END
+      ;END
     END
     ;
   END
@@ -3285,47 +3266,53 @@ pg_end:
     GOTO pg_end
   END
   ;
-  
-  .$temp = $DECODE (.$data, ";",0)
-  .$command_type = .$temp
-  .$temp = $DECODE (.$data, ";",1)
-  ;
-  ;;;;PRINT 0: .$data
-  mm = TRUE
-  SCASE .$command_type OF
-    SVALUE "MOVE":
-      ;
-      CALL parse_move.pc (.$data)
-      ;
-    SVALUE "MOVETO":
-      ;
-      CALL parse_moveto.pc (.$data)
-      ;
-    SVALUE "CMOVE":
-      ;
-      CALL parse_cmove.pc (.$data)
-      ;
-    SVALUE "SERVICE" :
-      ;
-      CALL parse_service.pc (.$data)
-      ;
-    SVALUE "POINTS" :
-      ;
-      CALL parse_point.PC (.$data)
-      ;
-    SVALUE "IS_AREA_MODE" :
-      ;
-      CALL parce_is_area.PC (.$data)
-      ;
-    SVALUE "MOVE_MODE" :
-      ;
-      CALL parce_move_mode.PC (.$data)
-      ;
-    SVALUE "MOVE_NEW":
-      ;
-      mm = FALSE
-      CALL parse_new_move.PC (.$data)
-      ;
+  IF .$data == "q" THEN
+    stop_connection = TRUE
+    TWAIT 2
+    CALL close_socket.pc
+  ELSE
+    ;
+    .$temp = $DECODE (.$data, ";",0)
+    .$command_type = .$temp
+    .$temp = $DECODE (.$data, ";",1)
+    ;
+    ;;;;PRINT 0: .$data
+    mm = TRUE
+    SCASE .$command_type OF
+      SVALUE "MOVE":
+        ;
+        CALL parse_move.pc (.$data)
+        ;
+      SVALUE "MOVETO":
+        ;
+        CALL parse_moveto.pc (.$data)
+        ;
+      SVALUE "CMOVE":
+        ;
+        CALL parse_cmove.pc (.$data)
+        ;
+      SVALUE "SERVICE" :
+        ;
+        CALL parse_service.pc (.$data)
+        ;
+      SVALUE "POINTS" :
+        ;
+        CALL parse_point.PC (.$data)
+        ;
+      SVALUE "IS_AREA_MODE" :
+        ;
+        CALL parce_is_area.PC (.$data)
+        ;
+      SVALUE "MOVE_MODE" :
+        ;
+        CALL parce_move_mode.PC (.$data)
+        ;
+      SVALUE "MOVE_NEW":
+        ;
+        mm = FALSE
+        CALL parse_new_move.PC (.$data)
+        ;
+    END
   END
   ;
 pg_end:
@@ -3632,7 +3619,7 @@ pg_end:
         GOTO pg_ret
       END
       ; IFPW;;PRINT 1, 1, 1 = ""
-      MC EXECUTE motion
+      ;MC EXECUTE motion
       TWAIT 5
       ;
     END

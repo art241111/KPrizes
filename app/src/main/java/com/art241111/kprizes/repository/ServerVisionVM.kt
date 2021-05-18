@@ -44,6 +44,8 @@ class ServerVisionVM : ViewModel() {
 
     private var isMoving = mutableStateOf(false)
     private var job: Job = Job()
+    private var isFirstStart = true
+
 
     /**
      * @param mode - тип игры.
@@ -51,68 +53,73 @@ class ServerVisionVM : ViewModel() {
      * Если 1 - то робот перемещает игрушку, когда пользователь захватил ее.
      */
     fun startGame(mode: State<Int>, robot: RobotVM, stayPrize: () -> Unit, goHome: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            movePositionHandler.isGameStart.collect { isGameStart ->
-                if (isGameStart) {
-                    startMoving()
+        if (isFirstStart) {
+            isFirstStart = false
+
+            viewModelScope.launch(Dispatchers.IO) {
+                movePositionHandler.isGameStart.collect { isGameStart ->
+                    if (!isMoving.value) {
+                        if (isGameStart) {
+                            isMoving.value = true
+                            startMoving()
+                        }
+                    }
                 }
             }
-        }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val oldGripperState = mutableStateOf(true)
+            viewModelScope.launch(Dispatchers.IO) {
+                val oldGripperState = mutableStateOf(true)
 
-            movePositionHandler.gripperState.collect { gripper ->
-                Log.d("GRIPPER", gripper.toString())
-                if (oldGripperState.value != gripper) {
-                    oldGripperState.value = gripper
+                movePositionHandler.gripperState.collect { gripper ->
+                    Log.d("GRIPPER", gripper.toString())
+                    if (oldGripperState.value != gripper) {
+                        oldGripperState.value = gripper
 
-                    when (mode.value) {
-                        0 -> {
-                            if (gripper) {
-                                robot dangerousRun CloseGripper()
-                            } else {
-                                stopMoving()
-                                robot run OpenGripper()
+                        when (mode.value) {
+                            0 -> {
+                                if (gripper) {
+                                    robot dangerousRun CloseGripper()
+                                } else {
+                                    stopMoving()
+                                    robot run OpenGripper()
 
-                                delay(20)
-                                goHome()
+                                    delay(20)
+                                    goHome()
+                                }
                             }
-                        }
 
-                        1 -> {
-                            if (gripper) {
-                                stopMoving()
+                            1 -> {
+                                if (gripper) {
+                                    stopMoving()
 
-                                robot dangerousRun CloseGripper()
-                                delay(20)
-                                stayPrize()
-                                goHome()
-                            } else {
-                                robot run OpenGripper()
+                                    robot dangerousRun CloseGripper()
+                                     delay(20)
+                                    stayPrize()
+                                    goHome()
+                                } else {
+                                    robot run OpenGripper()
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
     }
 
     private fun startMoving() {
-        isMoving.value = true
         moveInTimeDistance.startMoving()
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (isMoving.value) {
-                moveDistance.collect { newMoveDistance ->
-                    Log.d("Move", newMoveDistance.toString())
-                    if (!isMoving.value) this.cancel()
-                    ensureActive()
+            moveDistance.collect { newMoveDistance ->
+                Log.d("Move", newMoveDistance.toString())
+                if (!isMoving.value) this.cancel()
+                ensureActive()
 
-                    with(moveInTimeDistance) {
-                        newPosition = newMoveDistance
-                        gripperState = movePositionHandler.gripperState.value
-                    }
+                with(moveInTimeDistance) {
+                    newPosition = newMoveDistance
+                    gripperState = movePositionHandler.gripperState.value
                 }
             }
         }
