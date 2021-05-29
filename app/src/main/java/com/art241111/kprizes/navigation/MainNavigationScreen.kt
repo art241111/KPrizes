@@ -55,7 +55,7 @@ fun MainNavigateScreen(
 
     val controlVM = viewModel<ControlVM>()
     val moveInTime = MoveInTime(
-        delaySending = robot.delaySending,
+        delaySending = robot.delaySending.value,
         defaultButtonDistanceLong = robot.defaultButtonDistanceLong,
         defaultButtonDistanceShort = robot.defaultButtonDistanceShort,
         move = { x, y, z, o, a, t ->
@@ -94,7 +94,7 @@ fun MainNavigateScreen(
     val timer = viewModel<TimerVM>()
     val isFirstTimeUp = remember { mutableStateOf(true) }
     if (timer.progress.value <= 0 && isFirstTimeUp.value) {
-        serverVision.stopMoving()
+//        serverVision.stopMoving()
         controlVM.stopTrackingTilt()
         moveByZVM.stop()
         timer.stop()
@@ -169,7 +169,7 @@ fun MainNavigateScreen(
                     robot = robot,
                     moveInTime = moveInTime,
                     controlVM = controlVM,
-                    serverVisionVM = serverVision,
+                    serverVisionVMVM = serverVision,
                     moveByZVM = moveByZVM,
                     onGameEnd = {
                         moveByZVM.stop()
@@ -186,7 +186,7 @@ fun MainNavigateScreen(
                 SettingsScreen(
                     navigate = navigate,
                     robot = robot,
-                    serverVision = serverVision,
+                    serverVisionVM = serverVision,
                     sharedPreferences = sharedPreferences,
                     controlVM = controlVM,
                     moveInTime = moveInTime,

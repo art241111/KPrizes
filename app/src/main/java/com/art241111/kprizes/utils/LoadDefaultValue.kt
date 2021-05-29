@@ -16,7 +16,7 @@ import com.github.poluka.kControlLibrary.enity.position.toPoint
 
 object LoadDefaultValue {
     fun load(robotVM: RobotVM, sharedPreferences: SharedPreferencesHelperForString) {
-        robotVM.delaySending =
+        robotVM.delaySending.value =
             sharedPreferences.load(DELAY_SEND_SP, 70L.toString()).toLong()
 
         robotVM.defaultButtonDistanceLong =
@@ -25,8 +25,8 @@ object LoadDefaultValue {
         robotVM.defaultButtonDistanceShort =
             sharedPreferences.load(SHORT_MOVE_SP, 1.0.toString()).toDouble()
 
-        robotVM.homePoint =
-            sharedPreferences.load(EditPoints.HOME_POINT.name, Point().toString()).toPoint()
+//        robotVM.homePoint =
+//            sharedPreferences.load(EditPoints.HOME_POINT.name, Point().toString()).toPoint()
         robotVM.setPoint =
             sharedPreferences.load(EditPoints.SET_POINT.name, Point().toString()).toPoint()
 

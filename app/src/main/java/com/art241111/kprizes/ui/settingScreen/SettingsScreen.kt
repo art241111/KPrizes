@@ -31,7 +31,7 @@ fun BoxScope.SettingsScreen(
     sharedPreferences: SharedPreferencesHelperForString,
     controlVM: ControlVM,
     moveInTime: MoveInTime,
-    serverVision: ServerVisionVM,
+    serverVisionVM: ServerVisionVM,
     visionGameMode: MutableState<Int>
 ) {
     val settingsNavVM = viewModel<SettingsNavVM>()
@@ -49,7 +49,7 @@ fun BoxScope.SettingsScreen(
                     editPoint.value = point
                     settingsNavVM.moveToAddPoint()
                 },
-                serverVision = serverVision,
+                serverVisionVM = serverVisionVM,
                 visionGameMode = visionGameMode
             )
         }
@@ -67,8 +67,8 @@ fun BoxScope.SettingsScreen(
         SettingsScreens.CONNECT_TO_THE_VISION -> {
             ConnectView(
                 back = { settingsNavVM.back() },
-                onConnect = { ip -> serverVision.connect(ip) },
-                connectStatus = serverVision.connectStatus,
+                onConnect = { ip -> serverVisionVM.connect(ip) },
+                connectStatus = serverVisionVM.connectStatus,
                 sharedPreferences = sharedPreferences,
                 sharedPreferencesName = CONST_IP_NAME_VISION_SERVER
             )

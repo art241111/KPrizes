@@ -2716,9 +2716,6 @@ EESTOP_ERROR_CODE       0
 EESTOP_DELAY_TIME      3.000
 TP_RECINHI      0   0   0
 
-
-
-
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -2855,11 +2852,11 @@ mm
     IF mm == FALSE THEN
       ;FOR ctr = 0 TO points_counter
       ;IF points_counter != 0 THEN
-      ;IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
+      IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
         LMOVE poX
-      ;  BREAK
+        ;BREAK
       ;  $send_message = $PROGRAM_COMP
-      ;END;
+      END;
       ;END
       ;points_counter = 0
     ELSE
@@ -3086,12 +3083,12 @@ pg_end:
       .$data = $receive_data[i]
       ;DO
         ;.$string = .$data
-        .$temp = $DECODE (.$data, "\n", 0)
+        ;.$temp = $DECODE (.$data, "\n", 0)
         ;.$not_line = $DECODE (.$data, "\n", 1)
         ;
         ;IF .$temp <> .$string THEN
           ;$edit_string = $edit_string + .$temp
-          CALL parse.pc (.$temp)
+          CALL parse.pc (.$data)
           $receive_data[i] = ""
           ;$edit_string = ""
         ;END
@@ -3395,7 +3392,7 @@ pg_end:
   .$service_type = .$temp
   .$temp = $DECODE (.$data, ";",1)
   ;;;PRINT   .$service_type
-  ;;;PRINT   .$data
+  ;PRINT 0:   .$data
   ;IF SIG (11) THEN
   ;  SIG -11, 10
   ;ELSE
@@ -3429,15 +3426,15 @@ pg_end:
       CALL send.pc ($PROGRAM_COMP)
     SVALUE "CLAMP":
       IF (.$data == "ON;") THEN
-        SIG 10, -11  
-        TWAIT 0.2
-        $send_message = $PROGRAM_COMP
-        ;TYPE 0: "CLAMP ON"
-      ELSE
         SIG -10, 11  
         TWAIT 0.2
+        $send_message = $PROGRAM_COMP
+        TYPE 0: "CLAMP ON"
+      ELSE
+        SIG 10, -11  
+        TWAIT 0.2
         $send_message = $PROGRAM_COMP  
-        ;TYPE 0: "CLAMP OFF"
+        TYPE 0: "CLAMP OFF"
       END
   END
   
@@ -3507,12 +3504,12 @@ pg_end:
   .$temp = $DECODE (.$data, ";",1)
   ;
   IF gripper_state == 1 THEN
-    SIG 10, -11  
+    SIG -10, 11  
     $send_message = $PROGRAM_COMP
     TWAIT 0.2
     TYPE 0: "CLAMP ON"
   ELSE
-    SIG -10, 11
+    SIG 10, -11
     $send_message = $PROGRAM_COMP    
     TWAIT 0.2
     TYPE 0: "CLAMP OFF"
@@ -3631,7 +3628,7 @@ pg_ret:
 .TRANS
 po[0] 19.987339 595.009766 163.070511 -90.002869 170.000748 -104.999680
 poX 469.210266 32.905201 198.907837 -12.053053 179.985275 93.050896
-herePoint 0.000000 515.000671 382.000031 90.000000 179.999512 -89.999992
+herePoint -448.616699 70.579254 -146.971252 0.000000 180.000000 9.000000
 .END
 .REALS
 tcp_start_tmo = 5

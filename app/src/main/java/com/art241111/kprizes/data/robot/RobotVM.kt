@@ -1,6 +1,7 @@
 package com.art241111.kprizes.data.robot
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -34,7 +35,7 @@ const val ROBOT_POSITION_ANGLE = "ROBOT_POSITION_ANGLE "
 class RobotVM : ViewModel() {
     var defaultButtonDistanceShort: Double = 10.0
     var defaultButtonDistanceLong: Double = 10.0
-    var delaySending: Long = 10L
+    var delaySending: MutableState<Long> = mutableStateOf(10L)
     var robotPositionAngle = 0.0
 
     private val _isInArea = mutableStateOf(false)
@@ -53,7 +54,7 @@ class RobotVM : ViewModel() {
         }
     }
 
-    var homePoint = Point()
+    var homePoint = Point(-450, 70, -150, -115,180,50)
     var setPoint = Point()
 
     var firstPoint = Point()
@@ -156,11 +157,15 @@ class RobotVM : ViewModel() {
 //            )
 //        }
 
-        if ((abs(x) != 0.0) and (abs(y) != 0.0) and (abs(z) != 0.0)) {
+        val newX = if((x >= -1) and (x <= 1)) x else if (x < -1) -1.0 else 1.0
+        val newY = if((y >= -1) and (y <= 1)) y else if (y < -1) -1.0 else 1.0
+        val newZ = if((z >= -1) and (z <= 1)) z else if (z < -1) -1.0 else 1.0
+
+        if ((abs(newX) != 0.0) and (abs(newY) != 0.0) and (abs(newZ) != 0.0)) {
             this dangerousRun MoveNew(
-                x = (x / 2) * area[Axes.X],
-                y = (y / 2) * area[Axes.Y],
-                z = (z / 2) * area[Axes.Z],
+                x = (newX / 2) * area[Axes.X],
+                y = (newY / 2) * area[Axes.Y],
+                z = (newZ / 2) * area[Axes.Z],
                 gripperState = gripperState
             )
         }

@@ -47,7 +47,7 @@ fun BoxScope.SettingsList(
     settingsNavVM: SettingsNavVM,
     sharedPreferences: SharedPreferencesHelperForString,
     moveToAddPoint: (EditPoints) -> Unit,
-    serverVision: ServerVisionVM,
+    serverVisionVM: ServerVisionVM,
     visionGameMode: MutableState<Int>,
 ) {
     Column(modifier.align(Alignment.Center)) {
@@ -86,10 +86,10 @@ fun BoxScope.SettingsList(
 
                 item {
                     ParamChangeItem(
-                        defaultValue = robot.delaySending.toDouble(),
+                        defaultValue = robot.delaySending.value.toDouble(),
                         labelText = "Задержка отправки сообщений",
                         onValueChange = {
-                            robot.delaySending = it.toLong()
+                            robot.delaySending.value = it.toLong()
                             sharedPreferences.save(DELAY_SEND_SP, it.toLong().toString())
                         }
                     )
@@ -155,9 +155,9 @@ fun BoxScope.SettingsList(
                 item {
                     ConnectItem(
                         itemText = "Подключение к серверу",
-                        connectState = serverVision.connect,
+                        connectState = serverVisionVM.connect,
                         onDisconnect = {
-                            serverVision.disconnect()
+                            serverVisionVM.disconnect()
                         },
                         onConnectClick = { settingsNavVM.moveToConnectToTheVisionSever() }
                     )
@@ -165,10 +165,10 @@ fun BoxScope.SettingsList(
 
                 item {
                     ParamChangeItem(
-                        defaultValue = serverVision.getScale(),
+                        defaultValue = serverVisionVM.getScale(),
                         labelText = "Масштаб перемещений в режими отслеживания руки",
                         onValueChange = {
-                            serverVision.setScale(it)
+                            serverVisionVM.setScale(it)
                             sharedPreferences.save(SCALE_VISION, it.toString())
                         }
                     )

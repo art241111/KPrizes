@@ -1,5 +1,6 @@
 package com.art241111.kprizes.repository
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.github.poluka.kControlLibrary.enity.position.Point
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +17,7 @@ import kotlin.math.abs
  */
 
 class MoveInTimeDistance(
-    var delaySending: Long = 70L,
+    var delaySending: MutableState<Long> = mutableStateOf(10L),
     private val move: (point: Point, gripperState: Boolean) -> Unit,
     private val changeStatus: (Boolean) -> Unit,
 ) {
@@ -57,7 +58,7 @@ class MoveInTimeDistance(
                             oldPosition = newPosition
                         }
 
-//                        delay(delaySending)
+                        delay(delaySending.value)
                     }
                 }
             }

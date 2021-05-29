@@ -21,10 +21,10 @@ internal fun DelaySending(
 ) {
     EditText(
         modifier = modifier.fillMaxWidth(),
-        value = robot.delaySending.toDouble(),
+        value = robot.delaySending.value.toDouble(),
         labelText = "Задержка отправки сообщений",
         onValueChange = {
-            robot.delaySending = it.toLong()
+            robot.delaySending.value = it.toLong()
             sharedPreferences.save(DELAY_SEND_SP, it.toLong().toString())
         }
     )

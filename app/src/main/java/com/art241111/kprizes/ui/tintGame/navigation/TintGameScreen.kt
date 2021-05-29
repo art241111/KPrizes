@@ -25,7 +25,7 @@ fun TintGameNavigationScreen(
     robot: RobotVM,
     moveInTime: MoveInTime,
     controlVM: ControlVM,
-    serverVisionVM: ServerVisionVM,
+    serverVisionVMVM: ServerVisionVM,
     moveByZVM: MoveByZVM,
     onGameEnd: () -> Unit,
 ) {
@@ -36,7 +36,7 @@ fun TintGameNavigationScreen(
                 timer = timer,
                 onClick = {
                     timer.stop()
-                    serverVisionVM.stopMoving()
+                    serverVisionVMVM.stopMoving()
 
                     moveByZVM.setMoveInTime(moveInTime)
                     controlVM.stopTrackingTilt()
