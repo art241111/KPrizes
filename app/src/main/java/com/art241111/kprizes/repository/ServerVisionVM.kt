@@ -51,27 +51,48 @@ class ServerVisionVM : ViewModel() {
      * Если 0 - то пользователь переносит игрушку самостоятельно.
      * Если 1 - то робот перемещает игрушку, когда пользователь захватил ее.
      */
+    private var _robot = RobotVM()
     fun startGame(mode: State<Int>, robot: RobotVM, stayPrize: () -> Unit, goHome: () -> Unit) {
-        viewModelScope.launch() {
-            movePositionHandler.isGameStart.collect { isGameStart ->
-                Log.d("GAME_START", isGameStart.toString())
-                ensureActive()
-                if (isGameStart) {
-                    if (!isMoving.value) {
-                        isMoving.value = true
-                        Log.d("GAME_START", "isGameStart.toString()")
+//        if (isGameStart) {
+        this._robot = robot
 
-                        startMoving(
-                            moveInTimeDistance = moveInTimeDistance,
-                            moveDistance = movePositionHandler.moveDistance,
-                            gripper = movePositionHandler.gripperState
-                        )
-                    } else {
-                        stopMoving()
-                        delay(1000L)
-                        robot dangerousRun MoveToPoint(robot.homePoint)
-                    }
-                }
+        if (!isMoving.value) {
+            isMoving.value = true
+            Log.d("GAME_START", "isGameStart.toString()")
+
+            startMoving(
+                moveInTimeDistance = moveInTimeDistance,
+                moveDistance = movePositionHandler.moveDistance,
+                gripper = movePositionHandler.gripperState
+            )
+        }
+//            else {
+//                stopMoving()
+//                delay(1000L)
+//                robot dangerousRun MoveToPoint(robot.homePoint)
+//            }
+//        }
+
+//        viewModelScope.launch() {
+//            movePositionHandler.isGameStart.collect { isGameStart ->
+//                Log.d("GAME_START", isGameStart.toString())
+//                ensureActive()
+//                if (isGameStart) {
+//                    if (!isMoving.value) {
+//                        isMoving.value = true
+//                        Log.d("GAME_START", "isGameStart.toString()")
+//
+//                        startMoving(
+//                            moveInTimeDistance = moveInTimeDistance,
+//                            moveDistance = movePositionHandler.moveDistance,
+//                            gripper = movePositionHandler.gripperState
+//                        )
+//                    } else {
+//                        stopMoving()
+//                        delay(1000L)
+//                        robot dangerousRun MoveToPoint(robot.homePoint)
+//                    }
+//                }
 
 
 //                    startHandleGripperState(
@@ -82,9 +103,9 @@ class ServerVisionVM : ViewModel() {
 //                        gripperState = movePositionHandler.gripperState,
 //                        stopMoving = { stopMoving() }
 //                    )
-            }
-        }
     }
+//        }
+//    }
 
 
     private val oldGripperState = mutableStateOf(true)
@@ -178,6 +199,12 @@ class ServerVisionVM : ViewModel() {
 //        scope.cancel()
         isMoving.value = false
         moveInTimeDistance.stopMoving()
+
+        viewModelScope.launch {
+            delay(1000L)
+            _robot dangerousRun MoveToPoint(_robot.homePoint)
+
+        }
     }
 
     private var isHandling = false

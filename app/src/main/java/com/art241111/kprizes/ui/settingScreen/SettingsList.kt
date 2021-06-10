@@ -73,6 +73,18 @@ fun BoxScope.SettingsList(
                     )
                 }
 
+                // Connect to the robot
+                item {
+                    ConnectItem(
+                        itemText = "Подключение к серверу",
+                        connectState = serverVisionVM.connect,
+                        onDisconnect = {
+                            serverVisionVM.disconnect()
+                        },
+                        onConnectClick = { settingsNavVM.moveToConnectToTheVisionSever() }
+                    )
+                }
+
                 item {
                     ParamChangeItem(
                         defaultValue = robot.robotPositionAngle,
@@ -148,18 +160,6 @@ fun BoxScope.SettingsList(
                         text = "Максимальная точка",
                         coordinatePoint = robot.secondPoint.toString(),
                         pointFlag = EditPoints.SECOND_POINT
-                    )
-                }
-
-                // Connect to the robot
-                item {
-                    ConnectItem(
-                        itemText = "Подключение к серверу",
-                        connectState = serverVisionVM.connect,
-                        onDisconnect = {
-                            serverVisionVM.disconnect()
-                        },
-                        onConnectClick = { settingsNavVM.moveToConnectToTheVisionSever() }
                     )
                 }
 

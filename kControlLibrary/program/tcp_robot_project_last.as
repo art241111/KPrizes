@@ -2716,6 +2716,9 @@ EESTOP_ERROR_CODE       0
 EESTOP_DELAY_TIME      3.000
 TP_RECINHI      0   0   0
 
+
+
+
 N_INT128    "conn_status  "
 N_INT129    "auto_reconnect  "
 N_INT130    "run_move  "
@@ -2852,11 +2855,16 @@ mm
     IF mm == FALSE THEN
       ;FOR ctr = 0 TO points_counter
       ;IF points_counter != 0 THEN
-      IF IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN 
+      ;IF DX(poX) < max_point[1] AND DX(poX) > min_point[1] AND DY(poX) < max_point[2] AND DY(poX) > min_point[2] AND DZ(poX) < max_point[3] AND DZ(poX) > min_point[3] THEN
+      ;POINT test = NULL
+      
+     ; IF (DISTANCE(test, poX) <> 0) THEN
+      ;IF poX <> NULL THEN
         LMOVE poX
-        ;BREAK
+      ;END
+      ;BREAK
       ;  $send_message = $PROGRAM_COMP
-      END;
+      ;END;
       ;END
       ;points_counter = 0
     ELSE
@@ -2870,7 +2878,7 @@ mm
           ;
         SVALUE "BASE":
           IF is_in_area == TRUE THEN
-            IF DX(HERE) + motion_data[1] < max_point[1] AND DX(HERE) + motion_data[1] > min_point[1] AND DY(HERE) + motion_data[2] < max_point[2] AND DY(HERE) + motion_data[2] > min_point[2] AND DZ(HERE) + motion_data[3] < max_point[3] AND DZ(HERE) + motion_data[3] > min_point[3] THEN 
+            IF DX (HERE) + motion_data[1] < max_point[1] AND DX (HERE) + motion_data[1] > min_point[1] AND DY (HERE) + motion_data[2] < max_point[2] AND DY (HERE) + motion_data[2] > min_point[2] AND DZ (HERE) + motion_data[3] < max_point[3] AND DZ (HERE) + motion_data[3] > min_point[3] THEN
               DRAW motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6]
             END
           ELSE
@@ -2897,12 +2905,18 @@ mm
           ;
         SVALUE "LMOVE":
           ;
-          LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+          IF motion_data[1] < max_point[1] AND motion_data[1] > min_point[1] AND motion_data[2] < max_point[2] AND motion_data[2] > min_point[2] AND motion_data[3] < max_point[3] AND motion_data[3] > min_point[3] THEN
+            LMOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
+           ;OINT poX = NULL
+           BREAK
+           HERE poX 
+          END
+          
           $motion_type = ""
-          BREAK
+          
           $send_message = $PROGRAM_COMP
           ;
-       SVALUE "CMOVE":
+        SVALUE "CMOVE":
           ;
           C1MOVE TRANS (motion_data[1], motion_data[2], motion_data[3], motion_data[4], motion_data[5], motion_data[6])
           C2MOVE TRANS (motion_data[7], motion_data[8], motion_data[9], motion_data[10], motion_data[11], motion_data[12])
@@ -2921,7 +2935,7 @@ mm
           SIG -10, 11
           BREAK
           $send_message = $PROGRAM_COMP
-          $motion_type = ""  
+          $motion_type = ""
       END
     END
   END
@@ -3626,9 +3640,9 @@ pg_ret:
   ;
 .END
 .TRANS
-po[0] 19.987339 595.009766 163.070511 -90.002869 170.000748 -104.999680
+po[0] -703.410522 328.419708 -210.381821 143.433533 179.999084 -51.566280
 poX 469.210266 32.905201 198.907837 -12.053053 179.985275 93.050896
-herePoint -448.616699 70.579254 -146.971252 0.000000 180.000000 9.000000
+herePoint -540.909973 15.065000 -225.164993 -165.000015 180.000000 0.000000
 .END
 .REALS
 tcp_start_tmo = 5
